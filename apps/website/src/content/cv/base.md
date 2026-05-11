@@ -90,21 +90,18 @@ Tecnólogo en Informatica
 **Google Developer Expert**
   : **Jul 2019 — Present**
 
-Google Developers Experts(GDEs) are experienced, recognized developers of Google technologies. They distinguish themselves through frequently speaking at conferences, share their passion and experience by publishing videos and tutorials, writing code samples, mentoring developers and startups and much more. Thanks to their support, developers, high-potential startups and technical communities around the world build and launch highly innovative apps.
-
-Categories: Angular & Web
+Angular & Web — recognized by Google for deep web expertise; I speak at conferences, publish technical content, mentor engineers, and contribute code samples to the community.
 
 **Microsoft Most Valuable Professional**
   : **Apr 2022 — Present**
 
-Microsoft Most Valuable Professional (MVP) award recognizes exceptional technical community leadership and outstanding contributions in the technical communities.
-
-Category: Developer Technologies
+Developer Technologies — Microsoft-recognized community leadership through technical talks, content, and hands-on contributions to developer ecosystems.
 
 **Platzi Instructor**
   : **Jan 2023 — Present**
 
-Designed and delivered advanced technical curriculum for Latin America's largest tech education platform, spanning full-stack web development (Angular, NestJS, Node.js), languages such as TypeScript and Python, testing and performance, and applied AI topics for developers—among many other tracks taught over time. Being an instructor on Platzi is an honor I take seriously; I focus on translating complex engineering ideas—distributed systems, scalable backends, and production-ready architecture—into clear, actionable practice for tens of thousands of learners.
+Advanced curriculum for 30,000+ learners on Latin America's largest tech education platform, with emphasis on TypeScript, React, full-stack web (Angular, NestJS, Node.js), and applied AI for production systems.
+I translate complex architecture—scalable backends, LLM workflows, and reliability patterns—into practical courses developers can ship with.
 
 ## Skills
 
