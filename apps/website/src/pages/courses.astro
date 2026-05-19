@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SimpleLayout from '../components/SimpleLayout.astro';
+import Card from '../components/Card.astro';
+import CardLink from '../components/CardLink.astro';
+import CardDescription from '../components/CardDescription.astro';
+import { courses } from '../lib/courses';
+
+const platziProfileUrl = 'https://platzi.com/profes/nicobytes/';
+---
+
+<BaseLayout
+  title="Courses"
+  description="Courses on TypeScript, Angular, NestJS, Node.js, Python, and AI — taught on Platzi for 30,000+ learners."
+>
+  <SimpleLayout
+    title="Courses I've taught on Platzi."
+    intro={`I translate complex architecture—scalable backends, LLM workflows, and reliability patterns—into practical courses developers can ship with. Browse ${courses.length} courses below, or view my full instructor profile on Platzi.`}
+  >
+    <p class="mb-12 -mt-8 text-sm">
+      <a
+        href={platziProfileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-medium text-teal-500 transition hover:text-teal-600 dark:text-teal-400 dark:hover:text-teal-300"
+      >
+        View full profile on Platzi →
+      </a>
+    </p>
+    <ul role="list" class="grid grid-cols-1 gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+      {courses.map((course) => (
+        <Card as="li">
+          <h2 class="text-base font-semibold text-zinc-800 dark:text-zinc-100">
+            <CardLink href={course.link.href} target="_blank" rel="noopener noreferrer">
+              {course.name}
+            </CardLink>
+          </h2>
+          {course.description && <CardDescription>{course.description}</CardDescription>}
+          <p class="relative z-10 mt-6 text-sm font-medium text-zinc-400 transition group-hover:text-teal-500 dark:text-zinc-200">
+            {course.link.label}
+          </p>
+        </Card>
+      ))}
+    </ul>
+  </SimpleLayout>
+</BaseLayout>

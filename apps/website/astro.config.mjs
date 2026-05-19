@@ -1,55 +1,48 @@
-import { defineConfig } from 'astro/config';
+// @ts-check
+
 import mdx from '@astrojs/mdx';
-import tailwind from '@astrojs/tailwind';
+import partytown from '@astrojs/partytown';
 import compressor from 'astro-compressor';
 import sitemap from '@astrojs/sitemap';
-import robotsTxt from 'astro-robots-txt';
-import rehypeExternalLinks from 'rehype-external-links';
+import { defineConfig } from 'astro/config';
+import remarkGfm from 'remark-gfm';
 
-import partytown from '@astrojs/partytown';
+import tailwindcss from '@tailwindcss/vite';
 
-// https://astro.build/config
+import icon from 'astro-icon';
+
+const shikiConfig = {
+  theme: /** @type {'night-owl'} */ ('night-owl'),
+  wrap: false,
+};
+
 export default defineConfig({
-  site: 'https://nicobytes.com/',
-  image: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-      },
-    ],
-  },
-  markdown: {
-    rehypePlugins: [
-      [
-        rehypeExternalLinks,
-        {
-          target: '_blank',
-          rel: ['noopener', 'noreferrer']
-        }
-      ],
-    ]
-  },
+  site: 'https://nicobytes.com',
   integrations: [
     mdx({
-      shikiConfig: {
-        theme: 'night-owl',
-        wrap: false,
-      },
+      shikiConfig,
       gfm: false,
+    }),
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
     }),
     compressor({
       gzip: true,
       brotli: true,
     }),
     sitemap(),
-    tailwind(),
-    robotsTxt(),
-    partytown({
-      config: {
-        forward: ['dataLayer.push'],
-      },
-    }),
+    icon(),
   ],
+  markdown: {
+    remarkPlugins: [remarkGfm],
+    syntaxHighlight: 'shiki',
+    shikiConfig,
+  },
+  vite: {
+    plugins: [tailwindcss()],
+  },
   redirects: {
     '/discord': 'https://discord.gg/6tHdeJPB4x',
   },

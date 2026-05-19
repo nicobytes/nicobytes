@@ -1,0 +1,14 @@
+---
+import clsx from 'clsx';
+
+interface Props {
+  class?: string;
+  [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div class={clsx(className, 'prose dark:prose-invert')} {...rest}>
+  <slot />
+</div>

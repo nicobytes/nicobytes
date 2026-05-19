@@ -1,0 +1,26 @@
+---
+import clsx from 'clsx';
+
+interface Props {
+  as?: string;
+  class?: string;
+}
+
+const { as: Tag = 'div', class: className } = Astro.props;
+---
+
+<Fragment>
+  {Tag === 'li' ? (
+    <li class={clsx(className, 'group relative flex flex-col items-start')}>
+      <slot />
+    </li>
+  ) : Tag === 'article' ? (
+    <article class={clsx(className, 'group relative flex flex-col items-start')}>
+      <slot />
+    </article>
+  ) : (
+    <div class={clsx(className, 'group relative flex flex-col items-start')}>
+      <slot />
+    </div>
+  )}
+</Fragment>

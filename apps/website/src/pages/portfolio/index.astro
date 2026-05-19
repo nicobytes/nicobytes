@@ -1,42 +1,59 @@
 ---
-import Base from '@layouts/Base.astro';
-import ProjectCard from '@components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SimpleLayout from '../../components/SimpleLayout.astro';
+import PortfolioCard from '../../components/PortfolioCard.astro';
 
-const privateProjects = await getCollection('portfolio', ({ data }) => {
-  return data.type === 'private' && !data.draft;
-});
-const privateItems = privateProjects.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const sortByDate = (a: { data: { date: string } }, b: { data: { date: string } }) =>
+  +new Date(b.data.date) - +new Date(a.data.date);
 
-const publicProjects = await getCollection('portfolio', ({ data }) => {
-  return data.type === 'public' && !data.draft;
-});
-const publicItems = publicProjects.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const privateProjects = (await getCollection('portfolio', ({ data }) => !data.draft && data.type === 'private')).sort(
+  sortByDate,
+);
+
+const publicProjects = (await getCollection('portfolio', ({ data }) => !data.draft && data.type === 'public')).sort(
+  sortByDate,
+);
 ---
 
-<Base meta_title='Porfolio' image='og_porfolio_v1.jpg'>
-  <h2 class="mb-4 text-2xl font-bold">My Porfolio</h2>
-  <section class="grid w-full max-w-screen-2xl gap-8 sm:grid-cols-2 lg:gap-10 xl:grid-cols-3">
-    {
-      privateItems.map((project) => (
-        <a class="flex h-full flex-col " href={`/portfolio/${project.slug}#content`} data-astro-prefetch>
-          <ProjectCard {...project.data} />
-        </a>
-      ))
-    }
-  </section>
-  {
-    publicItems.length > 0 && (
+<BaseLayout
+  title="Portfolio"
+  description="Product and platform work across AI, edtech, mobile, and developer tools — LLM systems, edge ML, conversational agents, and open APIs built for scale."
+>
+  <SimpleLayout
+    title="Building AI products, platforms, and AI-first systems at scale."
+    intro="Hands-on engineering across AI tutors, adaptive assessments, browser runtimes, and conversational systems — from serverless LLM orchestration and on-device ML to APIs used by thousands of developers. Each project reflects work leading architecture, shipping at scale, and aligning systems with real user outcomes."
+  >
+    <section class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {privateProjects.map((project) => (
+        <PortfolioCard
+          href={`/portfolio/${project.id}`}
+          title={project.data.title}
+          description={project.data.description}
+          image={project.data.image}
+        />
+      ))}
+    </section>
+
+    {publicProjects.length > 0 && (
       <>
-        <h2 class="my-10 text-2xl font-bold">Open Source Projects</h2>
-        <section class="grid w-full max-w-screen-2xl gap-8 sm:grid-cols-2 lg:gap-10 xl:grid-cols-3">
-          {publicItems.map((project) => (
-            <a class="flex h-full flex-col " href={`/portfolio/${project.slug}#content`} data-astro-prefetch>
-              <ProjectCard {...project.data} />
-            </a>
+        <h2 class="mt-16 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+          Open source
+        </h2>
+        <p class="mt-3 max-w-2xl text-base text-zinc-600 dark:text-zinc-400">
+          Public APIs and tools maintained for the developer community — reliable contracts, documentation, and scalable delivery.
+        </p>
+        <section class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {publicProjects.map((project) => (
+            <PortfolioCard
+              href={`/portfolio/${project.id}`}
+              title={project.data.title}
+              description={project.data.description}
+              image={project.data.image}
+            />
           ))}
         </section>
       </>
-    )
-  }
-</Base>
+    )}
+  </SimpleLayout>
+</BaseLayout>

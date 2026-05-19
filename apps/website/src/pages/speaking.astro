@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SimpleLayout from '../components/SimpleLayout.astro';
+import Card from '../components/Card.astro';
+import CardTitle from '../components/CardTitle.astro';
+import CardCta from '../components/CardCta.astro';
+import CardEyebrow from '../components/CardEyebrow.astro';
+import { formatDate } from '../lib/formatDate';
+
+type SpeakingItem = {
+  title: string;
+  event: string;
+  date: string;
+  href: string;
+  cta: string;
+};
+
+const speakingItems: SpeakingItem[] = [
+  {
+    title: 'Generative UI: Interfaces that create themselves (Angular + Hashbrown)',
+    event: 'GDG Ahlen: Build with AI 2026',
+    date: '2026-05-19',
+    href: 'https://www.youtube.com/watch?v=NolHAwe7Cus',
+    cta: 'Watch video',
+  },
+  {
+    title: 'Bootstrapping an aerospace company to $17M ARR',
+    event: 'The Escape Velocity Show',
+    date: '2022-03-01',
+    href: '#',
+    cta: 'Listen to podcast',
+  },
+  {
+    title: 'Programming your company operating system',
+    event: 'How They Work Radio',
+    date: '2021-09-01',
+    href: '#',
+    cta: 'Listen to podcast',
+  },
+  {
+    title: 'In space, no one can watch you stream — until now',
+    event: 'SysConf 2021',
+    date: '2021-01-01',
+    href: '#',
+    cta: 'Watch video',
+  },
+  {
+    title: 'Lessons learned from our first product recall',
+    event: 'Business of Startups 2020',
+    date: '2020-01-01',
+    href: '#',
+    cta: 'Watch video',
+  },
+].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+---
+
+<BaseLayout
+  title="Speaking"
+  description="I've spoken at events all around the world and been interviewed for many podcasts."
+>
+  <SimpleLayout
+    title="I've spoken at events all around the world and been interviewed for many podcasts."
+    intro="One of my favorite ways to share my ideas is live on stage, where there's so much more communication bandwidth than there is in writing, and I love podcast interviews because they give me the opportunity to answer questions instead of just present my opinions."
+  >
+    <div class="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
+      <div class="flex max-w-3xl flex-col space-y-16">
+        {speakingItems.map((item) => (
+          <article class="md:grid md:grid-cols-4 md:items-baseline">
+            <Card class="md:col-span-3">
+              <CardTitle href={item.href}>{item.title}</CardTitle>
+              <CardEyebrow decorate>{item.event}</CardEyebrow>
+              <CardCta>{item.cta}</CardCta>
+            </Card>
+            <CardEyebrow as="time" dateTime={item.date} class="mt-1 max-md:hidden">
+              {formatDate(item.date)}
+            </CardEyebrow>
+          </article>
+        ))}
+      </div>
+    </div>
+  </SimpleLayout>
+</BaseLayout>

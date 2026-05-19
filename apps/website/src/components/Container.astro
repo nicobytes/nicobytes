@@ -1,0 +1,18 @@
+---
+import ContainerOuter from './ContainerOuter.astro';
+import ContainerInner from './ContainerInner.astro';
+
+interface Props {
+  class?: string;
+  style?: string;
+  [key: string]: any;
+}
+
+const { ...props } = Astro.props;
+---
+
+<ContainerOuter {...props}>
+  <ContainerInner>
+    <slot />
+  </ContainerInner>
+</ContainerOuter>
