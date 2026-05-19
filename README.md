@@ -6,7 +6,6 @@
 [![Microsoft MVP](https://img.shields.io/badge/Microsoft-MVP-0078D4?style=flat&logo=microsoft&logoColor=white)](https://mvp.microsoft.com/)
 [![Website](https://img.shields.io/badge/website-nicobytes.com-0ea5e9?style=flat)](https://nicobytes.com)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-nicobytes-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nicobytes/)
-[![Email](https://img.shields.io/badge/email-hi@nicobytes.com-EA4335?style=flat&logo=gmail&logoColor=white)](mailto:hi@nicobytes.com)
 
 Senior Software Engineer with **13+ years** of experience building scalable, user-centric products across frontend and backend. I lead architecture and execution in distributed, event-driven systems—often with **FastAPI/Python** and **Node.js**—and ship production AI with **LLMs, RAG, and voice**.
 
@@ -49,11 +48,3 @@ Recognized as a **Google Developer Expert** (Angular & Web) and **Microsoft MVP*
 [![Portfolio](https://img.shields.io/badge/Portfolio-view%20work-6366f1?style=for-the-badge)](https://nicobytes.com/portfolio/)
 [![Blog](https://img.shields.io/badge/Blog-nicobytes.com-14b8a6?style=for-the-badge)](https://nicobytes.com)
 [![YouTube](https://img.shields.io/badge/YouTube-@nicobytes-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@nicobytes)
-[![X](https://img.shields.io/badge/X-@nicobytes-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/nicobytes)
-
----
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=nicobytes&show_icons=true&theme=default&hide_border=true" alt="GitHub stats" height="150" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=nicobytes&layout=compact&hide_border=true" alt="Top languages" height="150" />
-</p>
