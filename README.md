@@ -1,6 +1,6 @@
 # Nicolas Molina Monroy
 
-### Senior Software Engineer · Cochabamba, Bolivia
+### Senior Software Engineer
 
 [![Google Developer Expert](https://img.shields.io/badge/Google-Developer%20Expert-4285F4?style=flat&logo=google&logoColor=white)](https://developers.google.com/community/experts)
 [![Microsoft MVP](https://img.shields.io/badge/Microsoft-MVP-0078D4?style=flat&logo=microsoft&logoColor=white)](https://mvp.microsoft.com/)
