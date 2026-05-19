@@ -1,0 +1,6 @@
+name = "nicobytes-com"
+compatibility_date = "2024-03-28"
+pages_build_output_dir = "./dist"
+
+[env.production]
+compatibility_date = "2024-03-28"
