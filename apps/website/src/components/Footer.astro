@@ -1,20 +1,29 @@
 ---
-import ContainerOuter from './ContainerOuter.astro';
-import ContainerInner from './ContainerInner.astro';
-import { navItems } from '../lib/navItems';
+import ContainerOuter from "./ContainerOuter.astro";
+import ContainerInner from "./ContainerInner.astro";
+import { navItems } from "../lib/navItems";
 ---
 
 <footer class="mt-32 flex-none">
   <ContainerOuter>
     <div class="border-t border-zinc-100 pt-10 pb-16 dark:border-zinc-700/40">
       <ContainerInner>
-        <div class="flex flex-col items-center justify-between gap-6 md:flex-row">
-          <div class="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm font-medium text-zinc-800 dark:text-zinc-200">
-            {navItems.map(item => (
-              <a href={item.href} class="transition hover:text-teal-500 dark:hover:text-teal-400">
-                {item.label}
-              </a>
-            ))}
+        <div
+          class="flex flex-col items-center justify-between gap-6 md:flex-row"
+        >
+          <div
+            class="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm font-medium text-zinc-800 dark:text-zinc-200"
+          >
+            {
+              navItems.map((item) => (
+                <a
+                  href={item.href}
+                  class="transition hover:text-teal-500 dark:hover:text-teal-400"
+                >
+                  {item.label}
+                </a>
+              ))
+            }
           </div>
         </div>
       </ContainerInner>

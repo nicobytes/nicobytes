@@ -1,20 +1,34 @@
 ---
-import CardLink from './CardLink.astro';
+import CardLink from "./CardLink.astro";
 
 interface Props {
   as?: string;
   href?: string;
 }
 
-const { as: Tag = 'h2', href } = Astro.props;
+const { as: Tag = "h2", href } = Astro.props;
 ---
 
-{Tag === 'h3' ? (
-  <h3 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
-    {href ? <CardLink href={href}><slot /></CardLink> : <slot />}
-  </h3>
-) : (
-  <h2 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
-    {href ? <CardLink href={href}><slot /></CardLink> : <slot />}
-  </h2>
-)}
+{
+  Tag === "h3" ? (
+    <h3 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
+      {href ? (
+        <CardLink href={href}>
+          <slot />
+        </CardLink>
+      ) : (
+        <slot />
+      )}
+    </h3>
+  ) : (
+    <h2 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
+      {href ? (
+        <CardLink href={href}>
+          <slot />
+        </CardLink>
+      ) : (
+        <slot />
+      )}
+    </h2>
+  )
+}

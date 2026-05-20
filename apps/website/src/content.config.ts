@@ -1,13 +1,13 @@
-import { defineCollection } from 'astro:content';
-import { z } from 'astro/zod';
-import { glob } from 'astro/loaders';
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { glob } from "astro/loaders";
 
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    author: z.string().default('Nicolas Molina (@nicobytes)'),
+    author: z.string().default("Nicolas Molina (@nicobytes)"),
     date: z.string(),
     heroImage: z.string().optional(),
     categories: z.array(z.string()).optional(),
@@ -17,13 +17,13 @@ const blog = defineCollection({
 });
 
 const portfolio = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/portfolio' }),
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/portfolio" }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
     image: z.string(),
     date: z.string(),
-    type: z.enum(['private', 'public']).default('private'),
+    type: z.enum(["private", "public"]).default("private"),
     url: z.string().url().optional(),
     draft: z.boolean().default(false),
   }),

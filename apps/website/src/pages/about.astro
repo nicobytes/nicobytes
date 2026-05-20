@@ -1,18 +1,20 @@
 ---
-import { Image } from 'astro:assets';
-import { Icon } from 'astro-icon/components';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Container from '../components/Container.astro';
-import { socialLinks } from '../lib/socialLinks';
-import ProfileImage from '../assets/images/about.png';
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/Container.astro";
+import { socialLinks } from "../lib/socialLinks";
+import ProfileImage from "../assets/images/about.png";
 
 const description =
-  'Senior Software Engineer with 13+ years of experience building scalable, user-centric products across frontend and backend systems. Google Developer Expert and Microsoft MVP based in Cochabamba, Bolivia.';
+  "Senior Software Engineer with 13+ years of experience building scalable, user-centric products across frontend and backend systems. Google Developer Expert and Microsoft MVP based in Cochabamba, Bolivia.";
 ---
 
 <BaseLayout title="About" {description}>
   <Container class="mt-16 sm:mt-32">
-    <div class="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-12">
+    <div
+      class="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-12"
+    >
       <div class="lg:pl-20">
         <div class="max-w-xs px-2.5 lg:max-w-none">
           <Image
@@ -25,39 +27,54 @@ const description =
         </div>
       </div>
       <div class="lg:order-first lg:row-span-2">
-        <h1 class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+        <h1
+          class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
+        >
           I'm Nicolas Molina.
         </h1>
         <div class="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
           <p>
-            I'm a Senior Software Engineer with over 13 years of experience delivering
-            user-centric products across frontend and backend systems. I lead architecture
-            and execution in distributed, event-driven environments—mainly with
-            TypeScript, Python, and Node.js—and I care as much about reliability at scale
-            as I do about the details of the developer experience.
+            I'm a Senior Software Engineer with over 13 years of experience
+            delivering user-centric products across frontend and backend
+            systems. I lead architecture and execution in distributed,
+            event-driven environments—mainly with TypeScript, Python, and
+            Node.js—and I care as much about reliability at scale as I do about
+            the details of the developer experience.
           </p>
           <p>
-            At <strong class="font-semibold text-zinc-800 dark:text-zinc-200">dotCMS</strong>, I
-            work on the platform's AI chat experience using Generative UI to render dynamic
-            components on the fly—handling common questions, automating form-filling, and
-            making cross-platform navigation feel natural. I also lead the design and
-            development of scalable features that keep performance and maintainability in
-            balance with product goals.
+            At <a
+              href="https://www.dotcms.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-teal-500 dark:text-teal-400">dotCMS</a
+            >, I work on the platform's AI chat experience using Generative UI
+            to render dynamic components on the fly—handling common questions,
+            automating form-filling, and making cross-platform navigation feel
+            natural. I also lead the design and development of scalable features
+            that keep performance and maintainability in balance with product
+            goals.
           </p>
           <p>
-            Before that, at <strong class="font-semibold text-zinc-800 dark:text-zinc-200">Platzi</strong>,
-            I architected Ada, the AI tutor, to support 6,000+ concurrent students on a
-            serverless edge stack with HonoJS and Cloudflare Workers. I built the LLM
-            orchestration layer with LangChainJS, GPT-4, and RAG, and led backend work on
-            an adaptive English placement test powered by FastAPI and Whisper for voice
-            analysis. I also created browser-based coding playgrounds with Pyodide and
-            maintained public APIs used by thousands of developers across Latin America.
+            Before that, at <a
+              href="https://platzi.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-teal-500 dark:text-teal-400">Platzi</a
+            >, I architected Ada, the AI tutor, to support 6,000+ concurrent
+            students on a serverless edge stack with HonoJS and Cloudflare
+            Workers. I built the LLM orchestration layer with LangChainJS,
+            GPT-4, and RAG, and led backend work on an adaptive English
+            placement test powered by FastAPI and Whisper for voice analysis. I
+            also created browser-based coding playgrounds with Pyodide and
+            maintained public APIs used by thousands of developers across Latin
+            America.
           </p>
           <p>
-            AI has been a thread through my career for years—from on-device inference with
-            TensorFlowJS at Lulla Care to conversational agents with Microsoft Bot Framework,
-            and now LLMs, RAG, voice AI, and LangGraph in production. I enjoy turning complex
-            systems into practical tools people can actually use.
+            AI has been a thread through my career for years—from on-device
+            inference with TensorFlowJS at Lulla Care to conversational agents
+            with Microsoft Bot Framework, and now LLMs, RAG, voice AI, and
+            LangGraph in production. I enjoy turning complex systems into
+            practical tools people can actually use.
           </p>
           <p>
             Outside of product work, I'm recognized as a
@@ -66,17 +83,18 @@ const description =
               target="_blank"
               rel="noopener noreferrer"
               class="text-teal-500 dark:text-teal-400"
-            >Google Developer Expert</a>
+              >Google Developer Expert</a
+            >
             in Angular & Web and a
             <a
               href="https://mvp.microsoft.com/en-US/MVP/profile/28c464f4-ccb0-ec11-983f-000d3a1017e3"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-teal-500 dark:text-teal-400"
-            >Microsoft MVP</a>
-            in Developer Technologies. I teach advanced curriculum to 30,000+ learners on
-            Platzi—including LangGraph for AI Agents—and speak, write, and mentor in the
-            developer community.
+              class="text-teal-500 dark:text-teal-400">Microsoft MVP</a
+            >
+            in Developer Technologies. I teach advanced curriculum to 30,000+ learners
+            on Platzi—including LangGraph for AI Agents—and speak, write, and mentor
+            in the developer community.
           </p>
         </div>
       </div>
@@ -102,14 +120,23 @@ const description =
           }
         </ul>
 
-        <div class="mt-10 rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
-          <h2 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Focus areas</h2>
+        <div
+          class="mt-10 rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40"
+        >
+          <h2 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            Focus areas
+          </h2>
           <ul class="mt-4 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
             <li>Languages: TypeScript, JavaScript, SQL, Python</li>
             <li>Full-stack web: Angular, React, Next.js, NestJS, FastAPI</li>
             <li>AI systems: LLMs, RAG, LangChain, LangGraph, voice AI</li>
-            <li>Infrastructure: Cloudflare Workers, Docker, event-driven design</li>
-            <li>Databases: MongoDB, Couchbase, CouchDB, PostgreSQL, Supabase, Firestore, Pinecone, vector DBs</li>
+            <li>
+              Infrastructure: Cloudflare Workers, Docker, event-driven design
+            </li>
+            <li>
+              Databases: MongoDB, Couchbase, CouchDB, PostgreSQL, Supabase,
+              Firestore, Pinecone, vector DBs
+            </li>
           </ul>
         </div>
       </div>

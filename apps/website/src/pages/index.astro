@@ -1,97 +1,126 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import clsx from 'clsx';
-import { Icon } from 'astro-icon/components'
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import clsx from "clsx";
+import { Icon } from "astro-icon/components";
 
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Container from '../components/Container.astro';
-import Card from '../components/Card.astro';
-import CardTitle from '../components/CardTitle.astro';
-import CardDescription from '../components/CardDescription.astro';
-import CardCta from '../components/CardCta.astro';
-import CardEyebrow from '../components/CardEyebrow.astro';
-import Resume from '../components/Resume.astro';
-import { formatDate } from '../lib/formatDate';
-import { socialLinks } from '../lib/socialLinks';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/Container.astro";
+import Card from "../components/Card.astro";
+import CardTitle from "../components/CardTitle.astro";
+import CardDescription from "../components/CardDescription.astro";
+import CardCta from "../components/CardCta.astro";
+import CardEyebrow from "../components/CardEyebrow.astro";
+import Resume from "../components/Resume.astro";
+import { formatDate } from "../lib/formatDate";
+import { socialLinks } from "../lib/socialLinks";
 
-import image1 from '../assets/images/photos/image-1.jpg';
-import image2 from '../assets/images/photos/image-2.jpg';
-import image3 from '../assets/images/photos/image-3.jpg';
-import image4 from '../assets/images/photos/image-4.jpg';
-import image5 from '../assets/images/photos/image-5.jpg';
+import image1 from "../assets/images/photos/image-1.jpg";
+import image2 from "../assets/images/photos/image-2.jpg";
+import image3 from "../assets/images/photos/image-3.jpg";
+import image4 from "../assets/images/photos/image-4.jpg";
+import image5 from "../assets/images/photos/image-5.jpg";
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft))
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, z) => +new Date(z.data.date) - +new Date(a.data.date))
   .slice(0, 4);
 
-const rotations = ['rotate-2', '-rotate-2', 'rotate-2', 'rotate-2', '-rotate-2'];
+const rotations = [
+  "rotate-2",
+  "-rotate-2",
+  "rotate-2",
+  "rotate-2",
+  "-rotate-2",
+];
 const photos = [image1, image2, image3, image4, image5];
-
 ---
 
 <BaseLayout>
   <Container class="mt-9">
     <div class="max-w-2xl">
-      <h1 class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+      <h1
+        class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
+      >
         Senior Software Developer
       </h1>
       <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-        I'm Nicolas Molina (@nicobytes) Sr Software Developer with more than 10 years of experience in development and technology management. Recognized by Google as an <a href="https://g.dev/nicobytes" target="_blank" class="text-teal-500 dark:text-teal-400">Angular & Web Developer Expert</a>, and by Microsoft as a <a
-        class="text-teal-500 dark:text-teal-400"
-        target="_blank"
-        href="https://mvp.microsoft.com/en-US/MVP/profile/28c464f4-ccb0-ec11-983f-000d3a1017e3"
-        >Most Valuable Professional</a
-      >.
+        I'm Nicolas Molina (@nicobytes) Sr Software Developer with more than 10
+        years of experience in development and technology management. Recognized
+        by Google as an <a
+          href="https://g.dev/nicobytes"
+          target="_blank"
+          class="text-teal-500 dark:text-teal-400"
+          >Angular & Web Developer Expert</a
+        >, and by Microsoft as a <a
+          class="text-teal-500 dark:text-teal-400"
+          target="_blank"
+          href="https://mvp.microsoft.com/en-US/MVP/profile/28c464f4-ccb0-ec11-983f-000d3a1017e3"
+          >Most Valuable Professional</a
+        >.
       </p>
       <div class="mt-6 flex gap-6">
-        {socialLinks.map(({ href, label, icon }) => (
-          <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} class="group -m-1 p-1">
-            <Icon name={icon} class="h-6 w-6 text-zinc-500 group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-zinc-300" />
-          </a>
-        ))}
+        {
+          socialLinks.map(({ href, label, icon }) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              class="group -m-1 p-1"
+            >
+              <Icon
+                name={icon}
+                class="h-6 w-6 text-zinc-500 group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-zinc-300"
+              />
+            </a>
+          ))
+        }
       </div>
     </div>
   </Container>
 
   <div class="mt-16 sm:mt-20">
     <div class="-my-4 flex justify-center gap-5 overflow-hidden py-4 sm:gap-8">
-      {photos.map((image, imageIndex) => (
-        <div
-          class={clsx(
-            'relative w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800',
-            rotations[imageIndex % rotations.length],
-          )}
-        >
-          <div class="aspect-9/10">
-            <Image
-              src={image}
-              alt=""
-              widths={[300, 500]}
-              sizes="(min-width: 640px) 18rem, 11rem"
-              class="absolute inset-0 h-full w-full object-cover"
-            />
+      {
+        photos.map((image, imageIndex) => (
+          <div
+            class={clsx(
+              "relative w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl dark:bg-zinc-800",
+              rotations[imageIndex % rotations.length],
+            )}
+          >
+            <div class="aspect-9/10">
+              <Image
+                src={image}
+                alt=""
+                widths={[300, 500]}
+                sizes="(min-width: 640px) 18rem, 11rem"
+                class="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 
   <Container class="mt-24 md:mt-28">
-    <div class="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
+    <div
+      class="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2"
+    >
       <div class="flex flex-col gap-16">
-        {posts.map((post) => (
-          <Card as="article">
-            <CardTitle href={`/blog/${post.id}`}>
-              {post.data.title}
-            </CardTitle>
-            <CardEyebrow as="time" dateTime={post.data.date} decorate>
-              {formatDate(post.data.date)}
-            </CardEyebrow>
-            <CardDescription>{post.data.description}</CardDescription>
-            <CardCta>Read post</CardCta>
-          </Card>
-        ))}
+        {
+          posts.map((post) => (
+            <Card as="article">
+              <CardTitle href={`/blog/${post.id}`}>{post.data.title}</CardTitle>
+              <CardEyebrow as="time" dateTime={post.data.date} decorate>
+                {formatDate(post.data.date)}
+              </CardEyebrow>
+              <CardDescription>{post.data.description}</CardDescription>
+              <CardCta>Read post</CardCta>
+            </Card>
+          ))
+        }
       </div>
       <div class="space-y-10 lg:pl-16 xl:pl-24">
         <!-- Newsletter 

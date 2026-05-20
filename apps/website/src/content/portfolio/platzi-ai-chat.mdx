@@ -1,10 +1,10 @@
 ---
-date: '2023-12-30'
-title: 'Platzi AI Chat'
-description: 'Scaled Platzi’s AI tutor (Ada) to 6,000+ concurrent learners on serverless Cloudflare Workers, with LangChain, GPT-4, and RAG for context-aware support.'
-image: '/portfolio/chat_ada.jpg'
-url: 'https://platzi.com/chat/'
-type: 'private'
+date: "2023-12-30"
+title: "Platzi AI Chat"
+description: "Scaled Platzi’s AI tutor (Ada) to 6,000+ concurrent learners on serverless Cloudflare Workers, with LangChain, GPT-4, and RAG for context-aware support."
+image: "/portfolio/chat_ada.jpg"
+url: "https://platzi.com/chat/"
+type: "private"
 ---
 
 My work on the Platzi AI Chat, Ada, involved both the backend and frontend. I employed HonoJS for serverless Cloudflare functions, enabling REST API consumption, and LangChainJS for managing LLMs (Large Language Models) like GPT-4 and GPT-3, utilizing prompt engineering and the RAG technique for customized interactions. On the frontend, I designed reusable React components and optimized the user interface with NextJS/React and TypeScript, ensuring that the chat offered 24/7 learning assistance.
@@ -25,7 +25,7 @@ A challenge in this project was to support multiple themes since Platzi recently
 
 ### Recommend classes, courses and routes to learn
 
-The chat can recommend classes, courses, and learning paths based on the user's interests. In this part, all the content in Platzi was transformed into vectors (embeddings), and using  <a href="https://www.pinecone.io/" target="_blank">Pinecone</a> as a vector database, we can inject new knowledge into LLMs like GPT-4 and GPT-3 and give an accurate answer.
+The chat can recommend classes, courses, and learning paths based on the user's interests. In this part, all the content in Platzi was transformed into vectors (embeddings), and using <a href="https://www.pinecone.io/" target="_blank">Pinecone</a> as a vector database, we can inject new knowledge into LLMs like GPT-4 and GPT-3 and give an accurate answer.
 
 ![Platzi AI Chat class recommendations](/portfolio/chat_ada_classes.jpg)
 

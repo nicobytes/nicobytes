@@ -1,88 +1,115 @@
 ---
-import clsx from 'clsx';
-import { Image } from 'astro:assets';
-import Container from './Container.astro';
-import ContainerOuter from './ContainerOuter.astro';
-import ContainerInner from './ContainerInner.astro';
-import ThemeToggle from './ThemeToggle.astro';
-import MobileNav from './MobileNav.astro';
-import avatarImage from '../assets/images/profile.jpg';
-import { isNavItemActive, navItems } from '../lib/navItems';
+import clsx from "clsx";
+import { Image } from "astro:assets";
+import Container from "./Container.astro";
+import ContainerOuter from "./ContainerOuter.astro";
+import ContainerInner from "./ContainerInner.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import MobileNav from "./MobileNav.astro";
+import avatarImage from "../assets/images/profile.jpg";
+import { isNavItemActive, navItems } from "../lib/navItems";
 
 const currentPath = Astro.url.pathname;
-const isHomePage = currentPath === '/';
+const isHomePage = currentPath === "/";
 ---
 
 <header
   class="pointer-events-none relative z-50 flex flex-none flex-col"
-  style={{ height: 'var(--header-height)', marginBottom: 'var(--header-mb)' }}
+  style={{ height: "var(--header-height)", marginBottom: "var(--header-mb)" }}
 >
-  {isHomePage && (
-    <div id="avatar-ref" class="order-last mt-[calc(var(--spacing-16,4rem)-(var(--spacing-3,0.75rem)))]"></div>
-    <ContainerOuter class="top-0 order-last -mb-3 pt-3" style="position: var(--header-position)">
-      <ContainerInner>
-        <div class="top-(--avatar-top,var(--spacing-3,0.75rem)) w-full" style="position: var(--header-inner-position)">
-          <div class="relative">
+  {
+    isHomePage && (
+      <>
+        <div
+          id="avatar-ref"
+          class="order-last mt-[calc(var(--spacing-16,4rem)-(var(--spacing-3,0.75rem)))]"
+        />
+        <ContainerOuter
+          class="top-0 order-last -mb-3 pt-3"
+          style="position: var(--header-position)"
+        >
+          <ContainerInner>
             <div
-              class="absolute top-3 left-0 origin-left transition-opacity h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:ring-white/10"
-              style="opacity: var(--avatar-border-opacity, 0); transform: var(--avatar-border-transform)"
-            ></div>
-            <a href="/" aria-label="Home" class="block h-16 w-16 origin-left pointer-events-auto" style="transform: var(--avatar-image-transform)">
-              <Image
-                src={avatarImage}
-                alt="my profile picture"
-                widths={[100, 200]}
-                class="rounded-full bg-zinc-100 object-cover h-16 w-16 dark:bg-zinc-800"
-              />
-            </a>
-          </div>
-        </div>
-      </ContainerInner>
-    </ContainerOuter>
-  )}
+              class="top-(--avatar-top,var(--spacing-3,0.75rem)) w-full"
+              style="position: var(--header-inner-position)"
+            >
+              <div class="relative">
+                <div
+                  class="absolute top-3 left-0 h-10 w-10 origin-left rounded-full bg-white/90 p-0.5 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition-opacity dark:bg-zinc-800/90 dark:ring-white/10"
+                  style="opacity: var(--avatar-border-opacity, 0); transform: var(--avatar-border-transform)"
+                />
+                <a
+                  href="/"
+                  aria-label="Home"
+                  class="pointer-events-auto block h-16 w-16 origin-left"
+                  style="transform: var(--avatar-image-transform)"
+                >
+                  <Image
+                    src={avatarImage}
+                    alt="my profile picture"
+                    widths={[100, 200]}
+                    class="h-16 w-16 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
+                  />
+                </a>
+              </div>
+            </div>
+          </ContainerInner>
+        </ContainerOuter>
+      </>
+    )
+  }
   <div
     id="header-ref"
     class="top-0 z-10 h-16 pt-6"
     style="position: var(--header-position)"
   >
-    <Container class="top-(--header-top,var(--spacing-6,1.5rem)) w-full" style="position: var(--header-inner-position)">
+    <Container
+      class="top-(--header-top,var(--spacing-6,1.5rem)) w-full"
+      style="position: var(--header-inner-position)"
+    >
       <div class="relative flex gap-4">
         <div class="flex flex-1">
-          {!isHomePage && (
-            <div class="h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:ring-white/10">
-              <a href="/" aria-label="Home" class="pointer-events-auto">
-                <Image
-                  src={avatarImage}
-                  alt="my profile picture"
-                  widths={[100, 200]}
-                  class="rounded-full bg-zinc-100 object-cover h-9 w-9 dark:bg-zinc-800"
-                />
-              </a>
-            </div>
-          )}
+          {
+            !isHomePage && (
+              <div class="h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:ring-white/10">
+                <a href="/" aria-label="Home" class="pointer-events-auto">
+                  <Image
+                    src={avatarImage}
+                    alt="my profile picture"
+                    widths={[100, 200]}
+                    class="h-9 w-9 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
+                  />
+                </a>
+              </div>
+            )
+          }
         </div>
         <div class="flex flex-1 justify-end md:justify-center">
           <MobileNav />
           <nav class="pointer-events-auto hidden md:block">
-            <ul class="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
-              {navItems.map(item => (
-                <li>
-                  <a
-                    href={item.href}
-                    class={clsx(
-                      'relative block px-3 py-2 transition',
-                      isNavItemActive(currentPath, item.href)
-                        ? 'text-teal-500 dark:text-teal-400'
-                        : 'hover:text-teal-500 dark:hover:text-teal-400',
-                    )}
-                  >
-                    {item.label}
-                    {isNavItemActive(currentPath, item.href) && (
-                      <span class="absolute inset-x-1 -bottom-px h-px bg-linear-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0"></span>
-                    )}
-                  </a>
-                </li>
-              ))}
+            <ul
+              class="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10"
+            >
+              {
+                navItems.map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      class={clsx(
+                        "relative block px-3 py-2 transition",
+                        isNavItemActive(currentPath, item.href)
+                          ? "text-teal-500 dark:text-teal-400"
+                          : "hover:text-teal-500 dark:hover:text-teal-400",
+                      )}
+                    >
+                      {item.label}
+                      {isNavItemActive(currentPath, item.href) && (
+                        <span class="absolute inset-x-1 -bottom-px h-px bg-linear-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0" />
+                      )}
+                    </a>
+                  </li>
+                ))
+              }
             </ul>
           </nav>
         </div>
@@ -96,9 +123,7 @@ const isHomePage = currentPath === '/';
   </div>
 </header>
 
-{isHomePage && (
-  <div class="flex-none" style="height: var(--content-offset)"></div>
-)}
+{isHomePage && <div class="flex-none" style="height: var(--content-offset)" />}
 
 <script define:vars={{ isHomePage }}>
   if (isHomePage) {
@@ -108,8 +133,8 @@ const isHomePage = currentPath === '/';
       return Math.min(Math.max(number, min), max);
     }
 
-    const headerRef = document.getElementById('header-ref');
-    const avatarRef = document.getElementById('avatar-ref');
+    const headerRef = document.getElementById("header-ref");
+    const avatarRef = document.getElementById("avatar-ref");
 
     if (headerRef && avatarRef) {
       let downDelay = avatarRef.offsetTop || 0;
@@ -126,34 +151,38 @@ const isHomePage = currentPath === '/';
 
       function updateHeaderStyles() {
         let { top, height } = headerRef.getBoundingClientRect();
-        let scrollY = clamp(window.scrollY, 0, document.body.scrollHeight - window.innerHeight);
+        let scrollY = clamp(
+          window.scrollY,
+          0,
+          document.body.scrollHeight - window.innerHeight,
+        );
 
         if (isInitial) {
-          setProperty('--header-position', 'sticky');
+          setProperty("--header-position", "sticky");
         }
 
-        setProperty('--content-offset', `${downDelay}px`);
+        setProperty("--content-offset", `${downDelay}px`);
 
         if (isInitial || scrollY < downDelay) {
-          setProperty('--header-height', `${downDelay + height}px`);
-          setProperty('--header-mb', `${-downDelay}px`);
+          setProperty("--header-height", `${downDelay + height}px`);
+          setProperty("--header-mb", `${-downDelay}px`);
         } else if (top + height < -upDelay) {
           let offset = Math.max(height, scrollY - upDelay);
-          setProperty('--header-height', `${offset}px`);
-          setProperty('--header-mb', `${height - offset}px`);
+          setProperty("--header-height", `${offset}px`);
+          setProperty("--header-mb", `${height - offset}px`);
         } else if (top === 0) {
-          setProperty('--header-height', `${scrollY + height}px`);
-          setProperty('--header-mb', `${-scrollY}px`);
+          setProperty("--header-height", `${scrollY + height}px`);
+          setProperty("--header-mb", `${-scrollY}px`);
         }
 
         if (top === 0 && scrollY > 0 && scrollY >= downDelay) {
-          setProperty('--header-inner-position', 'fixed');
-          removeProperty('--header-top');
-          removeProperty('--avatar-top');
+          setProperty("--header-inner-position", "fixed");
+          removeProperty("--header-top");
+          removeProperty("--avatar-top");
         } else {
-          removeProperty('--header-inner-position');
-          setProperty('--header-top', '0px');
-          setProperty('--avatar-top', '0px');
+          removeProperty("--header-inner-position");
+          setProperty("--header-top", "0px");
+          setProperty("--avatar-top", "0px");
         }
       }
 
@@ -171,14 +200,17 @@ const isHomePage = currentPath === '/';
         let x = (scrollY * (fromX - toX)) / downDelay + toX;
         x = clamp(x, fromX, toX);
 
-        setProperty('--avatar-image-transform', `translate3d(${x}rem, 0, 0) scale(${scale})`);
+        setProperty(
+          "--avatar-image-transform",
+          `translate3d(${x}rem, 0, 0) scale(${scale})`,
+        );
 
         let borderScale = 1 / (toScale / scale);
         let borderX = (-toX + x) * borderScale;
         let borderTransform = `translate3d(${borderX}rem, 0, 0) scale(${borderScale})`;
 
-        setProperty('--avatar-border-transform', borderTransform);
-        setProperty('--avatar-border-opacity', scale === toScale ? '1' : '0');
+        setProperty("--avatar-border-transform", borderTransform);
+        setProperty("--avatar-border-opacity", scale === toScale ? "1" : "0");
       }
 
       function updateStyles() {
@@ -188,8 +220,8 @@ const isHomePage = currentPath === '/';
       }
 
       updateStyles();
-      window.addEventListener('scroll', updateStyles, { passive: true });
-      window.addEventListener('resize', updateStyles);
+      window.addEventListener("scroll", updateStyles, { passive: true });
+      window.addEventListener("resize", updateStyles);
     }
   }
 </script>

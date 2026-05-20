@@ -1,19 +1,27 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import SimpleLayout from '../../components/SimpleLayout.astro';
-import PortfolioCard from '../../components/PortfolioCard.astro';
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SimpleLayout from "../../components/SimpleLayout.astro";
+import PortfolioCard from "../../components/PortfolioCard.astro";
 
-const sortByDate = (a: { data: { date: string } }, b: { data: { date: string } }) =>
-  +new Date(b.data.date) - +new Date(a.data.date);
+const sortByDate = (
+  a: { data: { date: string } },
+  b: { data: { date: string } },
+) => +new Date(b.data.date) - +new Date(a.data.date);
 
-const privateProjects = (await getCollection('portfolio', ({ data }) => !data.draft && data.type === 'private')).sort(
-  sortByDate,
-);
+const privateProjects = (
+  await getCollection(
+    "portfolio",
+    ({ data }) => !data.draft && data.type === "private",
+  )
+).sort(sortByDate);
 
-const publicProjects = (await getCollection('portfolio', ({ data }) => !data.draft && data.type === 'public')).sort(
-  sortByDate,
-);
+const publicProjects = (
+  await getCollection(
+    "portfolio",
+    ({ data }) => !data.draft && data.type === "public",
+  )
+).sort(sortByDate);
 ---
 
 <BaseLayout
@@ -25,35 +33,40 @@ const publicProjects = (await getCollection('portfolio', ({ data }) => !data.dra
     intro="Hands-on engineering across AI tutors, adaptive assessments, browser runtimes, and conversational systems — from serverless LLM orchestration and on-device ML to APIs used by thousands of developers. Each project reflects work leading architecture, shipping at scale, and aligning systems with real user outcomes."
   >
     <section class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      {privateProjects.map((project) => (
-        <PortfolioCard
-          href={`/portfolio/${project.id}`}
-          title={project.data.title}
-          description={project.data.description}
-          image={project.data.image}
-        />
-      ))}
+      {
+        privateProjects.map((project) => (
+          <PortfolioCard
+            href={`/portfolio/${project.id}`}
+            title={project.data.title}
+            description={project.data.description}
+            image={project.data.image}
+          />
+        ))
+      }
     </section>
 
-    {publicProjects.length > 0 && (
-      <>
-        <h2 class="mt-16 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
-          Open source
-        </h2>
-        <p class="mt-3 max-w-2xl text-base text-zinc-600 dark:text-zinc-400">
-          Public APIs and tools maintained for the developer community — reliable contracts, documentation, and scalable delivery.
-        </p>
-        <section class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {publicProjects.map((project) => (
-            <PortfolioCard
-              href={`/portfolio/${project.id}`}
-              title={project.data.title}
-              description={project.data.description}
-              image={project.data.image}
-            />
-          ))}
-        </section>
-      </>
-    )}
+    {
+      publicProjects.length > 0 && (
+        <>
+          <h2 class="mt-16 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+            Open source
+          </h2>
+          <p class="mt-3 max-w-2xl text-base text-zinc-600 dark:text-zinc-400">
+            Public APIs and tools maintained for the developer community —
+            reliable contracts, documentation, and scalable delivery.
+          </p>
+          <section class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {publicProjects.map((project) => (
+              <PortfolioCard
+                href={`/portfolio/${project.id}`}
+                title={project.data.title}
+                description={project.data.description}
+                image={project.data.image}
+              />
+            ))}
+          </section>
+        </>
+      )
+    }
   </SimpleLayout>
 </BaseLayout>

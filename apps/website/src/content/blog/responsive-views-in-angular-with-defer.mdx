@@ -29,29 +29,26 @@ It basically works by depending on `isMobile` signal to detect if it is mobile o
 
 ```html
 @if (isMobile()) {
-  <app-list [products]="products()" />
+<app-list [products]="products()" />
 } @else {
-  <app-table [products]="products()" />
+<app-table [products]="products()" />
 }
 ```
 
 When the app detects a mobile device, it loads a specific component; otherwise, it loads a different component, note that both use the same input. The `isMobile` signal uses the Angular CDK's BreakpointObserver to detect when it is mobile.
 
 ```ts
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs/operators";
 
 export default class ProductsComponent {
   private breakpointObserver$ = inject(BreakpointObserver);
   private isMobile$ = this.breakpointObserver$
     .observe(Breakpoints.Handset)
-    .pipe(
-      map((result) => result.matches)
-    );
-  
-  isMobile = toSignal(isMobile$, { initialValue: true });
+    .pipe(map((result) => result.matches));
 
+  isMobile = toSignal(isMobile$, { initialValue: true });
 }
 ```
 
@@ -59,11 +56,15 @@ Yes, I know that this task is possible using CSS Media Queries like this:
 
 ```css
 @media screen and (min-width: 0px) and (max-width: 400px) {
-  #my-content { display: block; }  /* show it on small screens */
+  #my-content {
+    display: block;
+  } /* show it on small screens */
 }
 
 @media screen and (min-width: 401px) and (max-width: 1024px) {
-  #my-content { display: none; }   /* hide it elsewhere */
+  #my-content {
+    display: none;
+  } /* hide it elsewhere */
 }
 ```
 
@@ -74,15 +75,11 @@ But in this case, you actually load both components and just hide them from the 
 With this approach, it is possible to use the new defer block to save bytes and load the component only when needed. With this code:
 
 ```html
-@if (isMobile()) {
-  @defer {
-    <app-list [products]="products()" />
-  }
-} @else {
-  @defer {
-    <app-table [products]="products()" />
-  }
-}
+@if (isMobile()) { @defer {
+<app-list [products]="products()" />
+} } @else { @defer {
+<app-table [products]="products()" />
+} }
 ```
 
 Now, with this approach, it is possible to save bytes depending on `isMobile` signal, because when you use the `@if` approach, both components are loaded in the page, but when you use the defer component, each component is loaded only when it is needed.
@@ -91,13 +88,13 @@ To visualize this case, when using the `@if` approach, you include both componen
 
 ![bundle size with if approach](/blog/responsive-views/screen_1.png)
 
-But if you use the defer approach, the component is split into three chunks: 
+But if you use the defer approach, the component is split into three chunks:
 
-|  Component  | Size |
-|:------:|:------------------:|
-| products-component (The page itself)  |     4.09kb      |
-| list-component  |     1.56kb      |
-| table-component  |     3.15kb     |
+|              Component               |  Size  |
+| :----------------------------------: | :----: |
+| products-component (The page itself) | 4.09kb |
+|            list-component            | 1.56kb |
+|           table-component            | 3.15kb |
 
 In the mobile case, the `products-component` and `list-component` are loaded, resulting in a total of 5.56kb loaded. Conversely, if it is not a mobile device such as a tablet or desktop, the `product-component` and `table-component` are loaded, resulting in a total of 7.24kb.
 
