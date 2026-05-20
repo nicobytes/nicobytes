@@ -1,12 +1,21 @@
 ---
+import { Icon } from "astro-icon/components";
 import ContainerOuter from "./ContainerOuter.astro";
 import ContainerInner from "./ContainerInner.astro";
 import { navItems } from "../lib/navItems";
+import { socialLinks } from "../lib/socialLinks";
+
+const currentYear = new Date().getFullYear();
 ---
 
 <footer class="mt-32 flex-none">
   <ContainerOuter>
-    <div class="border-t border-zinc-100 pt-10 pb-16 dark:border-zinc-700/40">
+    <div class="relative pt-10 pb-16">
+      <div
+        class="absolute inset-x-0 top-0 h-px"
+        style="background: var(--accent-gradient); opacity: 0.3;"
+      >
+      </div>
       <ContainerInner>
         <div
           class="flex flex-col items-center justify-between gap-6 md:flex-row"
@@ -18,14 +27,37 @@ import { navItems } from "../lib/navItems";
               navItems.map((item) => (
                 <a
                   href={item.href}
-                  class="transition hover:text-teal-500 dark:hover:text-teal-400"
+                  class="hover:text-accent-cyan transition duration-200"
                 >
                   {item.label}
                 </a>
               ))
             }
           </div>
+          <div class="flex items-center gap-4">
+            {
+              socialLinks.map(({ href, label, icon }) => (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  class="group"
+                >
+                  <Icon
+                    name={icon}
+                    class="group-hover:text-accent-cyan h-5 w-5 text-zinc-500 transition-all duration-200 group-hover:scale-110 dark:text-zinc-400"
+                  />
+                </a>
+              ))
+            }
+          </div>
         </div>
+        <p
+          class="mt-6 text-center text-xs text-zinc-400 md:text-left dark:text-zinc-500"
+        >
+          &copy; {currentYear} Nicolas Molina. Built with Astro.
+        </p>
       </ContainerInner>
     </div>
   </ContainerOuter>

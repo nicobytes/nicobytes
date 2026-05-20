@@ -34,13 +34,18 @@ const publicProjects = (
   >
     <section class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {
-        privateProjects.map((project) => (
-          <PortfolioCard
-            href={`/portfolio/${project.id}`}
-            title={project.data.title}
-            description={project.data.description}
-            image={project.data.image}
-          />
+        privateProjects.map((project, i) => (
+          <div
+            class="scroll-reveal h-full"
+            style={`transition-delay: ${i * 0.08}s`}
+          >
+            <PortfolioCard
+              href={`/portfolio/${project.id}`}
+              title={project.data.title}
+              description={project.data.description}
+              image={project.data.image}
+            />
+          </div>
         ))
       }
     </section>
@@ -48,21 +53,29 @@ const publicProjects = (
     {
       publicProjects.length > 0 && (
         <>
-          <h2 class="mt-16 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+          <h2 class="scroll-reveal mt-16 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
             Open source
           </h2>
-          <p class="mt-3 max-w-2xl text-base text-zinc-600 dark:text-zinc-400">
+          <p
+            class="scroll-reveal mt-3 max-w-2xl text-base text-zinc-600 dark:text-zinc-400"
+            style="transition-delay: 0.08s"
+          >
             Public APIs and tools maintained for the developer community —
             reliable contracts, documentation, and scalable delivery.
           </p>
           <section class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {publicProjects.map((project) => (
-              <PortfolioCard
-                href={`/portfolio/${project.id}`}
-                title={project.data.title}
-                description={project.data.description}
-                image={project.data.image}
-              />
+            {publicProjects.map((project, i) => (
+              <div
+                class="scroll-reveal h-full"
+                style={`transition-delay: ${i * 0.08}s`}
+              >
+                <PortfolioCard
+                  href={`/portfolio/${project.id}`}
+                  title={project.data.title}
+                  description={project.data.description}
+                  image={project.data.image}
+                />
+              </div>
             ))}
           </section>
         </>

@@ -28,7 +28,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image ?? "/og_image.jpg", Astro.site).href;
 ---
 
-<html lang="en" class="h-full antialiased">
+<html lang="en" class="h-full font-sans antialiased">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -53,6 +53,10 @@ const ogImage = new URL(image ?? "/og_image.jpg", Astro.site).href;
       title={siteTitle}
     />
     <link rel="icon" href="/favicon.png" />
+    <link
+      href="https://cdn.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
     <!-- Google tag (gtag.js) -->
     <script
       type="text/partytown"
@@ -78,13 +82,18 @@ const ogImage = new URL(image ?? "/og_image.jpg", Astro.site).href;
       })();
     </script>
   </head>
-  <body class="flex h-full bg-zinc-50 dark:bg-black">
+  <body class="noise-bg flex h-full bg-zinc-50 dark:bg-black">
     <div class="flex w-full">
       <div class="fixed inset-0 flex justify-center sm:px-8">
         <div class="flex w-full max-w-7xl lg:px-8">
           <div
             class="w-full bg-white ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-300/20"
           >
+            <div
+              class="pointer-events-none absolute inset-0 opacity-[0.02] dark:opacity-[0.04]"
+              style="background-image: linear-gradient(rgba(6,182,212,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.15) 1px, transparent 1px); background-size: 60px 60px;"
+            >
+            </div>
           </div>
         </div>
       </div>
@@ -96,5 +105,31 @@ const ogImage = new URL(image ?? "/og_image.jpg", Astro.site).href;
         <Footer />
       </div>
     </div>
+    <script>
+      const reveal = (el: Element) => {
+        el.classList.add("is-visible");
+        observer.unobserve(el);
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) reveal(entry.target);
+          });
+        },
+        { threshold: 0, rootMargin: "0px 0px -5% 0px" },
+      );
+
+      const elements = document.querySelectorAll(".scroll-reveal");
+      elements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight && rect.bottom > 0;
+        if (inView) {
+          reveal(el);
+        } else {
+          observer.observe(el);
+        }
+      });
+    </script>
   </body>
 </html>
