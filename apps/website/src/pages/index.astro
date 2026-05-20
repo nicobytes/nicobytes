@@ -123,7 +123,7 @@ const yearsOfExperience = getYearsOfExperience();
           posts.map((post, i) => (
             <div class="scroll-reveal" style={`transition-delay: ${i * 0.1}s`}>
               <Card as="article">
-                <CardTitle href={`/blog/${post.id}`}>
+                <CardTitle href={`/blog/${post.id}/`}>
                   {post.data.title}
                 </CardTitle>
                 <CardEyebrow as="time" dateTime={post.data.date} decorate>

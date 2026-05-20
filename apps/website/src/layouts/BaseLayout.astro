@@ -29,7 +29,10 @@ const pageTitle = title ?? siteTitle;
 const fullTitle = title
   ? `${title} - ${siteTitle}`
   : `${siteTitle} - Senior Software Developer`;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const pathname = Astro.url.pathname;
+const normalizedPathname =
+  pathname === "/" || pathname.endsWith("/") ? pathname : `${pathname}/`;
+const canonicalURL = new URL(normalizedPathname, Astro.site);
 const ogImage = new URL(image ?? "/og_image.jpg", Astro.site).href;
 ---
 

@@ -18,6 +18,7 @@ const shikiConfig = {
 
 export default defineConfig({
   site: "https://nicobytes.com",
+  trailingSlash: "always",
   integrations: [
     mdx({
       shikiConfig,

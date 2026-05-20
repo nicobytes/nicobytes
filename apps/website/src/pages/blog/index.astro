@@ -33,7 +33,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
               style={`transition-delay: ${i * 0.08}s`}
             >
               <Card class="md:col-span-3">
-                <CardTitle href={`/blog/${post.id}`}>
+                <CardTitle href={`/blog/${post.id}/`}>
                   {post.data.title}
                 </CardTitle>
                 <CardEyebrow
