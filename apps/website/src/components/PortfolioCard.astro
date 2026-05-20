@@ -11,20 +11,27 @@ const { href, title, description, image } = Astro.props;
 
 <a
   href={href}
-  class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 transition hover:ring-zinc-900/10 dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
+  class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg hover:shadow-teal-500/10 hover:ring-teal-500/30 dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-teal-400/30"
 >
-  <img
-    src={image}
-    alt={title}
-    width={500}
-    height={281}
-    loading="lazy"
-    decoding="async"
-    class="aspect-video w-full object-cover"
-  />
+  <div class="relative overflow-hidden">
+    <img
+      src={image}
+      alt={title}
+      width={500}
+      height={281}
+      loading="lazy"
+      decoding="async"
+      class="aspect-video w-full object-cover transition-transform duration-500"
+    />
+    <div
+      class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      aria-hidden="true"
+    >
+    </div>
+  </div>
   <div class="flex flex-1 flex-col p-6">
     <h3
-      class="text-base font-semibold text-zinc-800 group-hover:text-teal-500 dark:text-zinc-100 dark:group-hover:text-teal-400"
+      class="text-base font-semibold text-zinc-800 transition-colors duration-200 group-hover:text-teal-500 dark:text-zinc-100 dark:group-hover:text-teal-400"
     >
       {title}
     </h3>
