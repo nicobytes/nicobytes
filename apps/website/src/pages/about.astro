@@ -3,11 +3,13 @@ import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Container from "../components/Container.astro";
+import { getYearsOfExperience } from "../lib/experience";
 import { socialLinks } from "../lib/socialLinks";
 import ProfileImage from "../assets/images/about.png";
 
-const description =
-  "Senior Software Engineer with 13+ years of experience building scalable, user-centric products across frontend and backend systems. Google Developer Expert and Microsoft MVP based in Cochabamba, Bolivia.";
+const yearsOfExperience = getYearsOfExperience();
+
+const description = `Senior Software Engineer with ${yearsOfExperience}+ years of experience building scalable, user-centric products across frontend and backend systems. Google Developer Expert and Microsoft MVP based in Cochabamba, Bolivia.`;
 ---
 
 <BaseLayout title="About" {description}>
@@ -36,12 +38,12 @@ const description =
           class="animate-fade-up mt-6 space-y-7 text-base text-zinc-600 delay-1 dark:text-zinc-400"
         >
           <p>
-            I'm a Senior Software Engineer with over 13 years of experience
-            delivering user-centric products across frontend and backend
-            systems. I lead architecture and execution in distributed,
-            event-driven environments—mainly with TypeScript, Python, and
-            Node.js—and I care as much about reliability at scale as I do about
-            the details of the developer experience.
+            I'm a Senior Software Engineer with over {yearsOfExperience} years of
+            experience delivering user-centric products across frontend and backend
+            systems. I lead architecture and execution in distributed, event-driven
+            environments—mainly with TypeScript, Python, and Node.js—and I care as
+            much about reliability at scale as I do about the details of the developer
+            experience.
           </p>
           <p>
             At <a

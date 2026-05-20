@@ -1,6 +1,7 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { getYearsOfExperience } from "../lib/experience";
 import "../styles/global.css";
 
 interface Props {
@@ -13,11 +14,15 @@ interface Props {
 
 const {
   title,
-  description = "I'm Nicolas Molina (@nicobytes) Sr Software Developer with more than 10 years of experience in development and technology management. Recognized by Google as an Angular & Web Developer Expert, and by Microsoft as a Most Valuable Professional.",
+  description: descriptionProp,
   image,
   type = "website",
   noindex,
 } = Astro.props;
+
+const description =
+  descriptionProp ??
+  `I'm Nicolas Molina (@nicobytes) Sr Software Developer with more than ${getYearsOfExperience()} years of experience in development and technology management. Recognized by Google as an Angular & Web Developer Expert, and by Microsoft as a Most Valuable Professional.`;
 
 const siteTitle = "@nicobytes";
 const pageTitle = title ?? siteTitle;
