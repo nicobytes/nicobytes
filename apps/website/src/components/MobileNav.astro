@@ -1,6 +1,7 @@
 ---
 import clsx from "clsx";
 import { isNavItemActive, navItems } from "../lib/navItems";
+import { Icon } from "astro-icon/components";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -29,34 +30,25 @@ const currentPath = Astro.url.pathname;
 
 <div
   id="mobile-nav-backdrop"
-  class="fixed inset-0 z-50 hidden bg-zinc-800/40 opacity-0 backdrop-blur-xs transition-opacity duration-150 dark:bg-black/80"
+  class="pointer-events-auto fixed inset-0 z-50 hidden bg-zinc-800/40 opacity-0 backdrop-blur-xs transition-opacity duration-150 dark:bg-black/80"
 >
 </div>
 
 <div
   id="mobile-nav-panel"
-  class="fixed inset-x-4 top-8 z-50 hidden origin-top scale-95 rounded-3xl bg-white p-8 opacity-0 ring-1 ring-zinc-900/5 transition duration-150 dark:bg-zinc-900 dark:ring-zinc-800"
+  class="pointer-events-auto fixed inset-x-4 top-8 z-50 hidden origin-top scale-95 rounded-3xl bg-white p-8 opacity-0 ring-1 ring-zinc-900/5 transition duration-150 dark:bg-zinc-900 dark:ring-zinc-800"
 >
   <div class="flex flex-row-reverse items-center justify-between">
     <button
       type="button"
       id="mobile-nav-close"
       aria-label="Close menu"
-      class="-m-1 p-1"
+      class="-m-1 cursor-pointer p-1"
     >
-      <svg
-        viewBox="0 0 24 24"
-        aria-hidden="true"
+      <Icon
+        name="line-md:close"
         class="h-6 w-6 text-zinc-500 dark:text-zinc-400"
-      >
-        <path
-          d="m17.25 6.75-10.5 10.5M6.75 6.75l10.5 10.5"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"></path>
-      </svg>
+      />
     </button>
     <h2 class="text-sm font-medium text-zinc-600 dark:text-zinc-400">
       Navigation

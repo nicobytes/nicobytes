@@ -1,18 +1,14 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
 <div
   aria-hidden="true"
   class="group/cta relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
 >
   <slot />
-  <svg
-    viewBox="0 0 16 16"
-    fill="none"
-    aria-hidden="true"
-    class="ml-1 h-4 w-4 stroke-current transition-transform duration-200 group-hover/cta:translate-x-0.5"
-  >
-    <path
-      d="M6.75 5.75 9.25 8l-2.5 2.25"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"></path>
-  </svg>
+  <Icon
+    name="line-md:arrow-small-right"
+    class="ml-1 h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-0.5"
+  />
 </div>

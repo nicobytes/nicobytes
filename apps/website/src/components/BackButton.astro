@@ -1,0 +1,34 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  label: string;
+  href?: string;
+  class?: string;
+}
+
+const { label, href, class: className } = Astro.props;
+
+const buttonClass =
+  "group mb-8 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 transition lg:absolute lg:-left-5 lg:-mt-2 lg:mb-0 xl:-top-1.5 xl:left-0 xl:mt-0 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0 dark:ring-white/10 dark:hover:border-zinc-700 dark:hover:ring-white/20";
+
+const iconClass =
+  "h-4 w-4 text-zinc-500 transition group-hover:text-teal-500 dark:text-zinc-500 dark:group-hover:text-teal-400";
+---
+
+{
+  href ? (
+    <a href={href} aria-label={label} class:list={[buttonClass, className]}>
+      <Icon name="line-md:arrow-left" aria-hidden="true" class={iconClass} />
+    </a>
+  ) : (
+    <button
+      type="button"
+      onclick="history.back()"
+      aria-label={label}
+      class:list={[buttonClass, className]}
+    >
+      <Icon name="line-md:arrow-left" aria-hidden="true" class={iconClass} />
+    </button>
+  )
+}
