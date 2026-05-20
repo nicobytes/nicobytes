@@ -27,8 +27,11 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     >
       <div class="flex max-w-3xl flex-col space-y-16">
         {
-          posts.map((post) => (
-            <article class="md:grid md:grid-cols-4 md:items-baseline">
+          posts.map((post, i) => (
+            <article
+              class="scroll-reveal md:grid md:grid-cols-4 md:items-baseline"
+              style={`transition-delay: ${i * 0.08}s`}
+            >
               <Card class="md:col-span-3">
                 <CardTitle href={`/blog/${post.id}`}>
                   {post.data.title}
