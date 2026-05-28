@@ -47,7 +47,9 @@ const isHomePage = currentPath === "/";
                   <Image
                     src={avatarImage}
                     alt="my profile picture"
-                    widths={[100, 200]}
+                    widths={[64, 128, 192]}
+                    sizes="4rem"
+                    quality={90}
                     class="h-16 w-16 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
                   />
                 </a>
@@ -76,7 +78,9 @@ const isHomePage = currentPath === "/";
                   <Image
                     src={avatarImage}
                     alt="my profile picture"
-                    widths={[100, 200]}
+                    widths={[36, 72, 108]}
+                    sizes="2.25rem"
+                    quality={90}
                     class="h-9 w-9 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
                   />
                 </a>

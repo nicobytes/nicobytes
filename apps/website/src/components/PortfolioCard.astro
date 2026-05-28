@@ -20,8 +20,9 @@ const { href, title, description, image } = Astro.props;
     <Image
       src={image}
       alt={title}
-      width={500}
-      height={281}
+      widths={[400, 600, 800]}
+      sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+      quality={90}
       loading="lazy"
       decoding="async"
       class="aspect-video w-full object-cover transition-transform duration-500"
