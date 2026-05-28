@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import BackButton from "../../components/BackButton.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -6,6 +7,7 @@ import Button from "../../components/Button.astro";
 import Container from "../../components/Container.astro";
 import Prose from "../../components/Prose.astro";
 import { formatDate } from "../../lib/formatDate";
+import { getOgImageUrl } from "../../lib/getOgImageUrl";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -17,23 +19,24 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const ogImage = await getOgImageUrl(post.data.heroImage, Astro.site);
 ---
 
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
-  image={post.data.heroImage}
+  image={ogImage}
   type="article"
 >
-  <Container class="mt-16 lg:mt-32">
+  <Container class="mt-12 lg:mt-24">
     <div class="xl:relative">
       <div class="mx-auto max-w-2xl">
         <BackButton label="Go back to blog" />
         <article>
           {
             post.data.heroImage && (
-              <figure class="mb-8 overflow-hidden rounded-2xl shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:ring-white/10">
-                <img
+              <figure class="mb-6 overflow-hidden rounded-2xl shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:ring-white/10">
+                <Image
                   src={post.data.heroImage}
                   alt={post.data.title}
                   width={960}
@@ -47,7 +50,7 @@ const { Content } = await render(post);
           }
           <header class="flex flex-col">
             <h1
-              class="mt-6 text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
+              class="mt-4 text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
             >
               {post.data.title}
             </h1>
@@ -61,7 +64,7 @@ const { Content } = await render(post);
               <span class="ml-3">{formatDate(post.data.date)}</span>
             </time>
           </header>
-          <Prose class="mt-8" data-mdx-content>
+          <Prose class="mt-6" data-mdx-content>
             <Content />
           </Prose>
           {

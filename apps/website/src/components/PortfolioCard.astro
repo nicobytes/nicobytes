@@ -1,9 +1,12 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 interface Props {
   href: string;
   title: string;
   description: string;
-  image: string;
+  image: ImageMetadata;
 }
 
 const { href, title, description, image } = Astro.props;
@@ -14,7 +17,7 @@ const { href, title, description, image } = Astro.props;
   class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-md ring-1 shadow-zinc-800/5 ring-zinc-900/5 transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-lg hover:shadow-teal-500/10 hover:ring-teal-500/30 dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-teal-400/30"
 >
   <div class="relative overflow-hidden">
-    <img
+    <Image
       src={image}
       alt={title}
       width={500}
