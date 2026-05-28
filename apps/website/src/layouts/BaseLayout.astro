@@ -22,13 +22,13 @@ const {
 
 const description =
   descriptionProp ??
-  `I'm Nicolas Molina (@nicobytes) Sr Software Developer with more than ${getYearsOfExperience()} years of experience in development and technology management. Recognized by Google as an Angular & Web Developer Expert, and by Microsoft as a Most Valuable Professional.`;
+  `I'm Nicolas Molina (@nicobytes) Sr Software Engineer with more than ${getYearsOfExperience()} years of experience in development and technology management. Recognized by Google as an Angular & Web Developer Expert, and by Microsoft as a Most Valuable Professional.`;
 
 const siteTitle = "@nicobytes";
 const pageTitle = title ?? siteTitle;
 const fullTitle = title
   ? `${title} - ${siteTitle}`
-  : `${siteTitle} - Senior Software Developer`;
+  : `${siteTitle} - Senior Software Engineer`;
 const pathname = Astro.url.pathname;
 const normalizedPathname =
   pathname === "/" || pathname.endsWith("/") ? pathname : `${pathname}/`;
