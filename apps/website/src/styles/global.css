@@ -197,25 +197,30 @@ html {
 
 .gradient-border {
   position: relative;
+  z-index: 0;
 }
 .gradient-border::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -1px;
+  z-index: -2;
   border-radius: inherit;
-  padding: 1px;
   background: var(--accent-gradient);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
+}
+.gradient-border::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: white;
+  pointer-events: none;
+}
+.dark .gradient-border::after {
+  background: rgb(24 24 27);
 }
 .gradient-border:hover::before {
   opacity: 1;

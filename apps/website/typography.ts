@@ -271,6 +271,57 @@ export default {
           },
         },
       },
+      compact: {
+        css: {
+          "> *": {
+            marginTop: theme("spacing.6"),
+            marginBottom: theme("spacing.6"),
+          },
+          p: {
+            marginTop: theme("spacing.4"),
+            marginBottom: theme("spacing.4"),
+          },
+          h2: {
+            marginTop: theme("spacing.10"),
+            marginBottom: theme("spacing.3"),
+          },
+          h3: {
+            marginTop: theme("spacing.8"),
+            marginBottom: theme("spacing.3"),
+          },
+          hr: {
+            marginTop: theme("spacing.10"),
+            marginBottom: theme("spacing.10"),
+          },
+          li: {
+            marginTop: theme("spacing.3"),
+            marginBottom: theme("spacing.3"),
+          },
+          "li :is(ol, ul)": {
+            marginTop: theme("spacing.2"),
+            marginBottom: theme("spacing.2"),
+          },
+          "li :is(li, p)": {
+            marginTop: theme("spacing.2"),
+            marginBottom: theme("spacing.2"),
+          },
+          pre: {
+            padding: theme("spacing.5"),
+            lineHeight: theme("lineHeight.5"),
+          },
+          "pre code": {
+            lineHeight: theme("lineHeight.6"),
+            display: "block",
+          },
+          "pre .line": {
+            lineHeight: theme("lineHeight.5"),
+          },
+          "pre .line:empty": {
+            lineHeight: theme("lineHeight.4"),
+            minHeight: "0.625rem",
+          },
+        },
+      },
     }),
   },
 } satisfies Config;

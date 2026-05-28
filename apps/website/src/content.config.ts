@@ -4,12 +4,13 @@ import { glob } from "astro/loaders";
 
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
-  schema: z.object({
+  schema: ({ image }) =>
+    z.object({
     title: z.string(),
     description: z.string(),
     author: z.string().default("Nicolas Molina (@nicobytes)"),
     date: z.string(),
-    heroImage: z.string().optional(),
+    heroImage: image().optional(),
     categories: z.array(z.string()).optional(),
     draft: z.boolean().default(false),
     repoLink: z.string().url().optional(),
@@ -18,10 +19,11 @@ const blog = defineCollection({
 
 const portfolio = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/portfolio" }),
-  schema: z.object({
+  schema: ({ image }) =>
+    z.object({
     title: z.string(),
     description: z.string(),
-    image: z.string(),
+    image: image(),
     date: z.string(),
     type: z.enum(["private", "public"]).default("private"),
     url: z.string().url().optional(),
