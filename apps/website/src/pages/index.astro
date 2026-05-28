@@ -15,6 +15,10 @@ import Resume from "../components/Resume.astro";
 import { getYearsOfExperience } from "../lib/experience";
 import { formatDate } from "../lib/formatDate";
 import { socialLinks } from "../lib/socialLinks";
+import {
+  personSchema,
+  websiteSchema,
+} from "../lib/seo/jsonLd";
 
 import image1 from "../assets/images/photos/image-4.png";
 import image2 from "../assets/images/photos/image-3.png";
@@ -26,19 +30,67 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, z) => +new Date(z.data.date) - +new Date(a.data.date))
   .slice(0, 4);
 
-const rotations = [
-  "rotate-2",
-  "-rotate-2",
-  "rotate-2",
-  "rotate-2",
-  "-rotate-2",
+type HeroPhoto = {
+  src: typeof image1;
+  alt: string;
+  rotation: string;
+  loading: "lazy" | "eager";
+  fetchpriority?: "high";
+};
+
+const heroPhotos: HeroPhoto[] = [
+  {
+    src: image1,
+    alt: "Nicolas Molina at a tech conference",
+    rotation: "rotate-2",
+    loading: "lazy",
+  },
+  {
+    src: image2,
+    alt: "Nicolas Molina speaking on stage",
+    rotation: "-rotate-2",
+    loading: "eager",
+  },
+  {
+    src: image3,
+    alt: "Nicolas Molina at a developer meetup",
+    rotation: "rotate-2",
+    loading: "eager",
+    fetchpriority: "high",
+  },
+  {
+    src: image4,
+    alt: "Nicolas Molina at a community event",
+    rotation: "rotate-2",
+    loading: "eager",
+  },
+  {
+    src: image5,
+    alt: "Nicolas Molina at a workshop",
+    rotation: "-rotate-2",
+    loading: "lazy",
+  },
 ];
-const photos = [image1, image2, image3, image4, image5];
 
 const yearsOfExperience = getYearsOfExperience();
+
+const homeDescription = `Senior Software Engineer and Google Developer Expert building AI products, frontend platforms, and developer tools. Microsoft MVP with ${yearsOfExperience}+ years of experience.`;
+
+const siteUrl = Astro.site?.href ?? "https://nicobytes.com/";
+const homeJsonLd = [
+  websiteSchema(siteUrl, "@nicobytes"),
+  personSchema({
+    name: "Nicolas Molina",
+    url: siteUrl,
+    description: homeDescription,
+    sameAs: socialLinks.map((link) => link.href),
+    jobTitle: "Senior Software Engineer",
+  }),
+];
+
 ---
 
-<BaseLayout>
+<BaseLayout description={homeDescription} jsonLd={homeJsonLd}>
   <Container class="mt-9">
     <h1
       class="animate-fade-up inline-flex max-w-full items-baseline gap-1 text-[clamp(1.375rem,3.8vw,3rem)] font-bold tracking-tight whitespace-nowrap text-zinc-800 dark:text-zinc-100"
@@ -58,11 +110,13 @@ const yearsOfExperience = getYearsOfExperience();
         Recognized by Google as an <a
           href="https://g.dev/nicobytes"
           target="_blank"
+          rel="noopener noreferrer"
           class="hover:text-accent-cyan text-teal-500 transition dark:text-teal-400"
           >Angular Developer Expert</a
         >, and by Microsoft as a <a
           class="hover:text-accent-cyan text-teal-500 transition dark:text-teal-400"
           target="_blank"
+          rel="noopener noreferrer"
           href="https://mvp.microsoft.com/en-US/MVP/profile/28c464f4-ccb0-ec11-983f-000d3a1017e3"
           >Most Valuable Professional</a
         >.
@@ -91,21 +145,25 @@ const yearsOfExperience = getYearsOfExperience();
   <div class="mt-16 sm:mt-20">
     <div class="-my-4 flex justify-center gap-5 overflow-hidden py-4 sm:gap-8">
       {
-        photos.map((image, imageIndex) => (
+        heroPhotos.map((photo, index) => (
           <div
             class={clsx(
               "animate-fade-up relative w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 transition-transform duration-300 ease-out hover:scale-105 sm:w-72 sm:rounded-2xl dark:bg-zinc-800",
-              rotations[imageIndex % rotations.length],
-              `delay-${imageIndex + 3}`,
+              photo.rotation,
+              `delay-${index + 3}`,
             )}
           >
             <div class="aspect-9/10">
               <Image
-                src={image}
-                alt=""
+                src={photo.src}
+                alt={photo.alt}
                 widths={[352, 576, 864]}
                 sizes="(min-width: 640px) 18rem, 11rem"
-                quality={90}
+                quality={80}
+                format="webp"
+                loading={photo.loading}
+                fetchpriority={photo.fetchpriority}
+                decoding="async"
                 class="absolute inset-0 h-full w-full object-cover"
               />
             </div>

@@ -12,6 +12,7 @@ const platziProfileUrl = "https://platzi.com/profes/nicobytes/";
 <BaseLayout
   title="Courses"
   description="Courses on TypeScript, Angular, NestJS, Node.js, Python, and AI — taught on Platzi for 30,000+ learners."
+  noindex
 >
   <SimpleLayout
     title="Courses I've taught on Platzi."
@@ -46,7 +47,7 @@ const platziProfileUrl = "https://platzi.com/profes/nicobytes/";
             {course.description && (
               <CardDescription>{course.description}</CardDescription>
             )}
-            <p class="relative z-10 mt-6 text-sm font-medium text-zinc-400 transition group-hover:text-teal-500 dark:text-zinc-200">
+            <p class="relative z-10 mt-6 text-sm font-medium text-zinc-500 transition group-hover:text-teal-500 dark:text-zinc-300">
               {course.link.label}
             </p>
           </Card>

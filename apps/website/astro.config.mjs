@@ -16,9 +16,15 @@ const shikiConfig = {
   wrap: false,
 };
 
+const noindexPaths = ["/thank-you/", "/courses/", "/speaking/"];
+
 export default defineConfig({
   site: "https://nicobytes.com",
   trailingSlash: "always",
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "hover",
+  },
   integrations: [
     mdx({
       shikiConfig,
@@ -33,7 +39,10 @@ export default defineConfig({
       gzip: true,
       brotli: true,
     }),
-    sitemap(),
+    sitemap({
+      filter: (page) =>
+        !noindexPaths.some((path) => page.includes(path)),
+    }),
     icon(),
   ],
   markdown: {

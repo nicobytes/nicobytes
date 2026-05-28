@@ -14,19 +14,19 @@ import learningPathImg from "./placement_test_lp.jpg";
 
 This English test is an online exam designed to identify the students' English level accurately with the fewest questions possible. To achieve this goal, I worked on a Computerized Adaptive Test (CAT) algorithm built in Python. This algorithm allows you to choose the next question based on the student's previous answers. This system was enabled to consume across a REST API using FastAPI, and for audio questions, we used an audio-to-text model, in this case Whisper.
 
-### Diferrent types of questions
+## Diferrent types of questions
 
 The exam has different types of questions, such as multiple-choice, audio, and text questions, to check the students' English skills accurately. Each answer is validated by a <a href="https://duolingo-papers.s3.amazonaws.com/other/technical_manual.pdf" target="_blank">Computerized Adaptive Test (CAT) algorithm</a> built in Python that allows you to choose the next question based on the student's previous answers.
 
 <ArticleImage src={questionsImg} alt="Placement test questions" />
 
-### Audio questions with AI
+## Audio questions with AI
 
 An important skill to check is speaking, and this skill was assessed using the user's microphone to allow the user to answer the question. In this part, I worked with the new <a href="https://developer.chrome.com/blog/audio-worklet" target="_blank">AudioWorklet Browser API</a> and NextJS/React to get audio with quality, and then that audio is sent to the server to be processed by <a href="https://openai.com/research/whisper" target="_blank">Whisper model</a> and validated if the answer was correct.
 
 <ArticleImage src={audioImg} alt="Placement test audio questions" />
 
-### Recommendations based on student's answers
+## Recommendations based on student's answers
 
 When the exam is finished, the user can see the results, and according to the student's answers, the app recommends a learning path according to the level. That learning path is <a href="https://platzi.com/ada-skills/evoluciona/?id=g1710428380-c90c3b1a-6d39-4c6e-a258-e4cfc890adc6" target="_blank">shareable </a> on social networks, and it is possible to save it in your profile to continue learning.
 

@@ -8,6 +8,7 @@ import Container from "../../components/Container.astro";
 import Prose from "../../components/Prose.astro";
 import { formatDate } from "../../lib/formatDate";
 import { getOgImageUrl } from "../../lib/getOgImageUrl";
+import { blogPostingSchema } from "../../lib/seo/jsonLd";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -20,6 +21,15 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const ogImage = await getOgImageUrl(post.data.heroImage, Astro.site);
+const postUrl = new URL(`/blog/${post.id}/`, Astro.site).href;
+const jsonLd = blogPostingSchema({
+  title: post.data.title,
+  description: post.data.description,
+  url: postUrl,
+  datePublished: post.data.date,
+  image: ogImage,
+  author: post.data.author,
+});
 ---
 
 <BaseLayout
@@ -27,6 +37,9 @@ const ogImage = await getOgImageUrl(post.data.heroImage, Astro.site);
   description={post.data.description}
   image={ogImage}
   type="article"
+  publishedTime={post.data.date}
+  author={post.data.author}
+  jsonLd={jsonLd}
 >
   <Container class="mt-12 lg:mt-24">
     <div class="xl:relative">
@@ -41,8 +54,10 @@ const ogImage = await getOgImageUrl(post.data.heroImage, Astro.site);
                   alt={post.data.title}
                   widths={[672, 1024, 1344]}
                   sizes="(min-width: 42rem) 42rem, 100vw"
-                  quality={90}
+                  quality={85}
+                  format="webp"
                   loading="eager"
+                  fetchpriority="high"
                   decoding="async"
                   class="h-auto w-full object-cover md:max-h-[480px]"
                 />
@@ -57,7 +72,7 @@ const ogImage = await getOgImageUrl(post.data.heroImage, Astro.site);
             </h1>
             <time
               datetime={post.data.date}
-              class="order-first flex items-center text-base text-zinc-400 dark:text-zinc-500"
+              class="order-first flex items-center text-base text-zinc-500 dark:text-zinc-400"
             >
               <span
                 class="h-4 w-0.5 rounded-full"

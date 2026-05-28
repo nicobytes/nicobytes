@@ -19,7 +19,7 @@ This function allows converting RxJS observables into Signals. This facilitates 
 
 ## Basic Implementation of ToSignal
 
-### Creating an Observable
+## Creating an Observable
 
 Let's look at a simple example where we create a basic observable in Angular:
 
@@ -47,7 +47,7 @@ export class AppComponent {
 }
 ```
 
-### Transforming the Observable into a Signal
+## Transforming the Observable into a Signal
 
 Now, let's transform this observable into a Signal using the `toSignal` function:
 
@@ -79,7 +79,7 @@ Using `toSignal`, we have transformed the `state$` observable into a Signal `sta
 
 ## Options for the ToSignal Function
 
-### Initial Value
+## Initial Value
 
 This option is used when working with observables that do not have an initial value. It allows setting an initial value so that the Signal always has a value to render. This prevents the Signal from being `undefined` until the observable emits a value.
 
@@ -116,7 +116,7 @@ state(); // value from signal
 doubleState(); // value from signalvalue from signal
 ```
 
-### Require Sync
+## Require Sync
 
 This option synchronizes the Signal with the initial value of the observable if it has an initial value. Very useful when we need the Signal to have the same value as the observable from the beginning.
 
@@ -130,7 +130,7 @@ const state = toSignal(state$, { requireSync: true });
 state(); // 'value from observable'
 ```
 
-### Reject Errors
+## Reject Errors
 
 In case the observable generates an error, this option allows the Signal to keep its last valid value. Imagine we have an observable that emits values every second and, after 5 seconds, throws an error. If we do not use `rejectErrors`, the Signal will stop and will not emit more values. However, if we use `rejectErrors`, the Signal will keep the last valid value.
 
@@ -159,7 +159,7 @@ intervalValue(); // 5
 
 Now, let's look at a more realistic example of how to transform an observable from an HTTP service into a Signal.
 
-### HTTP Service
+## HTTP Service
 
 Suppose we have a service that obtains data from an API with the method `getLocations` which would be a RxJS observable without an initial value, meaning the value will transmit when the HTTP request completes.
 

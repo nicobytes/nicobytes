@@ -83,7 +83,10 @@ const resume: ResumeEntry[] = [
               alt=""
               widths={[40, 80]}
               sizes="2.5rem"
-              quality={90}
+              quality={80}
+              format="webp"
+              loading="lazy"
+              decoding="async"
               class="h-full w-full object-cover"
             />
           </div>
@@ -99,7 +102,7 @@ const resume: ResumeEntry[] = [
               </dd>
               <dt class="sr-only">Date</dt>
               <dd
-                class="shrink-0 text-xs whitespace-nowrap text-zinc-400 sm:text-right dark:text-zinc-500"
+                class="shrink-0 text-xs whitespace-nowrap text-zinc-500 sm:text-right dark:text-zinc-400"
                 aria-label={`${role.start} until ${role.end}`}
               >
                 <time datetime={role.start}>{role.start}</time>{" "}

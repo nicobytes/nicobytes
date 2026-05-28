@@ -32,7 +32,16 @@ const publicProjects = (
     title="Building AI products, platforms, and AI-first systems at scale."
     intro="Hands-on engineering across AI tutors, adaptive assessments, browser runtimes, and conversational systems — from serverless LLM orchestration and on-device ML to APIs used by thousands of developers. Each project reflects work leading architecture, shipping at scale, and aligning systems with real user outcomes."
   >
-    <section class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <h2
+      id="portfolio-projects-heading"
+      class="scroll-reveal text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100"
+    >
+      Projects
+    </h2>
+    <section
+      class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+      aria-labelledby="portfolio-projects-heading"
+    >
       {
         privateProjects.map((project, i) => (
           <div

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /thank-you/
+
+Sitemap: https://nicobytes.com/sitemap-index.xml

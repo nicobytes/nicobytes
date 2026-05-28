@@ -46,10 +46,14 @@ const isHomePage = currentPath === "/";
                 >
                   <Image
                     src={avatarImage}
-                    alt="my profile picture"
+                    alt=""
                     widths={[64, 128, 192]}
                     sizes="4rem"
-                    quality={90}
+                    quality={80}
+                    format="webp"
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async"
                     class="h-16 w-16 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
                   />
                 </a>
@@ -77,10 +81,13 @@ const isHomePage = currentPath === "/";
                 <a href="/" aria-label="Home" class="pointer-events-auto">
                   <Image
                     src={avatarImage}
-                    alt="my profile picture"
+                    alt=""
                     widths={[36, 72, 108]}
                     sizes="2.25rem"
-                    quality={90}
+                    quality={80}
+                    format="webp"
+                    loading="eager"
+                    decoding="async"
                     class="h-9 w-9 rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
                   />
                 </a>
@@ -90,7 +97,7 @@ const isHomePage = currentPath === "/";
         </div>
         <div class="flex flex-1 justify-end md:justify-center">
           <MobileNav />
-          <nav class="pointer-events-auto hidden md:block">
+          <nav class="pointer-events-auto hidden md:block" aria-label="Primary">
             <ul
               class="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10"
             >

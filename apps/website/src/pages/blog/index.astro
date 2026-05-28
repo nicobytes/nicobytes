@@ -8,15 +8,27 @@ import CardDescription from "../../components/CardDescription.astro";
 import CardCta from "../../components/CardCta.astro";
 import CardEyebrow from "../../components/CardEyebrow.astro";
 import { formatDate } from "../../lib/formatDate";
+import { blogIndexSchema } from "../../lib/seo/jsonLd";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, z) => +new Date(z.data.date) - +new Date(a.data.date),
 );
+
+const siteUrl = Astro.site?.href ?? "https://nicobytes.com/";
+const jsonLd = blogIndexSchema({
+  siteUrl,
+  posts: posts.map((post) => ({
+    title: post.data.title,
+    url: new URL(`/blog/${post.id}/`, Astro.site).href,
+    datePublished: post.data.date,
+  })),
+});
 ---
 
 <BaseLayout
   title="Blog"
   description="Technical articles on frontend development, JavaScript, AI agents, and applied AI — practical guides from a Google Developer Expert and Microsoft MVP."
+  jsonLd={jsonLd}
 >
   <SimpleLayout
     title="Writing on Frontend, JavaScript, agents, and applied AI."
