@@ -1,0 +1,223 @@
+---
+title: "Transformar observables a signals con toSignal en Angular"
+description: "Con la función toSignal puedes transformar observables en signals, simplificando la transición y reutilizando código existente."
+author: "Nicolas Molina (@nicobytes)"
+date: "2024-09-03"
+lang: "es"
+translationSlug: "transformar-observables-a-signals"
+heroImage: "./79-blog.jpg"
+categories: ["Angular", "Rxjs", "Signals"]
+draft: false
+---
+
+import ArticleImage from "../../../components/ArticleImage.astro";
+import codeExampleImg from "./code_1.jpg";
+
+La reactividad en Angular ha evolucionado bastante, sobre todo con la llegada de Signals. En este articulo vamos a revisar como trabajar con Angular, reactividad, Signals y RxJS. Vas a aprender a transformar observables en Signals usando la funcion `toSignal`, lo que facilita migrar y reutilizar codigo existente dentro de tus aplicaciones Angular.
+
+## toSignal: la funcion de transicion
+
+Esta funcion permite convertir observables de RxJS en Signals. Eso facilita reutilizar codigo existente mientras adoptas este nuevo modelo de reactividad. `toSignal` es especialmente util cuando quieres mantener la logica de negocio en RxJS y usar Signals para el renderizado y otras partes de la UI.
+
+## Implementacion basica de toSignal
+
+## Creando un observable
+
+Veamos un ejemplo sencillo donde creamos un observable basico en Angular:
+
+```ts
+import { Component } from "@angular/core";
+import { AsyncPipe } from "@angular/common";
+import { Subject } from "rxjs";
+
+@Component({
+  selector: "app-root",
+  standalone: true,
+  imports: [AsyncPipe],
+  template: `
+    <h2>state$: {{ state$ | async }}</h2>
+    <input type="text" #input />
+    <button (click)="change(input.value)">Change state</button>
+  `,
+})
+export class AppComponent {
+  state$ = new Subject<string>();
+
+  change(newValue: string) {
+    this.state$.next(newValue);
+  }
+}
+```
+
+## Transformando el observable en un signal
+
+Ahora transformemos ese observable en un Signal usando la funcion `toSignal`:
+
+```ts
+import { Component } from "@angular/core";
+import { Subject } from "rxjs";
+import { toSignal } from "@angular/core/rxjs-interop";
+
+@Component({
+  selector: "app-root",
+  standalone: true,
+  template: `
+    <h2>state$: {{ state() }}</h2>
+    <input type="text" #input />
+    <button (click)="change(input.value)">Change state</button>
+  `,
+})
+export class AppComponent {
+  state$ = new Subject<string>();
+  state = toSignal(this.state$);
+
+  change(newValue: string) {
+    this.state$.next(newValue);
+  }
+}
+```
+
+Usando `toSignal`, transformamos el observable `state$` en un Signal llamado `state` y asi evitamos usar `AsyncPipe` en el template.
+
+## Opciones de la funcion toSignal
+
+## Initial Value
+
+Esta opcion se usa cuando trabajas con observables que no tienen un valor inicial. Permite definir un valor por defecto para que el Signal siempre tenga algo que renderizar. Asi evitas que el Signal sea `undefined` hasta que el observable emita un valor.
+
+Mira este ejemplo:
+
+```ts
+import { computed } from "@angular/core";
+import { Subject } from "rxjs";
+import { toSignal } from "@angular/core/rxjs-interop";
+
+const state$ = new Subject<string>();
+const state = toSignal(state$);
+const doubleState = computed(() => state().repeat(2));
+
+state(); // undefined
+```
+
+En este caso, `state` es `undefined` hasta que `state$` emite un valor. Si intentamos duplicar el valor de `state` usando un `computed`, TypeScript nos va a advertir que `state` puede ser `undefined`.
+
+<ArticleImage src={codeExampleImg} alt="ejemplo de codigo" />
+
+Para evitarlo, podemos usar la opcion `initialValue`:
+
+```ts
+import { Subject } from "rxjs";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { computed } from "@angular/core";
+
+const state$ = new Subject<string>();
+const state = toSignal(state$, { initialValue: "value from signal" });
+const doubleState = computed(() => state().repeat(2));
+
+state(); // value from signal
+doubleState(); // value from signalvalue from signal
+```
+
+## Require Sync
+
+Esta opcion sincroniza el Signal con el valor inicial del observable cuando ese observable ya tiene un valor disponible. Es muy util cuando necesitas que el Signal arranque con el mismo valor desde el primer momento.
+
+```ts
+import { BehaviorSubject } from "rxjs";
+import { toSignal } from "@angular/core/rxjs-interop";
+
+const state$ = new BehaviorSubject("value from observable");
+const state = toSignal(state$, { requireSync: true });
+
+state(); // 'value from observable'
+```
+
+## Reject Errors
+
+Si el observable genera un error, esta opcion permite que el Signal conserve su ultimo valor valido. Imagina que tienes un observable que emite un valor cada segundo y, despues de 5 segundos, lanza un error. Si no usas `rejectErrors`, el Signal se detiene y deja de emitir. En cambio, si usas `rejectErrors`, el Signal mantiene el ultimo valor correcto.
+
+```ts
+import { interval, tap } from "rxjs";
+import { toSignal } from "@angular/core/rxjs-interop";
+
+const interval$ = interval(1000).pipe(
+  tap((value) => {
+    if (value === 5) {
+      throw new Error("Something went wrong");
+    }
+    return value;
+  }),
+);
+
+const intervalValue = toSignal(interval$, {
+  initialValue: 0,
+  rejectErrors: true,
+});
+
+intervalValue(); // 5
+```
+
+## Ejemplo real: integracion con HTTP Client
+
+Ahora veamos un ejemplo mas realista de como transformar el observable de un servicio HTTP en un Signal.
+
+## Servicio HTTP
+
+Supongamos que tenemos un servicio que obtiene datos desde una API con el metodo `getLocations`. Ese metodo devuelve un observable de RxJS sin valor inicial, lo que significa que el valor se emite cuando termina la solicitud HTTP.
+
+```ts
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+
+export interface Location {
+  id: number;
+  name: string;
+  description: string;
+  latitude: number;
+  longitude: number;
+}
+
+@Injectable({
+  providedIn: "root",
+})
+export class DataService {
+  private http = inject(HttpClient);
+
+  getLocations() {
+    const path = `https://api.nicobytes.store/api/v1/locations`;
+    return this.http.get<Location[]>(path);
+  }
+}
+```
+
+Ahora transformemos el observable del servicio en un Signal para que el componente pueda renderizar los datos de la API.
+
+```ts
+import { Component, inject } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { DataService } from "./data.service";
+
+@Component({
+  selector: "app-data",
+  standalone: true,
+  template: `
+    @for (item of locations(); track item.id) {
+      <li>{{ item.name }}</li>
+    }
+  `,
+})
+export class DataComponent {
+  dataService = inject(DataService);
+
+  locations$ = this.dataService.getLocations();
+  locations = toSignal(this.locations$, {
+    initialValue: [],
+  });
+}
+```
+
+## Conclusion
+
+La funcion `toSignal` facilita adoptar el nuevo modelo de reactividad de Angular sin tener que botar toda la logica solida que ya construiste con RxJS. La clave esta en identificar los casos de uso correctos y aplicar opciones como `initialValue`, `requireSync` y `rejectErrors` segun lo que necesite tu proyecto.
+
+Implementar Signals puede cambiar la forma en que tus aplicaciones Angular manejan la reactividad, ofreciendo un rendimiento mas granular y una gestion de estado mas simple para la UI.

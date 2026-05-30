@@ -1,0 +1,116 @@
+---
+title: "Vistas responsivas en Angular con defer"
+description: "Crea tablas responsivas y ahorra kilobytes en el proceso."
+author: "Nicolas Molina (@nicobytes)"
+date: "2024-04-18"
+lang: "es"
+translationSlug: "vistas-responsivas-en-angular-con-defer"
+heroImage: "./og.jpg"
+categories: ["Angular"]
+draft: false
+repoLink: "https://github.com/nicobytes/ecommerce-full-stack/tree/resposive-tables/apps/admin"
+---
+
+import ArticleImage from "../../../components/ArticleImage.astro";
+import responsiveDesktopImg from "./resposive_desktop.jpg";
+import responsiveMobileImg from "./resposive_mobile.jpg";
+import screen1Img from "./screen_1.png";
+import screen2Img from "./screen_2.png";
+import chartImg from "./chart.png";
+
+Muchas veces, en nuestras aplicaciones Angular, nos toca resolver el reto de construir interfaces responsivas segun el tamano de la pantalla. Normalmente puedes enfrentar este problema con media queries en CSS o con funcionalidades mas nuevas como las media container queries, pero en este post te voy a mostrar una forma muy sencilla de resolverlo y, de paso, ahorrar kilobytes.
+
+## El problema: tablas responsivas
+
+Una tabla responsiva puede ser complicada de manejar, y existen [varias formas](https://medium.com/appnroll-publication/5-practical-solutions-to-make-responsive-data-tables-ff031c48b122) de hacerlo. Tambien hay librerias muy buenas para resolver tablas responsivas, pero en mi caso elegi la forma mas simple: el patron de transformacion.
+
+Este patron consiste en crear diferentes componentes y cargarlos segun el tamano de pantalla. Por ejemplo, en escritorio puedes tener un componente especifico con una tabla.
+
+<ArticleImage src={responsiveDesktopImg} alt="vista responsiva en escritorio" />
+
+Y cuando la aplicacion corre en pantallas moviles, carga otro componente basado en cards.
+
+<ArticleImage src={responsiveMobileImg} alt="vista responsiva en movil" />
+
+Este enfoque es simple porque puedes tener dos componentes distintos: uno para movil y otro para tablet o escritorio. La ventaja es que puedes crear una vista personalizada para movil u otras pantallas; la desventaja es que terminas con componentes que comparten logica similar, pero ese es el trade-off de esta estrategia.
+
+Todo esto funciona a partir de la signal `isMobile`, que detecta si el dispositivo es movil o no.
+
+```html
+@if (isMobile()) {
+<app-list [products]="products()" />
+} @else {
+<app-table [products]="products()" />
+}
+```
+
+Cuando la app detecta un dispositivo movil, carga un componente especifico; de lo contrario, carga uno diferente. Fijate que ambos reciben el mismo input. La signal `isMobile` usa `BreakpointObserver` del Angular CDK para detectar cuando es movil.
+
+```ts
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs/operators";
+
+export default class ProductsComponent {
+  private breakpointObserver$ = inject(BreakpointObserver);
+  private isMobile$ = this.breakpointObserver$
+    .observe(Breakpoints.Handset)
+    .pipe(map((result) => result.matches));
+
+  isMobile = toSignal(isMobile$, { initialValue: true });
+}
+```
+
+Si, ya se que esto tambien se puede resolver con CSS Media Queries, algo como esto:
+
+```css
+@media screen and (min-width: 0px) and (max-width: 400px) {
+  #my-content {
+    display: block;
+  } /* show it on small screens */
+}
+
+@media screen and (min-width: 401px) and (max-width: 1024px) {
+  #my-content {
+    display: none;
+  } /* hide it elsewhere */
+}
+```
+
+Pero en ese caso realmente estas cargando ambos componentes y solo los ocultas de la vista del usuario con CSS.
+
+## Usar defer para ahorrar bytes
+
+Con este enfoque, es posible usar el nuevo bloque `defer` para ahorrar bytes y cargar cada componente solo cuando se necesita. Con este codigo:
+
+```html
+@if (isMobile()) { @defer {
+<app-list [products]="products()" />
+} } @else { @defer {
+<app-table [products]="products()" />
+} }
+```
+
+Con esto puedes ahorrar bytes en funcion de la signal `isMobile`, porque cuando usas el enfoque con `@if`, ambos componentes terminan cargados en la pagina. En cambio, cuando usas `@defer`, cada componente se carga solamente cuando hace falta.
+
+Para visualizarlo mejor, con el enfoque basado en `@if` incluyes ambos componentes en la pagina y el tamano termina siendo 7.72 kb.
+
+<ArticleImage src={screen1Img} alt="tamano del bundle usando if" />
+
+Pero si usas el enfoque con `defer`, el componente se divide en tres chunks:
+
+|              Component               |  Size  |
+| :----------------------------------: | :----: |
+| products-component (The page itself) | 4.09kb |
+|            list-component            | 1.56kb |
+|           table-component            | 3.15kb |
+
+En el caso movil, se cargan `products-component` y `list-component`, para un total de 5.56kb. En cambio, si no es un dispositivo movil, como una tablet o un escritorio, se cargan `product-component` y `table-component`, para un total de 7.24kb.
+
+<ArticleImage src={screen2Img} alt="tamano del bundle usando defer" />
+
+Como resultado, en entornos moviles la vista carga con menos KB, ahorrando datos, y en escritorio el componente de tabla se carga solo cuando hace falta.
+
+<ArticleImage src={chartImg} alt="grafica comparativa del tamano del bundle" />
+
+Y tiene sentido, porque el componente de tabla usa mas dependencias, como `MatTableModule` para renderizar la tabla, mientras que el componente de lista solo usa algo como `MatCardModule` para tener una tabla responsiva y reducir el tamano dependiendo de si es movil o no.

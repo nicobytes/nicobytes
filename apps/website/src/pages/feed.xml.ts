@@ -5,7 +5,10 @@ import type { APIContext } from "astro";
 import { getYearsOfExperience } from "../lib/experience";
 
 export async function GET(context: APIContext) {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  const posts = await getCollection(
+    "blog",
+    ({ data }) => !data.draft && data.lang === "en",
+  );
 
   return rss({
     title: "Nicolas Molina",

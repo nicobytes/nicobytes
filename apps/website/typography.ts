@@ -165,9 +165,13 @@ export default {
             paddingLeft: theme("spacing.6"),
           },
           li: {
-            marginTop: theme("spacing.6"),
-            marginBottom: theme("spacing.6"),
+            marginTop: 0,
+            marginBottom: 0,
             paddingLeft: theme("spacing[3.5]"),
+            lineHeight: theme("lineHeight.5"),
+          },
+          "li + li": {
+            marginTop: theme("spacing.1"),
           },
           "li::marker": {
             fontSize: theme("fontSize.sm")[0],
@@ -180,12 +184,12 @@ export default {
             color: "var(--tw-prose-bullets)",
           },
           "li :is(ol, ul)": {
-            marginTop: theme("spacing.4"),
-            marginBottom: theme("spacing.4"),
+            marginTop: theme("spacing.1"),
+            marginBottom: theme("spacing.1"),
           },
           "li :is(li, p)": {
-            marginTop: theme("spacing.3"),
-            marginBottom: theme("spacing.3"),
+            marginTop: 0,
+            marginBottom: 0,
           },
 
           pre: {
@@ -293,17 +297,25 @@ export default {
             marginTop: theme("spacing.10"),
             marginBottom: theme("spacing.10"),
           },
+          "ul, ol": {
+            marginTop: theme("spacing.4"),
+            marginBottom: theme("spacing.4"),
+          },
           li: {
-            marginTop: theme("spacing.3"),
-            marginBottom: theme("spacing.3"),
+            marginTop: 0,
+            marginBottom: 0,
+            lineHeight: theme("lineHeight.5"),
+          },
+          "li + li": {
+            marginTop: 0,
           },
           "li :is(ol, ul)": {
-            marginTop: theme("spacing.2"),
-            marginBottom: theme("spacing.2"),
+            marginTop: 0,
+            marginBottom: 0,
           },
           "li :is(li, p)": {
-            marginTop: theme("spacing.2"),
-            marginBottom: theme("spacing.2"),
+            marginTop: 0,
+            marginBottom: 0,
           },
           pre: {
             padding: theme("spacing.5"),
