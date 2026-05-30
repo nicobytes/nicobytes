@@ -7,12 +7,13 @@ lang: "es"
 translationSlug: "busqueda-semantica-vs-hibrida"
 heroImage: "./cover.jpg"
 categories: ["AI", "Supabase"]
-draft: false
+draft: true
 ---
 
-Cuando uno lee sobre `semantic search`, `hybrid search` y `full text search`, casi siempre encuentra ejemplos genéricos: documentos, recetas, productos o centros de ayuda. Sirven para entender la teoría, pero no muestran la tensión real que aparece cuando todo eso vive dentro de un agente conversacional.
+Cuando uno lee sobre `semantic search`, `hybrid search` y `full text search`, casi siempre encuentra ejemplos tecnicos genéricos: documentos, recetas, productos o links a support. Sirven para entender la teoría, pero no explican los casos reales que aparecen cuando todo eso vive dentro de un agente conversacional.
 
-En mi caso, esa tensión apareció construyendo un agente para una agencia de viajes. La idea inicial parecía suficiente: convertir la información de los planes turísticos en embeddings, conectarla a un flujo tipo RAG y dejar que el agente respondiera desde ahí.
+Entonces imaginemos que estamos construyendo un agente para una agencia de viajes que debe alimentarse de un RAG. La idea inicial parecía suficiente: convertir la información de los planes turísticos en embeddings, conectarla a un flujo tipo RAG y dejar que el agente respondiera desde ahí.
+
 
 Sobre el papel sonaba bien. En la práctica, no alcanzaba.
 
@@ -24,7 +25,7 @@ No es lo mismo que una persona pregunte:
 - `algo de aventura cerca de Bogotá`
 - `¿y el itinerario de Guatavita?`
 
-Las tres son preguntas válidas, pero no exigen el mismo tipo de búsqueda. Unas necesitan interpretación. Otras necesitan precisión textual. Y ahí fue donde empecé a notar que una sola estrategia no era suficiente.
+Las tres son preguntas válidas, pero no exigen el mismo tipo de búsqueda. Unas necesitan interpretación. Otras necesitan precisión textual. Y ahí fue donde empecé a notar que una sola estrategia no era suficiente. 
 
 ## Dónde semantic search realmente brilla
 
@@ -58,15 +59,11 @@ En esas consultas, el usuario todavía está descubriendo opciones. Si obligo al
 
 ### 3. Cuando la conversación ya trae contexto
 
-Este punto fue especialmente importante en Amaru.
+Este punto fue especialmente para mi agente. Por que para preguntas de seguimiento debe transformar la pregunta para crear una mejor consulta segun el historial de la conversación. La búsqueda no debería ejecutarse con esa frase sola, sino con una versión contextualizada. En ese tipo de seguimiento, la búsqueda semántica suele comportarse muy bien porque la consulta final ya captura el plan y la intención sin depender de una frase literal del sitio.
 
-El prompt del agente le indica que, antes de buscar, reescriba internamente preguntas vagas o elípticas usando el plan activo en la conversación. O sea, si la persona dice:
-
-- `¿y el itinerario?`
-- `¿incluye desayuno?`
-- `¿y precio?`
-
-la búsqueda no debería ejecutarse con esa frase sola, sino con una versión contextualizada. En ese tipo de seguimiento, la búsqueda semántica suele comportarse muy bien porque la consulta final ya captura el plan y la intención sin depender de una frase literal del sitio.
+- `¿y el itinerario?` => `itinerario del plan de Guatavita`
+- `¿incluye desayuno?` => `desayuno incluido en el plan de Guatavita`
+- `¿y precio?` => `precio del plan de Guatavita`
 
 En resumen, `semantic search` gana cuando el trabajo principal es **entender**.
 
@@ -132,7 +129,7 @@ Para resolver eso usé `Reciprocal Ranked Fusion` o `RRF`. En vez de obsesionars
 
 Eso la vuelve especialmente útil cuando quieres combinar estrategias sin forzar una equivalencia artificial entre sus puntajes.
 
-![Ilustración de fusión de rankeos con MongoDB](./mongo.png)
+Ilustración de fusión de rankeos con MongoDB
 
 ## El costo oculto: mantener viva la base de conocimiento
 
@@ -142,7 +139,7 @@ Cada vez que cambia un plan turístico, la base de conocimiento debe actualizars
 
 Ese pipeline se parece bastante a los flujos que muestran otros proveedores como Cloudflare cuando explican sistemas de recuperación modernos: no basta con almacenar información, también hay que mantenerla lista para responder bien.
 
-![Ilustración de mantenimiento de pipeline de búsqueda](./cloudflare.png)
+Ilustración de mantenimiento de pipeline de búsqueda
 
 ## El problema concreto que hybrid search me resolvió
 
