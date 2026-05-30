@@ -11,6 +11,9 @@ importers:
       '@astrojs/cloudflare':
         specifier: ^13.6.0
         version: 13.6.0(astro@6.4.2(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4))(jiti@2.7.0)(lightningcss@1.32.0)(workerd@1.20260526.1)(wrangler@4.95.0)
+      '@astrojs/markdown-remark':
+        specifier: ^7.2.0
+        version: 7.2.0
       '@fontsource/bricolage-grotesque':
         specifier: ^5.2.10
         version: 5.2.10

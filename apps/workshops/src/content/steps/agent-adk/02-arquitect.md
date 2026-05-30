@@ -22,7 +22,7 @@ Antes de instalar herramientas, mira el mapa de la plataforma. En el taller lo r
 
 ## En este taller
 
-- ADK + system prompt + skills dinámicas
+- ADK + system prompt estructurado + function tools
 - Playground local con API key de AI Studio
 - Despliegue orientado a **Agent Runtime**
 

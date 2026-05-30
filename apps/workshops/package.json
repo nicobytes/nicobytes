@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.6.0",
+    "@astrojs/markdown-remark": "^7.2.0",
     "@fontsource/bricolage-grotesque": "^5.2.10",
     "@fontsource/geist-sans": "^5.2.5",
     "@fontsource/jetbrains-mono": "^5.2.8",

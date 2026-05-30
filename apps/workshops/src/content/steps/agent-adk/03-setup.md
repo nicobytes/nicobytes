@@ -1,6 +1,6 @@
 ---
 title: 'Configura tu entorno de desarrollo'
-titleStep: Setup
+titleStep: Entorno
 description: 'Instala Python, uv y el CLI de Google Agents en tu máquina local para construir agentes con ADK.'
 order: 3
 prevStep: '02-arquitect'
