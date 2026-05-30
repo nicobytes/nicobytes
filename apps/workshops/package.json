@@ -9,15 +9,23 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate-types": "wrangler types",
+    "deploy": "npx wrangler deploy"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.6.0",
     "@fontsource/bricolage-grotesque": "^5.2.10",
     "@fontsource/geist-sans": "^5.2.5",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.2",
-    "tailwindcss": "^4.3.0"
+    "rehype-external-links": "^3.0.0",
+    "tailwindcss": "^4.3.0",
+    "wrangler": "^4.95.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }

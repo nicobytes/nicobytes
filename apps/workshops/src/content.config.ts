@@ -17,8 +17,8 @@ const steps = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/steps' }),
   schema: z.object({
     title: z.string(),
+    titleStep: z.string(),
     description: z.string(),
-    author: z.string().optional(),
     order: z.number(),
   }),
 });

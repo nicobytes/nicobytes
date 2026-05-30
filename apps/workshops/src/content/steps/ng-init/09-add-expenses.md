@@ -1,13 +1,11 @@
 ---
-title: Agregando gastos
-author: Angular Bolivia
+title: 'Agregando gastos'
+titleStep: 'Agregando gastos'
 description: ¡Genial! Ya aprendimos sobre Interpolation y cómo mostrar datos en nuestra aplicación. Ahora vamos a dar el siguiente paso, crear una función que nos permita guardar nuestros gastos de manera interactiva.
 order: 9
 prevStep: '08-ngmodel'
 nextStep: '10-expenses-list'
 ---
-
-# Agregando gastos
 
 > ¡Genial! Ya aprendimos sobre Interpolation y cómo mostrar datos en nuestra aplicación. Ahora vamos a dar el siguiente paso: crear una función que nos permita guardar nuestros gastos de manera interactiva.
 

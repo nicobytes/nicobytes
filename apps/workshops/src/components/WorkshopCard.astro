@@ -4,11 +4,11 @@ import type { CollectionEntry } from 'astro:content';
 interface Props {
   workshop: CollectionEntry<'workshops'>;
   index: number;
+  href: string;
 }
 
-const { workshop, index } = Astro.props;
+const { workshop, index, href } = Astro.props;
 const { title, description, level, tags } = workshop.data;
-const href = `/workshops/${workshop.id}`;
 ---
 
 <article

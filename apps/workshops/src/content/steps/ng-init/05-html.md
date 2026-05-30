@@ -1,13 +1,11 @@
 ---
-title: HTML
-author: Angular Bolivia
+title: 'Introducción a HTML'
+titleStep: HTML
 description: Te estarás preguntando, ¿qué es una plantilla o vista?
 order: 5
 nextStep: '06-template'
 prevStep: '04-components'
 ---
-
-# Introducción a HTML
 
 > ¿Te has preguntado cómo Angular muestra el contenido en el navegador? ¡Las plantillas HTML son la respuesta!
 

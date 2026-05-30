@@ -39,5 +39,5 @@ export function getStepSlug(step: StepEntry) {
 }
 
 export function getStepHref(workshop: string, step: StepEntry) {
-  return `/workshops/${workshop}/${getStepSlug(step)}`;
+  return `/${workshop}/${getStepSlug(step)}`;
 }

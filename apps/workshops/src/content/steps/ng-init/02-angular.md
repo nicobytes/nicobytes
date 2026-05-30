@@ -1,13 +1,11 @@
 ---
-title: Angular
-author: Angular Bolivia
+title: '¿Qué es Angular?'
+titleStep: Angular
 description: Angular es un framework que nos ayuda a crear sitios y aplicaciones web modernas de una manera más fácil y organizada. ¡Fue creado por Google y es usado por miles de desarrolladores en todo el mundo!
 order: 2
 nextStep: '03-stackblitz'
 prevStep: '01-welcome'
 ---
-
-# ¿Qué es Angular?
 
 > Angular es un framework que nos ayuda a crear sitios y aplicaciones web modernas de una manera más fácil y organizada. ¡Fue creado por Google y es usado por miles de desarrolladores en todo el mundo!
 

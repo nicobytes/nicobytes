@@ -36,7 +36,7 @@ const { prev, next, prevHref, nextHref } = Astro.props;
             d="M15 19l-7-7 7-7"
           />
         </svg>
-        {prev.data.title}
+        {prev.data.titleStep}
       </a>
     ) : (
       <span />
@@ -50,7 +50,7 @@ const { prev, next, prevHref, nextHref } = Astro.props;
         data-astro-prefetch
         class="pointer-events-auto inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 font-mono text-sm font-medium text-canvas transition-colors hover:bg-accent-dim"
       >
-        {next.data.title}
+        {next.data.titleStep}
         <svg
           class="h-4 w-4"
           fill="none"

@@ -1,13 +1,11 @@
 ---
-title: Presupuesto
-author: Angular Bolivia
+title: 'Agregando presupuesto y saldo'
+titleStep: Presupuesto
 description: Para controlar nuestros gastos es importante saber cuál es nuestro presupuesto y cuál sería nuestro saldo.
 order: 11
 prevStep: '10-expenses-list'
 nextStep: '12-css'
 ---
-
-# Agregando presupuesto y saldo
 
 > En esta sección aprenderemos a manejar el presupuesto y calcular el saldo disponible en nuestra aplicación de gastos.
 

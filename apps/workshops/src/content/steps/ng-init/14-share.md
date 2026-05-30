@@ -1,13 +1,11 @@
 ---
-title: Comparte tu app
-author: Angular Bolivia
+title: '¡Comparte tu primera aplicación Angular!'
+titleStep: 'Comparte tu app'
 description: ¡Felicitaciones! Has creado tu primera aplicación en Angular. Ahora es momento de mostrar al mundo lo que has logrado.
 order: 14
 prevStep: '13-delete-expenses'
 nextStep: '15-congratulations'
 ---
-
-# ¡Comparte tu primera aplicación Angular!
 
 > ¡Has llegado muy lejos! Has creado tu primera aplicación en Angular y es momento de mostrar al mundo lo que has logrado. Comparte tu trabajo con amigos, familia y la comunidad de desarrolladores.
 

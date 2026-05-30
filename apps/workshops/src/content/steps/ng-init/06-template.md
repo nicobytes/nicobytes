@@ -1,13 +1,11 @@
 ---
-title: Tu primera plantilla
-author: Angular Bolivia
+title: '¡Tu primera plantilla HTML en Angular!'
+titleStep: 'Tu primera plantilla'
 description: Aprenderemos a crear nuestra primera plantilla HTML en Angular para construir la interfaz de nuestra aplicación.
 order: 6
 nextStep: '07-signal'
 prevStep: '05-html'
 ---
-
-# ¡Tu primera plantilla HTML en Angular!
 
 > En este paso, aprenderemos a crear la estructura básica de nuestra aplicación usando HTML. Las plantillas en Angular son archivos HTML que nos permiten definir cómo se verá nuestra aplicación.
 

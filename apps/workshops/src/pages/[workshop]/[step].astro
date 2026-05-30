@@ -1,13 +1,13 @@
 ---
 import { Code } from 'astro:components';
 import { getCollection, render } from 'astro:content';
-import WorkshopLayout from '../../../layouts/WorkshopLayout.astro';
+import WorkshopLayout from '../../layouts/WorkshopLayout.astro';
 import {
   getStepSlug,
   getWorkshopSteps,
   groupStepsByWorkshop,
   parseStepId,
-} from '../../../lib/workshops';
+} from '../../lib/workshops';
 
 export async function getStaticPaths() {
   const allSteps = await getCollection('steps');

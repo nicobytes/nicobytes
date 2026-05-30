@@ -1,13 +1,11 @@
 ---
-title: Eliminando gastos
-author: Angular Bolivia
+title: 'Eliminando gastos'
+titleStep: 'Eliminando gastos'
 description: ¿Llegaste muy rápido hasta aquí? Si aún queda tiempo para que termine el taller, podemos ver cómo eliminar gastos de nuestra lista.
 order: 13
 prevStep: '12-css'
 nextStep: '14-share'
 ---
-
-# Eliminando gastos
 
 > ¿Llegaste muy rápido hasta aquí? Si aún queda tiempo para que termine el taller, podemos ver cómo eliminar gastos de nuestra lista.
 

@@ -1,13 +1,11 @@
 ---
-title: ¿Y ahora qué?
-author: Angular Bolivia
+title: '¡Lo lograste! ¿Qué sigue ahora?'
+titleStep: '¿Y ahora qué?'
 description: ¡Felicitaciones! Has completado tu primera aplicación con Angular. Este es el comienzo de tu viaje como desarrollador Angular.
 order: 15
 prevStep: '14-share'
 nextStep: '16-retos-extra'
 ---
-
-# ¡Lo lograste! ¿Qué sigue ahora?
 
 > ¡Felicitaciones! Has completado tu primera aplicación con Angular. Este es solo el comienzo de tu viaje como desarrollador Angular y estamos muy orgullosos de tu logro.
 

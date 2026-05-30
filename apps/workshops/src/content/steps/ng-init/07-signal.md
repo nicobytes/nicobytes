@@ -1,13 +1,11 @@
 ---
 title: Signals
-author: Angular Bolivia
+titleStep: Signals
 description: Signals es un sistema que permite a Angular rastrear cómo y dónde se utiliza el estado en una aplicación, permitiendo al framework optimizar las actualizaciones de renderizado.
 order: 7
 prevStep: '06-template'
 nextStep: '08-ngmodel'
 ---
-
-# Signals
 
 Los Signals son una característica moderna y emocionante de Angular que nos ayuda a manejar los datos de nuestra aplicación de una forma más inteligente. Imagina que tienes una caja mágica (el Signal) que no solo guarda información, sino que también le avisa automáticamente a Angular cuando esa información cambia. ¡Es como tener un asistente personal que siempre mantiene todo actualizado!
 

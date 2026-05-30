@@ -1,13 +1,11 @@
 ---
-title: Lista de gastos
-author: Angular Bolivia
+title: 'Mostrando la Lista de Gastos'
+titleStep: 'Lista de gastos'
 description: Aprenderemos a mostrar en pantalla la lista de gastos que el usuario va registrando, usando las características modernas de Angular.
 order: 10
 prevStep: '09-add-expenses'
 nextStep: '11-budget'
 ---
-
-# Mostrando la Lista de Gastos
 
 > ¡Excelente progreso! Ya aprendimos a guardar los gastos en nuestra aplicación. Ahora vamos a dar el siguiente paso: mostrar estos gastos en pantalla para que los usuarios puedan ver todos sus registros de una forma bonita y ordenada.
 

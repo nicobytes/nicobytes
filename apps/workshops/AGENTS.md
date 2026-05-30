@@ -61,7 +61,9 @@ src/
 Definido en `src/content.config.ts`:
 
 - **`workshops`**: JSON en `src/content/workshops/`. Campos: `title`, `description`, `order`, `level?`, `tags?`.
-- **`steps`**: Markdown en `src/content/steps/{workshop-id}/`. Frontmatter: `title`, `description`, `order`, `author?`.
+- **`steps`**: Markdown en `src/content/steps/{workshop-id}/`. Frontmatter: `title`, `titleStep`, `description`, `order`.
+  - `title`: heading principal del paso (h1 en el layout).
+  - `titleStep`: etiqueta corta para sidenav y navegación prev/next.
 
 Convenciones:
 
@@ -105,7 +107,7 @@ Tailwind 4 se configura en `src/styles/global.css` con `@theme`. Usa las utilida
 
 - **UI/layouts/componentes**: seguir tokens y `/frontend-design`.
 - **Nuevo taller**: añadir JSON en `workshops/` + carpeta de pasos en `content/steps/`.
-- **Nuevo paso**: markdown con frontmatter válido y `order` secuencial.
+- **Nuevo paso**: markdown con frontmatter válido (`title`, `titleStep`, `description`, `order`) y `order` secuencial. No repetir el título como `#` en el cuerpo del markdown.
 - No añadir frameworks UI (React, Vue) ni dependencias pesadas sin necesidad.
 - Mantener el sitio estático — sin API routes ni SSR salvo que se pida explícitamente.
 

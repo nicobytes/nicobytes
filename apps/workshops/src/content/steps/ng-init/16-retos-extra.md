@@ -1,12 +1,10 @@
 ---
-title: Retos Extra
-author: Angular Bolivia
+title: 'Retos Adicionales'
+titleStep: 'Retos Extra'
 description: Retos adicionales para el workshop
 order: 16
 prevStep: '15-congratulations'
 ---
-
-# Retos Adicionales
 
 > ¡Felicitaciones por llegar hasta aquí! 👏 Si quieres seguir practicando y mejorando tu aplicación, te proponemos los siguientes retos que te ayudarán a aprender más sobre Angular.
 

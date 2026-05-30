@@ -1,13 +1,11 @@
 ---
-title: ngModel
-author: Angular Bolivia
+title: 'Usando ngModel'
+titleStep: ngModel
 description: En este punto vamos a aprender el uso de ngModel para ingresar nuestros gastos.
 order: 8
 prevStep: '07-signal'
 nextStep: '09-add-expenses'
 ---
-
-# Usando ngModel
 
 > Ahora aprenderemos sobre ngModel, una característica muy útil de Angular que nos ayuda a conectar lo que el usuario escribe en un formulario con nuestros signals. ¡Es como tener un asistente que toma nota de todo lo que escribimos!
 

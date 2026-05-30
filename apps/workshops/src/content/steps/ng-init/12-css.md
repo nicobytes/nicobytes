@@ -1,13 +1,11 @@
 ---
-title: CSS
-author: Angular Bolivia
+title: 'CSS - ¡Hagamos que nuestra app se vea profesional!'
+titleStep: CSS
 description: Vamos a hacer que nuestra aplicación de gastos se vea profesional y atractiva utilizando CSS para darle estilo.
 order: 12
 prevStep: '11-budget'
 nextStep: '13-delete-expenses'
 ---
-
-# CSS - ¡Hagamos que nuestra app se vea profesional!
 
 > ¡Felicitaciones! Ya tenemos una aplicación funcional para manejar nuestros gastos. Ahora vamos a dar el siguiente paso: hacer que se vea profesional y atractiva usando CSS.
 
