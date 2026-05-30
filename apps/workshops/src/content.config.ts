@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const workshops = defineCollection({
@@ -9,7 +10,6 @@ const workshops = defineCollection({
     order: z.number(),
     level: z.string().optional(),
     tags: z.array(z.string()).optional(),
-    accent: z.string().optional(),
   }),
 });
 

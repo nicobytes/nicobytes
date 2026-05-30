@@ -16,13 +16,20 @@ const href = `/workshops/${workshop.id}`;
   style={`animation-delay: ${index * 80}ms`}
 >
   <a href={href} class="block" data-astro-prefetch>
-    <h2
-      class="font-display text-2xl font-semibold tracking-tight text-text transition-colors group-hover:text-accent md:text-3xl"
-    >
-      {title}
-    </h2>
+    <div class="flex items-baseline gap-4">
+      <span class="font-mono text-xs tabular-nums text-faint">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <h2
+        class="text-lg font-medium tracking-tight text-text/90 transition-colors group-hover:text-accent md:text-xl"
+      >
+        {title}
+      </h2>
+    </div>
 
-    <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-faint">
+    <div
+      class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 pl-9 font-mono text-xs text-faint"
+    >
       {
         level && (
           <span class="uppercase tracking-[0.18em] text-muted">{level}</span>
@@ -35,7 +42,7 @@ const href = `/workshops/${workshop.id}`;
       }
     </div>
 
-    <p class="mt-4 max-w-2xl text-base leading-relaxed text-muted">
+    <p class="mt-4 max-w-2xl pl-9 text-sm leading-relaxed text-muted md:text-base">
       {description}
     </p>
   </a>

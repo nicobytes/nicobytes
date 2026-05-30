@@ -10,12 +10,12 @@ const workshops = (await getCollection('workshops')).sort(
 
 <BaseLayout>
   <main class="mx-auto min-h-screen max-w-3xl px-6 py-16 md:px-8 md:py-24">
-    <header class="mb-14 animate-fade-up">
+    <header class="mb-16 animate-fade-up md:mb-20">
       <p class="font-mono text-xs uppercase tracking-[0.24em] text-faint">
         Technical workshops
       </p>
       <h1
-        class="font-display mt-4 text-4xl font-semibold tracking-tight text-text md:text-5xl"
+        class="font-display mt-4 text-5xl font-bold leading-none tracking-tighter text-text md:text-6xl"
       >
         Workshops
       </h1>
@@ -25,13 +25,21 @@ const workshops = (await getCollection('workshops')).sort(
       </p>
     </header>
 
+    <div class="list-divider mb-10"></div>
+
     <section>
+      <p
+        class="mb-8 font-mono text-[10px] uppercase tracking-[0.22em] text-faint"
+      >
+        Talleres disponibles
+      </p>
+
       {
         workshops.map((workshop, index) => (
-          <>
+          <div>
             {index > 0 && <div class="list-divider" />}
             <WorkshopCard workshop={workshop} index={index} />
-          </>
+          </div>
         ))
       }
     </section>
