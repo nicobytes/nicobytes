@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import {
+  getStepHref,
+  getWorkshopSteps,
+  parseStepId,
+} from '../../../lib/workshops';
+
+export async function getStaticPaths() {
+  const steps = await getCollection('steps');
+  const workshops = new Set<string>();
+
+  for (const step of steps) {
+    workshops.add(parseStepId(step.id).workshop);
+  }
+
+  return Array.from(workshops).map((workshop) => ({
+    params: { workshop },
+    props: { workshop },
+  }));
+}
+
+const { workshop } = Astro.props;
+const steps = await getCollection('steps');
+const workshopSteps = getWorkshopSteps(steps, workshop);
+const firstStep = workshopSteps[0];
+
+if (!firstStep) {
+  return Astro.redirect('/');
+}
+
+return Astro.redirect(getStepHref(workshop, firstStep));
+---

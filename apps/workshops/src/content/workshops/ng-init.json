@@ -1,0 +1,8 @@
+{
+  "title": "NG | INIT",
+  "description": "Taller introductorio a Angular: desde la configuración inicial hasta tu primera app de gastos personales con componentes, signals y estilos.",
+  "order": 1,
+  "level": "beginner",
+  "tags": ["angular", "typescript", "signals", "components"],
+  "accent": "#c8ff00"
+}

@@ -1,0 +1,62 @@
+---
+import { Code } from 'astro:components';
+import { getCollection, render } from 'astro:content';
+import WorkshopLayout from '../../../layouts/WorkshopLayout.astro';
+import {
+  getStepSlug,
+  getWorkshopSteps,
+  groupStepsByWorkshop,
+  parseStepId,
+} from '../../../lib/workshops';
+
+export async function getStaticPaths() {
+  const allSteps = await getCollection('steps');
+  const grouped = groupStepsByWorkshop(allSteps);
+
+  return allSteps.map((step) => {
+    const { workshop } = parseStepId(step.id);
+    const workshopSteps = grouped.get(workshop) ?? [];
+    const currentIndex = workshopSteps.findIndex(
+      (item) => item.id === step.id,
+    );
+
+    return {
+      params: {
+        workshop,
+        step: getStepSlug(step),
+      },
+      props: {
+        step,
+        workshopSteps,
+        prev: currentIndex > 0 ? workshopSteps[currentIndex - 1] : null,
+        next:
+          currentIndex < workshopSteps.length - 1
+            ? workshopSteps[currentIndex + 1]
+            : null,
+      },
+    };
+  });
+}
+
+const { step, workshopSteps, prev, next } = Astro.props;
+const { workshop } = Astro.params;
+const workshops = await getCollection('workshops');
+const workshopEntry = workshops.find((item) => item.id === workshop);
+
+if (!workshopEntry || !workshop) {
+  return Astro.redirect('/');
+}
+
+const { Content } = await render(step);
+---
+
+<WorkshopLayout
+  workshop={workshop}
+  workshopTitle={workshopEntry.data.title}
+  currentStep={step}
+  workshopSteps={workshopSteps}
+  prev={prev}
+  next={next}
+>
+  <Content components={{ pre: Code }} />
+</WorkshopLayout>

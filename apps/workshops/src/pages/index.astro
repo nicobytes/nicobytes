@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkshopCard from '../components/WorkshopCard.astro';
+
+const workshops = (await getCollection('workshops')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout>
+  <main class="mx-auto min-h-screen max-w-3xl px-6 py-16 md:px-8 md:py-24">
+    <header class="mb-14 animate-fade-up">
+      <p class="font-mono text-xs uppercase tracking-[0.24em] text-faint">
+        Technical workshops
+      </p>
+      <h1
+        class="font-display mt-4 text-4xl font-semibold tracking-tight text-text md:text-5xl"
+      >
+        Workshops
+      </h1>
+      <p class="mt-4 max-w-xl text-base leading-relaxed text-muted">
+        Guías paso a paso para aprender haciendo. Elige un taller y avanza a tu
+        ritmo.
+      </p>
+    </header>
+
+    <section>
+      {
+        workshops.map((workshop, index) => (
+          <>
+            {index > 0 && <div class="list-divider" />}
+            <WorkshopCard workshop={workshop} index={index} />
+          </>
+        ))
+      }
+    </section>
+
+    <footer class="list-divider mt-4 pt-8">
+      <p class="font-mono text-xs text-faint">© {new Date().getFullYear()}</p>
+    </footer>
+  </main>
+</BaseLayout>

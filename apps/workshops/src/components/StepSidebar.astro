@@ -1,0 +1,59 @@
+---
+import type { StepEntry } from '../lib/workshops';
+import { getStepHref } from '../lib/workshops';
+
+interface Props {
+  workshop: string;
+  workshopTitle: string;
+  steps: StepEntry[];
+  currentStepId: string;
+}
+
+const { workshop, workshopTitle, steps, currentStepId } = Astro.props;
+---
+
+<aside
+  class="sticky top-0 hidden h-screen w-72 shrink-0 flex-col border-r border-border-subtle bg-surface lg:flex"
+>
+  <div class="border-b border-border-subtle px-5 py-6">
+    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">
+      Workshop
+    </p>
+    <p class="font-display mt-2 text-lg font-semibold leading-snug text-text">
+      {workshopTitle}
+    </p>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto px-3 py-4">
+    <ol class="space-y-1">
+      {
+        steps.map((step) => {
+          const isActive = step.id === currentStepId;
+          const href = getStepHref(workshop, step);
+          const stepNumber = String(step.data.order).padStart(2, '0');
+
+          return (
+            <li>
+              <a
+                href={href}
+                data-astro-prefetch
+                class:list={[
+                  'flex items-start gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors',
+                  isActive
+                    ? 'bg-surface-raised text-accent'
+                    : 'text-muted hover:bg-surface-raised hover:text-text',
+                ]}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <span class="font-mono text-xs leading-5 text-faint">
+                  {stepNumber}
+                </span>
+                <span class="leading-5">{step.data.title}</span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </nav>
+</aside>
