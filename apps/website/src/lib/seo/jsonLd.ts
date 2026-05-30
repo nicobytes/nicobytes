@@ -38,6 +38,7 @@ export function blogPostingSchema(post: {
   datePublished: string;
   image?: string;
   author: string;
+  inLanguage?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -49,6 +50,7 @@ export function blogPostingSchema(post: {
       "@type": "Person",
       name: post.author,
     },
+    inLanguage: post.inLanguage,
     image: post.image,
     mainEntityOfPage: {
       "@type": "WebPage",

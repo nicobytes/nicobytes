@@ -1,0 +1,149 @@
+---
+title: "Como usar Whisper en Python"
+description: "Whisper es un modelo de IA de OpenAI que te permite convertir audio a texto con muy buena calidad y precision."
+author: "Nicolas Molina (@nicobytes)"
+date: "2024-03-26"
+lang: "es"
+translationSlug: "como-usar-whisper-en-python"
+heroImage: "./cover.jpg"
+categories: ["AI", "Python"]
+draft: false
+---
+
+import ArticleImage from "../../../components/ArticleImage.astro";
+import terminalImg from "./terminal_1.jpg";
+import screenImg from "./screen_3.jpg";
+
+Whisper es un modelo de IA de OpenAI que te permite convertir cualquier audio a texto con muy buena calidad y precision. En este articulo te voy a mostrar como usar este modelo para obtener transcripciones desde un archivo de audio y como ejecutarlo con Python.
+
+## 1. Crear el entorno
+
+En este punto te recomiendo usar [Conda](https://docs.conda.io/en/latest/) para crear el entorno de Python y manejar las dependencias con poetry.
+
+```bash
+mkdir whisper_project
+cd whisper_project
+conda create --name whisper_project python=3.10
+conda activate whisper_project
+conda install -c conda-forge ffmpeg
+conda install -c conda-forge poetry
+poetry init
+```
+
+Ten en cuenta que instale `ffmpeg` para manejar archivos de audio dentro del entorno. Eso es necesario para usar Whisper con Python.
+
+## 2. Instalar Whisper
+
+Cuando tengas el entorno listo, puedes instalar Whisper con el siguiente comando:
+
+```bash
+poetry add openai-whisper
+```
+
+## 3. Usar Whisper
+
+Ahora que Whisper ya esta instalado, puedes crear un archivo `main.py`, importar Whisper como paquete de Python y luego cargar el modelo que quieras usar. Hay cinco tamanos de modelo que ofrecen un balance entre velocidad y precision.
+
+|  Size  | English-only model | Multilingual model | Required VRAM | Relative speed |
+| :----: | :----------------: | :----------------: | :-----------: | :------------: |
+|  tiny  |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~32x      |
+|  base  |     `base.en`      |       `base`       |     ~1 GB     |      ~16x      |
+| small  |     `small.en`     |      `small`       |     ~2 GB     |      ~6x       |
+| medium |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
+| large  |        N/A         |      `large`       |    ~10 GB     |       1x       |
+
+Este es el codigo en `main.py` para usar Whisper con Python:
+
+```python
+# main.py
+import whisper
+model = whisper.load_model('large')
+
+def get_transcribe(audio: str, language: str = 'en'):
+    return model.transcribe(audio=audio, language=language, verbose=True)
+
+if __name__ == "__main__":
+    result = get_transcribe(audio='./input/audio.wav')
+    print('-'*50)
+    print(result.get('text', ''))
+```
+
+Con la funcion `get_transcribe` puedes obtener la transcripcion de un archivo de audio. Esta funcion recibe 2 argumentos: la ruta del audio y el idioma. `audio` es la ruta al archivo en tu entorno, y `language` es el idioma del audio. Whisper puede detectar el idioma automaticamente, pero suele funcionar mejor si lo defines desde el comienzo. En este caso voy a usar el siguiente audio y obtener la transcripcion.
+
+<audio controls>
+  <source
+    src="https://github.com/Azure-Samples/cognitive-services-speech-sdk/raw/master/samples/cpp/windows/console/samples/enrollment_audio_katie.wav"
+    type="audio/wav"
+  />
+</audio>
+
+## 4. Ejecutar el script
+
+Ahora, desde tu terminal, puedes ejecutar el script con este comando:
+
+```bash
+python main.py
+```
+
+<ArticleImage src={terminalImg} alt="salida en terminal" />
+
+Listo.
+
+Ahora puedes crear un notebook de Jupyter, por ejemplo un archivo llamado `demo.ipyhnb`, y usar Whisper tambien desde ahi.
+
+## 5. Guardar resultados en archivos
+
+Whisper tiene varias utilidades que te permiten guardar los resultados en diferentes formatos para trabajar mejor con las transcripciones. Puedes usar la funcion `get_writer` para obtener un writer y guardar los resultados en el formato que necesites.
+
+```python
+from whisper.utils import get_writer
+
+writer = get_writer("tsv", './')
+writer(results, 'transcribe.tsv')
+```
+
+Si implementas eso dentro de `main.py`, puedes guardar los resultados con este codigo:
+
+```python
+# main.py
+import whisper
+from whisper.utils import get_writer
+model = whisper.load_model('large')
+
+
+def get_transcribe(audio: str, language: str = 'en'):
+    return model.transcribe(audio=audio, language=language, verbose=True)
+
+
+def save_file(results, format='tsv'):
+    writer = get_writer(format, './output/')
+    writer(results, f'transcribe.{format}')
+
+
+if __name__ == "__main__":
+    result = get_transcribe(audio='./input/audio.wav')
+    print('-'*50)
+    print(result.get('text', ''))
+    save_file(result)
+    save_file(result, 'txt')
+    save_file(result, 'srt')
+```
+
+Como resultado, ahora vas a tener la transcripcion en formatos `tsv`, `txt` y `srt`.
+
+<ArticleImage src={screenImg} alt="archivos de salida" />
+
+Y la estructura del proyecto se vera asi:
+
+```bash
+.
+├── input
+│   └── audio.wav
+├── main.py
+├── output
+│   ├── transcribe.srt
+│   ├── transcribe.tsv
+│   └── transcribe.txt
+├── poetry.lock
+└── pyproject.toml
+```

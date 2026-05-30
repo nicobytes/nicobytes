@@ -6,29 +6,31 @@ const blog = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
   schema: ({ image }) =>
     z.object({
-    title: z.string(),
-    description: z.string(),
-    author: z.string().default("Nicolas Molina (@nicobytes)"),
-    date: z.string(),
-    heroImage: image().optional(),
-    categories: z.array(z.string()).optional(),
-    draft: z.boolean().default(false),
-    repoLink: z.string().url().optional(),
-  }),
+      title: z.string(),
+      description: z.string(),
+      author: z.string().default("Nicolas Molina (@nicobytes)"),
+      date: z.string(),
+      lang: z.enum(["en", "es"]).default("en"),
+      translationSlug: z.string().optional(),
+      heroImage: image().optional(),
+      categories: z.array(z.string()).optional(),
+      draft: z.boolean().default(false),
+      repoLink: z.url().optional(),
+    }),
 });
 
 const portfolio = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/portfolio" }),
   schema: ({ image }) =>
     z.object({
-    title: z.string(),
-    description: z.string(),
-    image: image(),
-    date: z.string(),
-    type: z.enum(["private", "public"]).default("private"),
-    url: z.string().url().optional(),
-    draft: z.boolean().default(false),
-  }),
+      title: z.string(),
+      description: z.string(),
+      image: image(),
+      date: z.string(),
+      type: z.enum(["private", "public"]).default("private"),
+      url: z.url().optional(),
+      draft: z.boolean().default(false),
+    }),
 });
 
 export const collections = { blog, portfolio };

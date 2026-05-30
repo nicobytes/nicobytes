@@ -1,0 +1,87 @@
+---
+title: "Privacidad en JavaScript: propiedades y metodos privados nativos con hashtag"
+description: "JavaScript ahora permite declarar propiedades y metodos privados directamente con un hashtag (#), habilitando privacidad nativa sin depender de TypeScript."
+author: "Nicolas Molina (@nicobytes)"
+date: "2024-10-14"
+lang: "es"
+translationSlug: "privacidad-en-javascript"
+heroImage: "./80-blog.jpg"
+categories: ["JavaScript", "TypeScript", "Privacy"]
+draft: true
+---
+
+JavaScript ahora permite que los desarrolladores declaren metodos y propiedades privadas directamente con un hashtag (#), habilitando privacidad nativa sin depender de TypeScript.
+
+## Privacidad nativa con hashtags
+
+Antes de esta actualizacion, los desarrolladores usaban convenciones como el guion bajo (`_`) para indicar que una propiedad debia ser "privada", pero eso no garantizaba privacidad real. Con TypeScript aparecio la palabra clave `private`, que aportaba cierta proteccion durante el desarrollo, aunque esa privacidad se perdia una vez que el codigo era transpilado a JavaScript.
+
+La actualizacion mas reciente de JavaScript permite declarar propiedades y metodos privados con un hashtag (#), garantizando privacidad en tiempo de ejecucion y evitando que se puedan acceder desde fuera de la clase.
+
+## Comparacion entre TypeScript y JavaScript
+
+## Privacidad en TypeScript
+
+En TypeScript, `private` se usa para declarar propiedades y metodos privados:
+
+```typescript
+class ProductService {
+  private products: string[] = [];
+
+  private addProduct(product: string) {
+    this.products.push(product);
+  }
+}
+```
+
+Aunque esta privacidad es util durante el desarrollo, se pierde una vez que el codigo se convierte a JavaScript.
+
+## Propiedades privadas en JavaScript con hashtags
+
+JavaScript ahora permite declarar propiedades y metodos privados usando un hashtag (#), lo cual garantiza su privacidad incluso en tiempo de ejecucion:
+
+```javascript
+class ProductService {
+  #products = [];
+
+  #addProduct(product) {
+    this.#products.push(product);
+  }
+}
+```
+
+En este ejemplo, `#products` y `#addProduct` no se pueden acceder desde fuera de la clase, manteniendo la seguridad y la integridad del codigo.
+
+## Ejemplo practico: clase `ProductService`
+
+Veamos un ejemplo practico con la clase `ProductService` usando hashtags para la privacidad:
+
+```javascript
+class ProductService {
+  #products = [];
+
+  #addProduct(product) {
+    this.#products.push(product);
+  }
+
+  publicAddProduct(product) {
+    this.#addProduct(product);
+  }
+
+  getProducts() {
+    return this.#products;
+  }
+}
+```
+
+En este ejemplo, `#products` y `#addProduct` quedan protegidos del acceso externo, mejorando la seguridad y reduciendo la probabilidad de modificaciones no deseadas.
+
+## Impacto en el desarrollo web
+
+La incorporacion de propiedades y metodos privados nativos mejora de forma importante la seguridad y la calidad del codigo. Ahora los desarrolladores pueden crear clases mejor encapsuladas y mas faciles de mantener, lo que facilita la evolucion de los proyectos con el tiempo.
+
+## Conclusion
+
+La privacidad nativa en JavaScript representa un avance importante para los desarrolladores, porque mejora la seguridad y simplifica la construccion de aplicaciones web robustas. Ojala esta explicacion te anime a adoptar esta funcionalidad en tus proyectos.
+
+Si tienes preguntas o temas que te gustaria que cubra en futuros articulos, puedes dejarme tus comentarios. Nos vemos en la proxima.

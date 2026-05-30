@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import { getCollection, render } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import BackButton from "../../components/BackButton.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Button from "../../components/Button.astro";
@@ -10,18 +10,122 @@ import { formatDate } from "../../lib/formatDate";
 import { getOgImageUrl } from "../../lib/getOgImageUrl";
 import { blogPostingSchema } from "../../lib/seo/jsonLd";
 
-export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+type BlogEntry = CollectionEntry<"blog">;
+
+interface AlternateLink {
+  href: string;
+  label: string;
+  hreflang: "en" | "es";
 }
 
-const { post } = Astro.props;
+function getBaseSlug(post: BlogEntry) {
+  if (post.data.lang === "es" && post.id.endsWith("/es")) {
+    return post.id.slice(0, -3);
+  }
+
+  return post.id;
+}
+
+function getPostPath(post: BlogEntry, baseSlug = getBaseSlug(post)) {
+  if (post.data.lang === "es") {
+    return `/blog/es/${post.data.translationSlug ?? baseSlug}/`;
+  }
+
+  return `/blog/${baseSlug}/`;
+}
+
+export async function getStaticPaths() {
+  const getStaticBaseSlug = (post: BlogEntry) => {
+    if (post.data.lang === "es" && post.id.endsWith("/es")) {
+      return post.id.slice(0, -3);
+    }
+
+    return post.id;
+  };
+  const getStaticPostPath = (post: BlogEntry, baseSlug = getStaticBaseSlug(post)) =>
+    post.data.lang === "es"
+      ? `/blog/es/${post.data.translationSlug ?? baseSlug}/`
+      : `/blog/${baseSlug}/`;
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  const groups = new Map<string, { en?: BlogEntry; es?: BlogEntry }>();
+
+  for (const post of posts) {
+    const baseSlug = getStaticBaseSlug(post);
+    const group = groups.get(baseSlug) ?? {};
+
+    group[post.data.lang] = post;
+    groups.set(baseSlug, group);
+  }
+
+  return Array.from(groups.entries()).flatMap(([baseSlug, group]) => {
+    const paths = [];
+
+    if (group.en) {
+      const alternate = group.es
+        ? {
+            href: getStaticPostPath(group.es, baseSlug),
+            label: "Leer en español",
+            hreflang: "es" as const,
+          }
+        : undefined;
+
+      paths.push({
+        params: { slug: baseSlug },
+        props: { post: group.en, baseSlug, alternate },
+      });
+    }
+
+    if (group.es) {
+      const alternate = group.en
+        ? {
+            href: getStaticPostPath(group.en, baseSlug),
+            label: "Read in English",
+            hreflang: "en" as const,
+          }
+        : undefined;
+
+      paths.push({
+        params: {
+          slug: `es/${group.es.data.translationSlug ?? baseSlug}`,
+        },
+        props: { post: group.es, baseSlug, alternate },
+      });
+    }
+
+    return paths;
+  });
+}
+
+const { post, baseSlug, alternate } = Astro.props as {
+  post: BlogEntry;
+  baseSlug: string;
+  alternate?: AlternateLink;
+};
 const { Content } = await render(post);
 const ogImage = await getOgImageUrl(post.data.heroImage, Astro.site);
-const postUrl = new URL(`/blog/${post.id}/`, Astro.site).href;
+const site = Astro.site ?? "https://nicobytes.com";
+const postPath = getPostPath(post, baseSlug);
+const postUrl = new URL(postPath, site).href;
+const alternateUrl = alternate ? new URL(alternate.href, site).href : undefined;
+const defaultUrl =
+  post.data.lang === "en"
+    ? postUrl
+    : alternate?.hreflang === "en"
+      ? alternateUrl
+      : undefined;
+const alternates = [
+  { href: postUrl, hreflang: post.data.lang },
+  ...(alternateUrl && alternate
+    ? [{ href: alternateUrl, hreflang: alternate.hreflang }]
+    : []),
+  ...(defaultUrl ? [{ href: defaultUrl, hreflang: "x-default" }] : []),
+];
+const dateLocale = post.data.lang === "es" ? "es-CO" : "en-US";
+const pageLang = post.data.lang === "es" ? "es-CO" : "en";
+const backButtonLabel =
+  post.data.lang === "es" ? "Volver al blog" : "Go back to blog";
+const repoButtonLabel =
+  post.data.lang === "es" ? "Ver repositorio" : "View repo";
 const jsonLd = blogPostingSchema({
   title: post.data.title,
   description: post.data.description,
@@ -29,6 +133,7 @@ const jsonLd = blogPostingSchema({
   datePublished: post.data.date,
   image: ogImage,
   author: post.data.author,
+  inLanguage: pageLang,
 });
 ---
 
@@ -40,11 +145,13 @@ const jsonLd = blogPostingSchema({
   publishedTime={post.data.date}
   author={post.data.author}
   jsonLd={jsonLd}
+  lang={pageLang}
+  alternates={alternates}
 >
   <Container class="mt-12 lg:mt-24">
     <div class="xl:relative">
       <div class="mx-auto max-w-2xl">
-        <BackButton label="Go back to blog" />
+        <BackButton label={backButtonLabel} />
         <article>
           {
             post.data.heroImage && (
@@ -70,15 +177,27 @@ const jsonLd = blogPostingSchema({
             >
               {post.data.title}
             </h1>
-            <time
-              datetime={post.data.date}
-              class="order-first flex items-center text-base text-zinc-500 dark:text-zinc-400"
-            >
-              <span
-                class="h-4 w-0.5 rounded-full"
-                style="background: var(--accent-gradient);"></span>
-              <span class="ml-3">{formatDate(post.data.date)}</span>
-            </time>
+            <div class="order-first flex flex-wrap items-center gap-x-4 gap-y-2 text-base text-zinc-500 dark:text-zinc-400">
+              <time datetime={post.data.date} class="flex items-center">
+                <span
+                  class="h-4 w-0.5 rounded-full"
+                  style="background: var(--accent-gradient);"></span>
+                <span class="ml-3">
+                  {formatDate(post.data.date, dateLocale)}
+                </span>
+              </time>
+              {
+                alternate && (
+                  <a
+                    href={alternate.href}
+                    hreflang={alternate.hreflang}
+                    class="text-sm font-medium text-teal-500 transition hover:text-teal-600 dark:text-teal-400 dark:hover:text-teal-300"
+                  >
+                    {alternate.label}
+                  </a>
+                )
+              }
+            </div>
           </header>
           <Prose class="mt-6" data-mdx-content>
             <Content />
@@ -92,7 +211,7 @@ const jsonLd = blogPostingSchema({
                 variant="secondary"
                 class="group mt-8 w-full"
               >
-                View repo
+                {repoButtonLabel}
                 <svg
                   viewBox="0 0 16 16"
                   fill="none"
