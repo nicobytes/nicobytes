@@ -15,6 +15,11 @@ Desde la carpeta donde quieras trabajar (por ejemplo, tu directorio de proyectos
 
 ```bash
 agents-cli create my-first-agent --prototype --yes -d agent_runtime
+```
+
+Ahora vamos a la carpeta del proyecto:
+
+```bash
 cd my-first-agent
 ```
 

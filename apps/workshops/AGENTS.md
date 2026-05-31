@@ -8,8 +8,8 @@ Plataforma de talleres técnicos paso a paso. Sitio estático en **Astro 6** con
 
 Antes de implementar cambios visuales, lee y sigue `.agents/skills/frontend-design/SKILL.md` en la raíz del monorepo. El taller ya tiene una dirección estética definida — **refínala, no la reemplaces** con estética genérica:
 
-- Tema oscuro industrial/editorial
-- Acento lima (`#c8ff00`) sobre canvas casi negro
+- Tema oscuro industrial/editorial (**default**); light mode opcional vía toggle (esquina superior derecha)
+- Acento lima (`#c8ff00`) sobre canvas casi negro (dark) o gris claro (light)
 - Tipografía: **Bricolage Grotesque** (display), **Geist Sans** (body), **JetBrains Mono** (meta/navegación)
 - Bordes punteados, animación `fade-up` con stagger, prose invertido para pasos
 
@@ -42,7 +42,7 @@ pnpm preview          # preview del build
 
 ```
 src/
-├── components/       # Astro: WorkshopCard, StepSidebar, StepNav
+├── components/       # Astro: WorkshopCard, StepSidebar, StepNav, ThemeToggle
 ├── content/
 │   ├── workshops/    # *.json — metadata del taller
 │   └── steps/        # {workshop}/{order-slug}.md — pasos del taller
@@ -86,11 +86,14 @@ Tailwind 4 se configura en `src/styles/global.css` con `@theme`. Usa las utilida
 | `--color-text` | `text-text` | Texto principal |
 | `--color-muted` | `text-muted` | Texto secundario |
 | `--color-faint` | `text-faint` | Meta, labels mono |
-| `--color-accent` | `text-accent`, `bg-accent` | Links, CTAs |
+| `--color-accent` | `text-accent` | Links, inline code, nav activo |
+| `--color-accent-bg` | `bg-accent-bg` | CTAs con fondo lima |
+| `--color-on-accent` | `text-on-accent` | Texto sobre fondo accent |
 | `--font-display` | `font-display` | Títulos |
 | `--font-mono` | `font-mono` | Navegación, badges |
 
 - Importa `global.css` desde layouts, no dupliques tokens.
+- **Theming:** dark por defecto; `html.light` sobreescribe tokens. Preferencia en `localStorage` (`theme`: `light` | `dark`). Script anti-FOUC en `BaseLayout`.
 - Contenido markdown de pasos: envolver en `workshop-prose prose prose-invert`.
 - Preferir utilidades Tailwind sobre CSS custom salvo animaciones o prose ya definidos.
 - Usar `data-astro-prefetch` en links de navegación entre pasos.

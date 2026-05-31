@@ -40,7 +40,7 @@ const { workshop, workshopTitle, steps, currentStepId } = Astro.props;
                 class:list={[
                   'flex items-start gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors',
                   isActive
-                    ? 'bg-surface-raised text-accent'
+                    ? 'bg-accent/10 text-accent'
                     : 'text-muted hover:bg-surface-raised hover:text-text',
                 ]}
                 aria-current={isActive ? 'page' : undefined}

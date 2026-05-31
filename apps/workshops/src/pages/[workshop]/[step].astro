@@ -1,5 +1,4 @@
 ---
-import { Code } from 'astro:components';
 import { getCollection, render } from 'astro:content';
 import WorkshopLayout from '../../layouts/WorkshopLayout.astro';
 import {
@@ -58,5 +57,5 @@ const { Content } = await render(step);
   prev={prev}
   next={next}
 >
-  <Content components={{ pre: Code }} />
+  <Content />
 </WorkshopLayout>

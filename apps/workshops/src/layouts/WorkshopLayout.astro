@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import CodeCopy from '../components/CodeCopy.astro';
 import StepSidebar from '../components/StepSidebar.astro';
 import StepNav from '../components/StepNav.astro';
 import type { StepEntry } from '../lib/workshops';
@@ -29,7 +30,7 @@ const pageTitle = `${currentStep.data.title} · ${workshopTitle}`;
       currentStepId={currentStep.id}
     />
 
-    <main class="relative flex min-h-screen flex-1 flex-col">
+    <main class="relative flex min-h-screen min-w-0 flex-1 flex-col overflow-x-clip">
       <article class="mx-auto w-full max-w-3xl flex-1 px-6 py-10 pb-28 lg:px-10">
         <header class="mb-10 border-b border-dashed border-border pb-8">
           <a
@@ -60,4 +61,5 @@ const pageTitle = `${currentStep.data.title} · ${workshopTitle}`;
       />
     </main>
   </div>
+  <CodeCopy />
 </BaseLayout>
