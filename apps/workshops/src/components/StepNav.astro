@@ -1,0 +1,73 @@
+---
+import type { StepEntry } from '../lib/workshops';
+
+interface Props {
+  workshop: string;
+  prev: StepEntry | null;
+  next: StepEntry | null;
+  prevHref?: string;
+  nextHref?: string;
+}
+
+const { prev, next, prevHref, nextHref } = Astro.props;
+---
+
+<div
+  class="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex items-end justify-between px-4 py-5 lg:pl-80 lg:pr-8"
+>
+  {
+    prev && prevHref ? (
+      <a
+        href={prevHref}
+        data-astro-prefetch
+        class="pointer-events-auto inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-3 font-mono text-sm text-muted transition-colors hover:border-faint hover:text-text"
+      >
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        {prev.data.titleStep}
+      </a>
+    ) : (
+      <span />
+    )
+  }
+
+  {
+    next && nextHref ? (
+      <a
+        href={nextHref}
+        data-astro-prefetch
+        class="pointer-events-auto inline-flex items-center gap-2 rounded-lg bg-accent-bg px-5 py-3 font-mono text-sm font-medium text-on-accent transition-colors hover:bg-accent-bg-dim"
+      >
+        {next.data.titleStep}
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </a>
+    ) : (
+      <span />
+    )
+  }
+</div>

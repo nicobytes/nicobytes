@@ -1,0 +1,21 @@
+{
+	"compatibility_date": "2026-05-30",
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
+	"name": "nicobytes-workshops",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "SESSION",
+			"id": "1f19baa290bc4e5aadc2e9959ef5ff05"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}

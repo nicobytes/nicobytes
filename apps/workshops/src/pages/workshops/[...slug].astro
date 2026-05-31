@@ -1,0 +1,11 @@
+---
+export const prerender = false;
+
+const slug = Astro.params.slug;
+
+if (!slug) {
+  return Astro.redirect('/', 301);
+}
+
+return Astro.redirect(`/${slug}`, 301);
+---

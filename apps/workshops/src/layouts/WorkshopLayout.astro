@@ -1,0 +1,65 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import CodeCopy from '../components/CodeCopy.astro';
+import StepSidebar from '../components/StepSidebar.astro';
+import StepNav from '../components/StepNav.astro';
+import type { StepEntry } from '../lib/workshops';
+import { getStepHref } from '../lib/workshops';
+
+interface Props {
+  workshop: string;
+  workshopTitle: string;
+  currentStep: StepEntry;
+  workshopSteps: StepEntry[];
+  prev: StepEntry | null;
+  next: StepEntry | null;
+}
+
+const { workshop, workshopTitle, currentStep, workshopSteps, prev, next } =
+  Astro.props;
+
+const pageTitle = `${currentStep.data.title} · ${workshopTitle}`;
+---
+
+<BaseLayout title={pageTitle} description={currentStep.data.description}>
+  <div class="flex min-h-screen">
+    <StepSidebar
+      workshop={workshop}
+      workshopTitle={workshopTitle}
+      steps={workshopSteps}
+      currentStepId={currentStep.id}
+    />
+
+    <main class="relative flex min-h-screen min-w-0 flex-1 flex-col overflow-x-clip">
+      <article class="mx-auto w-full max-w-3xl flex-1 px-6 py-10 pb-28 lg:px-10">
+        <header class="mb-10 border-b border-dashed border-border pb-8">
+          <a
+            href="/"
+            class="font-mono text-xs tracking-wide text-faint transition-colors hover:text-accent"
+          >
+            ← workshops
+          </a>
+          <p class="mt-4 font-mono text-xs uppercase tracking-[0.2em] text-faint">
+            {workshopTitle}
+          </p>
+          <h1 class="font-display mt-3 text-3xl font-semibold tracking-tight text-text md:text-4xl">
+            {currentStep.data.title}
+          </h1>
+        </header>
+
+        <div class="workshop-prose prose prose-invert max-w-none">
+          <slot />
+        </div>
+      </article>
+
+      <StepNav
+        workshop={workshop}
+        prev={prev}
+        next={next}
+        prevHref={prev ? getStepHref(workshop, prev) : undefined}
+        nextHref={next ? getStepHref(workshop, next) : undefined}
+      />
+    </main>
+  </div>
+  <CodeCopy />
+</BaseLayout>
