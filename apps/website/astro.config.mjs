@@ -8,6 +8,7 @@ import { unified } from "@astrojs/markdown-remark";
 import { defineConfig } from "astro/config";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
 
 import tailwindcss from "@tailwindcss/vite";
@@ -51,7 +52,16 @@ export default defineConfig({
   markdown: {
     processor: unified({
       remarkPlugins: [remarkGfm, remarkMath],
-      rehypePlugins: [rehypeKatex],
+      rehypePlugins: [
+        [
+          rehypeExternalLinks,
+          {
+            target: "_blank",
+            rel: ["noopener", "noreferrer"],
+          },
+        ],
+        rehypeKatex,
+      ],
     }),
     syntaxHighlight: "shiki",
     shikiConfig,
