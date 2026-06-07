@@ -4,8 +4,11 @@ import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import compressor from "astro-compressor";
 import sitemap from "@astrojs/sitemap";
+import { unified } from "@astrojs/markdown-remark";
 import { defineConfig } from "astro/config";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 import tailwindcss from "@tailwindcss/vite";
 
@@ -46,7 +49,10 @@ export default defineConfig({
     icon(),
   ],
   markdown: {
-    remarkPlugins: [remarkGfm],
+    processor: unified({
+      remarkPlugins: [remarkGfm, remarkMath],
+      rehypePlugins: [rehypeKatex],
+    }),
     syntaxHighlight: "shiki",
     shikiConfig,
   },

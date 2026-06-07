@@ -1,110 +1,81 @@
 ---
-title: "Búsqueda semántica e híbrida dentro de un agente"
-description: "Qué aprendí al combinar semantic search, full text search y RRF en un agente conversacional que recomienda planes turísticos."
-author: "Nicolas Molina (@nicobytes)"
-date: "2026-05-28"
+title: "Hybrid search: la decisión que no sabía que necesitaba en mi agente"
+description: "Qué aprendí al usar hybrid search como estrategia por defecto en un agente conversacional: fusionar semantic search, full text search y RRF para recomendar planes turísticos."
+date: "2026-06-07"
 lang: "es"
-translationSlug: "busqueda-semantica-vs-hibrida"
-heroImage: "./cover.jpg"
-categories: ["AI", "Supabase"]
-draft: true
+translationSlug: "por-que-hybrid-search"
+heroImage: "./cover.png"
+categories: ["AI"]
 ---
 
-Cuando uno lee sobre `semantic search`, `hybrid search` y `full text search`, casi siempre encuentra ejemplos tecnicos genéricos: documentos, recetas, productos o links a support. Sirven para entender la teoría, pero no explican los casos reales que aparecen cuando todo eso vive dentro de un agente conversacional.
+import ArticleImage from "../../../components/ArticleImage.astro";
+import ragImg from "./rag_es.png";
+import hybridImg from "./hybrid.png";
+import exploratoriaImg from "./exploratoria.png";
+import puntualImg from "./puntual.png";
+import cloudflareImg from "./cloudflare.png";
+import chatExploImg from "./chat_explo.png";
+import chatPuntualImg from "./chat_puntual.png";
+
+> **TL;DR:** Construyendo un agente conversacional para una agencia de viajes, descubrí que hybrid search —fusionar los resultados de la búsqueda semántica y la léxica— mejoró notablemente mi sistema RAG.
+
+Cuando uno lee sobre semantic search, hybrid search y full text search, casi siempre encuentra ejemplos tecnicos genéricos: documentos, recetas, productos o links a support. Sirven para entender la teoría, pero no explican los casos reales que aparecen cuando todo eso vive dentro de un agente conversacional.
 
 Entonces imaginemos que estamos construyendo un agente para una agencia de viajes que debe alimentarse de un RAG. La idea inicial parecía suficiente: convertir la información de los planes turísticos en embeddings, conectarla a un flujo tipo RAG y dejar que el agente respondiera desde ahí.
 
+<ArticleImage src={ragImg} alt="sistema RAG" />
 
-Sobre el papel sonaba bien. En la práctica, no alcanzaba.
+> Sobre el papel sonaba bien. En la práctica, no alcanzaba.
 
 El problema no era recuperar información. El problema era recuperar **la información correcta según el momento de la conversación**.
 
 No es lo mismo que una persona pregunte:
 
-- `planes pa tierra caliente`
-- `algo de aventura cerca de Bogotá`
-- `¿y el itinerario de Guatavita?`
+- "planes pa tierra caliente" - Pregunta Ambigua
+- "algo de aventura cerca de Bogotá" - Pregunta exploratoria
+- "¿y el itinerario de Guatavita?" - Pregunta de seguimiento
 
-Las tres son preguntas válidas, pero no exigen el mismo tipo de búsqueda. Unas necesitan interpretación. Otras necesitan precisión textual. Y ahí fue donde empecé a notar que una sola estrategia no era suficiente. 
+Las tres son preguntas válidas, pero exigen cosas distintas: unas necesitan interpretación, otras precisión textual. Al principio pensé que eso significaba elegir entre estrategias. Después de probar en la práctica, la conclusión fue otra: necesitaba **una sola búsqueda que entendiera intención y respetara el texto exacto al mismo tiempo**. Eso es exactamente lo que hace hybrid search.
 
-## Dónde semantic search realmente brilla
+## ¿Qué es hybrid search?
 
-La búsqueda semántica no intenta responder "¿aparecen estas palabras?", sino "¿qué contenido se parece en intención a esta consulta?".
+Antes de entrar en el detalle de qué aporta cada búsqueda, vale la pena entender la idea general. Hybrid search no es una técnica nueva: es **combinar dos búsquedas que ya existen** y ejecutarlas en paralelo sobre la misma consulta.
 
-Eso fue clave porque las personas casi nunca hablan como está escrito el sitio. Hablan como hablan:
+- **Búsqueda léxica (full text search):** busca coincidencias exactas de palabras clave. Es precisa pero rígida.
+- **Búsqueda semántica (vector search):** busca por significado e intención, aunque las palabras no coincidan. Es flexible pero a veces imprecisa.
 
-- con abreviaciones
-- con jerga
-- con frases vagas
-- con intención implícita
-- con memoria incompleta del nombre de un plan
+El reto es que cada una entrega su propio ranking con puntajes que no son comparables entre sí. Ahí entra Reciprocal Rank Fusion (RRF): en lugar de mezclar los scores crudos, toma la **posición** de cada resultado en ambas listas y produce un único ranking final.
 
-Por eso, `semantic search` me funcionó muy bien en tres escenarios.
+<ArticleImage src={hybridImg} alt="Diagrama de hybrid search: búsqueda léxica y semántica fusionadas con RRF para la consulta 'Best places to visit in Paris'" />
 
-### 1. Cuando el usuario busca por intención y no por nombre
+En el ejemplo de la imagen, la consulta "Best places to visit in Paris" se ejecuta por las dos vías. La búsqueda léxica posiciona primero la Eiffel Tower por coincidencia exacta de palabras; la semántica posiciona primero Montmartre por cercanía de intención. RRF combina ambos rankeos —sumando el aporte de cada lista según la posición— y reordena todo en una lista final donde la Eiffel Tower queda arriba porque aparece bien posicionada en las dos búsquedas a la vez.
 
-Ejemplo: `planes pa tierra caliente`
+Esa es la idea de fondo: **un resultado que convence a ambas capas sube con más fuerza**. Con esto claro, veamos qué aporta cada capa por separado.
 
-Aquí la persona no está pidiendo un nombre oficial ni una coincidencia exacta. Está describiendo el tipo de experiencia que quiere. La búsqueda semántica puede conectar esa intención con destinos que encajan con esa idea, aunque no digan literalmente `tierra caliente`.
+## Lo que aporta la capa semántica: semantic search
 
-### 2. Cuando la consulta es exploratoria
+La búsqueda semántica no responde "¿aparecen estas palabras?", sino "¿qué contenido se parece en intención a esta consulta?". Eso es clave porque las personas casi nunca hablan como está escrito el sitio: usan abreviaciones, jerga, frases vagas o recuerdan mal el nombre de un plan.
 
-Ejemplos:
+Por eso la capa semántica gana cuando el trabajo principal es **entender**: consultas por intención ("planes pa tierra caliente"), consultas exploratorias ("algo de aventura cerca de Bogotá") o preguntas de seguimiento donde la consulta ya viene contextualizada con el historial ("¿y el itinerario?" => "itinerario del plan de Guatavita"). En todos esos casos conecta la intención con el contenido correcto aunque las palabras no coincidan literalmente.
 
-- `algo de aventura cerca de Bogotá`
-- `planes de naturaleza para el fin de semana`
-- `quiero algo con montaña pero no tan pesado`
+El problema aparece cuando la conversación deja de ser ambigua. Si el usuario ya sabe qué plan le interesa y pide algo puntual ("dime en detalle el itinerario para Guatavita"), una búsqueda puramente semántica puede traer resultados razonables pero no los más precisos, porque palabras como "itinerario" o "precio" aparecen en muchos planes. Entender la intención sigue importando, pero ya no basta: también hay que anclar la respuesta al texto correcto.
 
-En esas consultas, el usuario todavía está descubriendo opciones. Si obligo al sistema a depender de coincidencias exactas, corro el riesgo de perder resultados valiosos solo porque la información está redactada de otra manera dentro de la base de conocimiento.
+## Lo que aporta la capa léxica: full text search
 
-### 3. Cuando la conversación ya trae contexto
+Full text search responde una pregunta distinta: "¿dónde aparecen estas palabras o variaciones cercanas?". Es una búsqueda más clásica y determinista que premia la coincidencia textual, y resulta útil cuando el usuario conoce el nombre exacto del plan, usa términos que existen literalmente en el contenido o busca algo muy puntual.
 
-Este punto fue especialmente para mi agente. Por que para preguntas de seguimiento debe transformar la pregunta para crear una mejor consulta segun el historial de la conversación. La búsqueda no debería ejecutarse con esa frase sola, sino con una versión contextualizada. En ese tipo de seguimiento, la búsqueda semántica suele comportarse muy bien porque la consulta final ya captura el plan y la intención sin depender de una frase literal del sitio.
+El problema es que, dentro de un agente, tampoco quiero depender solo de eso: si el usuario escribe con jerga, recuerda mal el nombre o formula la idea de forma más natural, full text search se queda corto muy rápido. Por eso no tiene sentido elegir entre capa semántica y capa léxica. La solución es **combinarlas siempre** en una sola búsqueda híbrida.
 
-- `¿y el itinerario?` => `itinerario del plan de Guatavita`
-- `¿incluye desayuno?` => `desayuno incluido en el plan de Guatavita`
-- `¿y precio?` => `precio del plan de Guatavita`
+## La solución: hybrid search como default
 
-En resumen, `semantic search` gana cuando el trabajo principal es **entender**.
+Hybrid search no es un punto medio ni una opción para casos especiales. Es el **default**: ejecuta ambas capas en paralelo y fusiona sus resultados en una sola lista ponderada.
 
-## El punto donde semantic search empieza a quedarse corto
+Me ayudó a cubrir el espacio que queda entre dos fallas opuestas:
 
-El problema aparece cuando la conversación deja de ser ambigua.
+- la rigidez de full text search
+- la posible deriva semántica de semantic search
 
-Después de varias interacciones, muchas veces el usuario ya no está explorando. Ya sabe qué plan le interesa y quiere una respuesta puntual. Por ejemplo:
-
-`dime en detalle el itinerario para Guatavita`
-
-Ahí ya no necesito que el sistema considere todos los planes que podrían parecerse semánticamente. Ya sé que la conversación va sobre un plan concreto. Sin embargo, como palabras como `itinerario`, `precio` o `incluye` aparecen en muchos planes, una búsqueda puramente semántica puede empezar a traer resultados que son razonables, pero no necesariamente los más precisos.
-
-Ese fue el punto de quiebre para mí: entender la intención seguía siendo importante, pero ya no bastaba. También necesitaba anclar la respuesta al texto correcto.
-
-## Qué aporta full text search
-
-`Full text search` responde muy bien a una pregunta distinta: "¿dónde aparecen estas palabras o variaciones cercanas de estas palabras?".
-
-Eso resulta útil cuando el usuario:
-
-- conoce el nombre exacto del plan
-- usa términos que sí existen literalmente en el contenido
-- busca algo muy puntual, casi como si estuviera copiando y pegando desde el sitio
-
-En otras palabras, es una búsqueda más clásica y más determinista. No intenta interpretar demasiado: premia la coincidencia textual.
-
-El problema es que, dentro de un agente, tampoco quiero depender solo de eso. Si el usuario escribe con jerga, recuerda mal el nombre o formula la idea de forma más natural, `full text search` puede quedarse corto muy rápido.
-
-Ahí fue donde la solución dejó de ser elegir entre una u otra. La solución fue **combinarlas**.
-
-## La solución: hybrid search
-
-`Hybrid search` me ayudó a cubrir el espacio que queda entre dos fallas opuestas:
-
-- la rigidez de `full text search`
-- la posible deriva semántica de `semantic search`
-
-Dicho simple: hay consultas donde importa el significado, pero también importa muchísimo que ciertas palabras estén presentes de forma literal.
-
-En mi caso, la búsqueda híbrida no apareció como "otra opción más". Apareció como respuesta a un problema concreto: algunas preguntas necesitaban que el sistema entendiera la intención, **pero sin soltar demasiado el ancla del texto exacto**.
+Dicho simple: hay consultas donde importa el significado, pero también importa muchísimo que ciertas palabras estén presentes de forma literal. En lugar de decidir cuál pesa más según la pregunta, hybrid search deja que el ranking final lo resuelva.
 
 La idea de fondo es sencilla:
 
@@ -112,127 +83,89 @@ La idea de fondo es sencilla:
 2. se ejecuta una búsqueda semántica
 3. se combinan ambos rankeos para producir un ranking final más estable
 
-No se trata de escoger una y descartar la otra. Se trata de sumar evidencia.
+No se trata de escoger una y descartar la otra. Se trata de sumar evidencia en cada consulta.
 
 Si un resultado aparece bien posicionado tanto por coincidencia textual como por cercanía semántica, sube con más fuerza en el ranking final. Y eso, para un agente conversacional, es muy valioso porque reduce dos errores muy comunes:
 
 - traer algo semánticamente cercano, pero no lo suficientemente específico
 - perder la respuesta correcta porque la persona no escribió la frase exacta
 
-## Cómo se mezclan dos búsquedas tan distintas
+## Las pruebas: semantic vs hybrid vs full text
 
-Aquí aparece un detalle interesante.
+Para comprobarlo armé una vista que ejecuta la misma consulta por las tres vías —semantic, hybrid y full text— y compara los resultados lado a lado.
 
-La búsqueda semántica y la búsqueda por texto no producen puntajes comparables entre sí. Una se apoya en similitud vectorial; la otra, en coincidencia léxica. Mezclarlas directamente sería como sumar métricas que significan cosas distintas.
+En una consulta exploratoria como "planes destinos recomendados", full text se queda en blanco: no hay coincidencia literal de esas palabras en el contenido. La búsqueda semántica sí entiende la intención y trae planes relevantes, y hybrid termina apoyándose en esa señal semántica para devolver un buen ranking. Aquí la capa léxica no aporta, pero tampoco estorba.
 
-Para resolver eso usé `Reciprocal Ranked Fusion` o `RRF`. En vez de obsesionarse con el valor exacto de cada score, esta técnica toma la posición relativa de cada resultado en ambos listados y hace un re-ranking final.
+<ArticleImage src={exploratoriaImg} alt="Comparación de búsqueda semantic, hybrid y full text para la consulta exploratoria 'planes destinos recomendados': full text no devuelve resultados" />
 
-Eso la vuelve especialmente útil cuando quieres combinar estrategias sin forzar una equivalencia artificial entre sus puntajes.
+En una consulta puntual como "Cumbre Nevado del Tolima" cambia el panorama: las tres vías devuelven resultados, pero hybrid es la única que combina lo mejor de ambas. Fusiona el plan que full text encuentra por coincidencia textual exacta con el que la semántica encuentra por cercanía de significado, y los reordena con RRF para dejar arriba los que aparecen bien posicionados en las dos listas.
 
-Ilustración de fusión de rankeos con MongoDB
+<ArticleImage src={puntualImg} alt="Comparación de búsqueda semantic, hybrid y full text para la consulta puntual 'Cumbre Nevado del Tolima': hybrid fusiona resultados de ambas capas" />
 
-## El costo oculto: mantener viva la base de conocimiento
+En mis pruebas, hybrid search dio resultados mejores que semantic search sola en todos los escenarios. No encontré un caso donde valiera la pena usar solo una capa.
 
-Eso sí: cuando uno habla de `hybrid search`, es fácil enfocarse solo en la parte bonita del ranking final. Pero detrás hay una tubería que también hay que mantener.
+## La magia matemática detrás: RRF
 
-Cada vez que cambia un plan turístico, la base de conocimiento debe actualizarse. Eso implica volver a preparar el contenido para recuperación, regenerar embeddings y recalcular los términos que alimentan la búsqueda textual. No es una sola indexación: son varias capas que deben mantenerse sincronizadas.
+Aquí está el detalle que hace que todo funcione. La búsqueda semántica y la búsqueda por texto no producen puntajes comparables entre sí: una se apoya en similitud vectorial (valores entre 0 y 1) y la otra en relevancia léxica (un número sin límite superior). Sumar esos scores directamente sería como sumar metros con kilos o peras con manzanas.
 
-Ese pipeline se parece bastante a los flujos que muestran otros proveedores como Cloudflare cuando explican sistemas de recuperación modernos: no basta con almacenar información, también hay que mantenerla lista para responder bien.
+Reciprocal Rank Fusion (RRF) esquiva ese problema con una idea elegante: **ignora el valor del score y se queda solo con la posición** de cada documento en cada lista. El puntaje final de un documento es la suma de su aporte en cada ranking:
 
-Ilustración de mantenimiento de pipeline de búsqueda
+$$
+\text{RRF}(d) = \sum_{i=1}^{n} \frac{1}{k + \text{rank}_i(d)}
+$$
 
-## El problema concreto que hybrid search me resolvió
+Donde $d$ es el documento, $\text{rank}_i(d)$ es la posición que ocupa en el ranking $i$ (semántico o léxico) y $k$ es una constante de suavizado (un valor típico es $k = 60$). La intuición es directa: estar en la primera posición aporta $\frac{1}{k+1}$, la segunda aporta $\frac{1}{k+2}$, y así sucesivamente; mientras más abajo, menos suma.
 
-En este producto no solo necesito que el agente sugiera planes relacionados. También necesito que responda con precisión cuando el usuario ya está hablando de un plan concreto.
+Lo poderoso es lo que pasa cuando un documento aparece en **ambas** listas: sus dos aportes se acumulan y lo empujan hacia arriba. Un resultado que convence tanto a la capa semántica como a la léxica termina ganándole a otro que solo destacó en una. Y como todo se mide en posiciones, nunca hay que forzar una equivalencia artificial entre puntajes que significan cosas distintas.
 
-Un ejemplo claro fue esta consulta:
 
-`itinerario en Paracaidismo en Flandes`
+## El costo oculto: mantener vivo el RAG
 
-Ahí ya no estamos ante una exploración abierta. La persona dio un nombre específico del plan y pidió un detalle puntual. En ese escenario, tanto la búsqueda semántica como la híbrida traían resultados razonables, pero la híbrida tenía una ventaja natural: combinaba el nombre exacto del plan con la capacidad de encontrar la parte correcta de la base de conocimiento donde estaba el itinerario.
+Cuando uno habla de hybrid search es fácil enfocarse solo en la parte bonita del ranking final. Pero el verdadero costo de cualquier RAG no está en la búsqueda: está en **mantener el sistema vivo**. La base de conocimiento no es algo que se indexa una vez y se olvida; hay que mantenerla sincronizada con la realidad.
 
-Ese caso resume muy bien el dominio:
+Cada vez que cambia un plan turístico hay que rehacer dos cosas a la vez. Por un lado, regenerar los embeddings para que la capa semántica siga entendiendo el contenido nuevo. Por otro, recalcular los términos (tokens) que alimentan la búsqueda léxica, lo que normalmente implica una función que extrae y normaliza las palabras clave del texto. No es una sola indexación: son varias capas que deben moverse juntas cada vez que el contenido cambia.
 
-- el usuario sí recuerda el nombre del plan
-- quiere una parte específica del contenido
-- me conviene premiar la coincidencia textual sin perder robustez semántica
+<ArticleImage src={cloudflareImg} alt="Pipeline de un sistema de búsqueda híbrida: en indexing time el archivo se parte en chunks que generan vectores (embeddings) y tokens (keywords); en query time ambos índices se consultan y se fusionan con RRF antes del reranking" />
 
-Otro escenario donde `hybrid search` gana bien es cuando la persona pega texto casi literal desde el sitio, usa un nombre muy específico o incluso un slug. Ahí no quiero que el sistema "interprete demasiado". Quiero que aproveche el texto exacto, pero sin renunciar a la capa semántica que ayuda a encontrar la respuesta correcta si la redacción no coincide al cien por ciento.
+Ese pipeline —parsear, chunkear, generar embeddings, tokenizar para keywords, indexar en paralelo, fusionar con RRF y rerankear— es exactamente el que describe Cloudflare cuando explica su [AI Search agent primitive](https://blog.cloudflare.com/ai-search-agent-primitive/). Por lo complejo que es sostenerlo, muchas empresas ya lo ofrecen empaquetado como **RAG as a service**: por fuera parece una sola API, pero por detrás es justo esto.
 
-## Cuándo ganó semantic y cuándo ganó hybrid
+En mi caso, como uso Supabase, no tuve que montar toda esa tubería desde cero. Lo soporté siguiendo su guía oficial de [hybrid search](https://supabase.com/docs/guides/ai/hybrid-search), que combina `tsvector` (full text search) y `pgvector` (semantic search) en una sola función SQL y resuelve la fusión con RRF directamente en Postgres.
 
-Si tuviera que resumirlo de forma operativa, diría esto.
+## Cómo lo llevé al agente conversacional
 
-### Casos donde ganó semantic search
+Con la búsqueda resuelta, el agente expone una sola tool de recuperación: hybrid search. El agente no decide si usar semántica o léxica; simplemente le pasa la consulta y la tool devuelve los resultados más apropiados según el contexto, ya fusionados con RRF y rankeados. Así el agente se concentra en responder, no en elegir cómo buscar.
 
-- cuando la consulta describe una intención y no un nombre exacto
-- cuando la persona usa lenguaje natural, coloquial o impreciso
-- cuando hay que resolver seguimientos conversacionales usando contexto previo
-- cuando el valor está en entender "qué tipo de plan quiere" más que "qué texto escribió"
+En la práctica, con un framework como Google ADK basta con exponer esa búsqueda como una tool más del agente:
 
-Ejemplos:
+```python
+root_agent = Agent(
+    model="gemini-pro-latest",
+    name="amaru",
+    description="Your travel agent.",
+    mode="chat",
+    instruction='Your instructions here',
+    tools=[
+        search_context,
+    ],
+)
+```
 
-- `planes pa tierra caliente`
-- `algo de aventura cerca de Bogotá`
-- `¿y precio?` después de venir hablando de un plan específico
-- `quiero algo parecido a desierto pero que también tenga caminata`
+Aquí `search_context` es la tool que ejecuta la consulta de hybrid search contra la base de conocimiento y devuelve el contexto ya rankeado. El agente decide cuándo llamarla, le pasa la consulta (contextualizada con el historial cuando hace falta) y responde a partir de ese contexto. No hay lógica de "qué estrategia usar": esa decisión ya vive dentro de la búsqueda, y el agente solo consume el resultado.
 
-### Casos donde ganó hybrid search
+En el agente Amaru ya se ve integrada. Con una consulta exploratoria como "planes a tierra caliente", el agente invoca `search_context`, recupera planes relevantes y responde con opciones concretas sin que el usuario haya dado un nombre exacto:
 
-- cuando hay un nombre exacto del plan en la consulta
-- cuando el usuario copia una frase muy cercana al contenido original
-- cuando conviene mezclar precisión léxica con comprensión semántica
-- cuando quiero reducir el riesgo de traer algo parecido, pero no exactamente lo correcto
+<ArticleImage src={chatExploImg} alt="Chat del agente Amaru: el usuario pide planes a tierra caliente y el agente invoca search_context para recomendar Paracaidismo en Flandes, La Guajira y Río Güejar" />
 
-Ejemplos:
+Con una consulta más puntual como "planes para cumbre nevado tolima", el flujo es el mismo: una sola tool, pero el contexto devuelto ya ancla al plan correcto y el agente responde con rutas e itinerarios específicos:
 
-- `itinerario en Paracaidismo en Flandes`
-- `punto de encuentro Mano del Gigante y Tatacoa`
-- búsquedas por slug o nombre muy específico
-- frases literales tomadas de la descripción del sitio
+<ArticleImage src={chatPuntualImg} alt="Chat del agente Amaru: el usuario pregunta por la cumbre del Nevado del Tolima y search_context devuelve rutas tradicional, Montaña Pura y Travesía" />
 
-## Cómo lo llevé al agente
+## Conclusión
 
-Otra decisión importante fue no exponer las tres estrategias como si fueran botones intercambiables.
+Construir un agente conversacional con RAG me enseñó que el reto no es recuperar información, sino recuperar la correcta en cada momento de la conversación. A veces el usuario explora con lenguaje vago; otras, ya sabe el plan y pide un detalle puntual. Esa dualidad no se resuelve eligiendo entre semantic search o full text search: se resuelve combinándolas siempre y dejando que RRF decida cuánto pesa cada capa según la consulta.
 
-En el agente terminé dejando dos herramientas de recuperación, y la elección depende del tipo de pregunta y del estado de la conversación.
+Las pruebas lo confirmaron. En consultas exploratorias, hybrid se apoya en la semántica sin que la capa léxica estorbe. En consultas puntuales, fusiona coincidencia textual y cercanía de significado para subir el resultado correcto. En ningún escenario encontré un caso donde valiera la pena usar solo una capa.
 
-La decisión está guiada por el prompt:
+El costo real está del otro lado: mantener vivo el RAG —regenerar embeddings, recalcular keywords, sincronizar índices cada vez que cambia el contenido—. Pero una vez resuelta esa tubería, integrar la búsqueda en el agente es directo: una tool, una consulta, contexto ya rankeado. Amaru lo demuestra en cada conversación.
 
-- usar búsqueda **semántica** cuando el usuario explora por intención, destino, tema o hace seguimientos conversacionales con contexto
-- usar búsqueda **híbrida** cuando conviene insistir en coincidencia exacta: nombre muy específico, slug o texto muy cercano al original
-
-Eso hizo que el agente no solo respondiera mejor, sino que también tomara decisiones más coherentes sobre **cómo** buscar antes de responder.
-
-## Qué me enseñó este caso sobre hybrid search
-
-Antes de implementarlo, era fácil pensar en `hybrid search` como una recomendación genérica de documentación: combinar keywords con semántica y ya.
-
-Después de usarlo en un caso real, mi lectura cambió.
-
-`Hybrid search` no resuelve todo. Lo que sí resuelve muy bien es una tensión muy común en asistentes que trabajan con contenido real:
-
-- si te apoyas demasiado en texto exacto, te vuelves frágil frente al lenguaje natural
-- si te apoyas demasiado en semántica, puedes perder precisión cuando el usuario sí dejó una pista textual fuerte
-
-En un catálogo de planes turísticos, esa tensión aparece todo el tiempo. La gente a veces explora por sensación y otras veces pregunta por un plan exacto. Un mismo agente tiene que sobrevivir a ambas cosas.
-
-Por eso, mi conclusión no es que `hybrid search` reemplace a `semantic search`, ni que `semantic search` vuelva inútil a `full text search`.
-
-Mi conclusión es más práctica:
-
-- `full text search` sigue siendo valioso cuando la coincidencia textual importa
-- `semantic search` es el mejor punto de partida para intención y conversación
-- `hybrid search` brilla cuando necesitas que el sistema entienda el significado, pero sin perder de vista el texto exacto
-
-Y esa fue, al menos en mi caso, la diferencia entre tener un buscador técnicamente correcto y tener un agente que realmente responde mejor.
-
-## Cierre
-
-Si el problema fuera solo recuperar documentos, probablemente habría bastado con escoger una técnica y optimizarla.
-
-Pero cuando el problema es **ayudar a una persona a descubrir, comparar y profundizar en planes turísticos dentro de una conversación**, una sola estrategia rara vez alcanza.
-
-En mi experiencia, el salto de calidad no vino solo de mejorar embeddings o de ajustar el ranking. Vino de aceptar que las preguntas cambian a medida que avanza la conversación, y que el sistema de búsqueda también tiene que cambiar con ellas.
-
-Ahí fue donde `hybrid search` dejó de ser una idea interesante y se volvió una decisión de producto.
+Hybrid search dejó de ser una recomendación de documentación y se volvió el default de mi agente. No porque sea la técnica más sofisticada, sino porque es la que mejor sobrevive a cómo hablan las personas cuando descubren, comparan y profundizan en un plan.
