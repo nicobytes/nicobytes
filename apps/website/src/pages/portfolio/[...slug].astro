@@ -19,7 +19,8 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
-const ogImage = await getOgImageUrl(project.data.image, Astro.site);
+const { url: ogImage, width: ogImageWidth, height: ogImageHeight } =
+  await getOgImageUrl(project.data.image, Astro.site);
 const projectUrl = new URL(`/portfolio/${project.id}/`, Astro.site).href;
 const jsonLd = creativeWorkSchema({
   title: project.data.title,
@@ -34,6 +35,8 @@ const jsonLd = creativeWorkSchema({
   title={project.data.title}
   description={project.data.description}
   image={ogImage}
+  imageWidth={ogImageWidth}
+  imageHeight={ogImageHeight}
   jsonLd={jsonLd}
 >
   <Container class="mt-12 lg:mt-24">

@@ -10,6 +10,8 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
   type?: "website" | "article";
   noindex?: boolean;
   publishedTime?: string;
@@ -20,10 +22,22 @@ interface Props {
   alternates?: { href: string; hreflang: string }[];
 }
 
+function toOgLocale(lang: string): "en_US" | "es_CO" {
+  return lang.startsWith("es") ? "es_CO" : "en_US";
+}
+
+function hreflangToOgLocale(hreflang: string): "en_US" | "es_CO" | undefined {
+  if (hreflang === "en") return "en_US";
+  if (hreflang === "es") return "es_CO";
+  return undefined;
+}
+
 const {
   title,
   description: descriptionProp,
   image,
+  imageWidth,
+  imageHeight,
   type = "website",
   noindex,
   publishedTime,
@@ -48,6 +62,17 @@ const normalizedPathname =
   pathname === "/" || pathname.endsWith("/") ? pathname : `${pathname}/`;
 const canonicalURL = new URL(normalizedPathname, Astro.site);
 const ogImage = new URL(image ?? "/og_image.jpg", Astro.site).href;
+const ogLocale = toOgLocale(lang);
+const ogLocaleAlternates = [
+  ...new Set(
+    alternates
+      .map((alternate) => hreflangToOgLocale(alternate.hreflang))
+      .filter(
+        (locale): locale is "en_US" | "es_CO" =>
+          locale !== undefined && locale !== ogLocale,
+      ),
+  ),
+];
 ---
 
 <html lang={lang} class="h-full font-sans antialiased">
@@ -62,7 +87,20 @@ const ogImage = new URL(image ?? "/og_image.jpg", Astro.site).href;
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalURL} />
+    <meta property="og:locale" content={ogLocale} />
+    {
+      ogLocaleAlternates.map((locale) => (
+        <meta property="og:locale:alternate" content={locale} />
+      ))
+    }
     <meta property="og:image" content={ogImage} />
+    {ogImage.startsWith("https://") && (
+      <meta property="og:image:secure_url" content={ogImage} />
+    )}
+    {imageWidth && <meta property="og:image:width" content={String(imageWidth)} />}
+    {imageHeight && (
+      <meta property="og:image:height" content={String(imageHeight)} />
+    )}
     <meta property="og:site_name" content={siteTitle} />
     {
       type === "article" && publishedTime && (

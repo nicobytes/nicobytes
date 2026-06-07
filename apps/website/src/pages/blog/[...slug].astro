@@ -103,7 +103,8 @@ const { post, baseSlug, alternate } = Astro.props as {
   alternate?: AlternateLink;
 };
 const { Content } = await render(post);
-const ogImage = await getOgImageUrl(post.data.heroImage, Astro.site);
+const { url: ogImage, width: ogImageWidth, height: ogImageHeight } =
+  await getOgImageUrl(post.data.heroImage, Astro.site);
 const site = Astro.site ?? "https://nicobytes.com";
 const postPath = getPostPath(post, baseSlug);
 const postUrl = new URL(postPath, site).href;
@@ -142,6 +143,8 @@ const jsonLd = blogPostingSchema({
   title={post.data.title}
   description={post.data.description}
   image={ogImage}
+  imageWidth={ogImageWidth}
+  imageHeight={ogImageHeight}
   type="article"
   publishedTime={post.data.date}
   author={post.data.author}
