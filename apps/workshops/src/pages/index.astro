@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkshopCard from '../components/WorkshopCard.astro';
+import { getStepHref, getWorkshopSteps } from '../lib/workshops';
+
+const workshops = (await getCollection('workshops')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const steps = await getCollection('steps');
+---
+
+<BaseLayout>
+  <main class="mx-auto min-h-screen max-w-3xl px-6 py-12 md:px-8 md:py-16">
+    {
+      workshops.map((workshop, index) => {
+        const workshopSteps = getWorkshopSteps(steps, workshop.id);
+        const firstStep = workshopSteps[0];
+        const href = firstStep
+          ? getStepHref(workshop.id, firstStep)
+          : `/${workshop.id}`;
+
+        return (
+          <div>
+            {index > 0 && <div class="list-divider" />}
+            <WorkshopCard workshop={workshop} index={index} href={href} />
+          </div>
+        );
+      })
+    }
+  </main>
+</BaseLayout>

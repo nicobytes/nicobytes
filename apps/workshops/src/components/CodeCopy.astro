@@ -1,0 +1,89 @@
+<template id="code-copy-button">
+  <button type="button" class="code-block__copy" aria-label="Copiar código">
+    <svg
+      class="code-block__icon"
+      width="1rem"
+      height="1rem"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="M9.116 17q-.691 0-1.153-.462T7.5 15.385V4.615q0-.69.463-1.153T9.116 3h7.769q.69 0 1.153.462t.462 1.153v10.77q0 .69-.462 1.152T16.884 17zm-3 3q-.691 0-1.153-.462T4.5 18.385V6.615h1v11.77q0 .23.192.423t.423.192h8.77v1z"
+      ></path>
+    </svg>
+    <svg
+      class="code-block__icon code-block__icon--success"
+      width="1rem"
+      height="1rem"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="m9.55 17.308l-4.97-4.97l.714-.713l4.256 4.256l9.156-9.156l.713.714z"
+      ></path>
+    </svg>
+  </button>
+</template>
+
+<script>
+  function enhanceCodeBlocks() {
+    const template = document.getElementById('code-copy-button');
+    if (!template) return;
+
+    for (const pre of document.querySelectorAll('.workshop-prose pre.astro-code')) {
+      if (pre.closest('.code-block')) continue;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block not-prose';
+
+      const source = document.createElement('textarea');
+      source.className = 'code-block__source';
+      source.readOnly = true;
+      source.hidden = true;
+      source.setAttribute('aria-hidden', 'true');
+      source.value = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
+
+      const button = template.content.firstElementChild?.cloneNode(true);
+      if (!(button instanceof HTMLButtonElement)) continue;
+
+      pre.parentNode?.insertBefore(wrapper, pre);
+      wrapper.append(source, button, pre);
+    }
+  }
+
+  enhanceCodeBlocks();
+  document.addEventListener('astro:page-load', enhanceCodeBlocks);
+
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const button = target.closest('.code-block__copy');
+    if (!button) return;
+
+    const block = button.closest('.code-block');
+    const source = block?.querySelector('.code-block__source');
+    if (!(source instanceof HTMLTextAreaElement)) return;
+
+    void (async () => {
+      try {
+        await navigator.clipboard.writeText(source.value);
+      } catch {
+        source.removeAttribute('hidden');
+        source.select();
+        document.execCommand('copy');
+        source.setAttribute('hidden', '');
+      }
+
+      button.setAttribute('aria-label', 'Copiado');
+      button.classList.add('code-block__copy--success');
+
+      window.setTimeout(() => {
+        button.setAttribute('aria-label', 'Copiar código');
+        button.classList.remove('code-block__copy--success');
+      }, 2000);
+    })();
+  });
+</script>

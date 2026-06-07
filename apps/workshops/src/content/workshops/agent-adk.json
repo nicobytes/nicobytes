@@ -1,0 +1,7 @@
+{
+  "title": "Tu primer Agent con Google ADK",
+  "description": "Taller introductorio al Agent Development Kit de Google: desde el scaffolding del proyecto hasta construir, probar y desplegar tu primer agente con function tools, Gemini y consumo REST en producción.",
+  "order": 2,
+  "level": "beginner",
+  "tags": ["python", "agents", "adk", "gemini", "google"]
+}

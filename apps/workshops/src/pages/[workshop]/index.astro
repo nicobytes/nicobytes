@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import { getStepHref, getWorkshopSteps } from '../../lib/workshops';
+
+export const prerender = false;
+
+const { workshop } = Astro.params;
+
+if (!workshop) {
+  return Astro.redirect('/');
+}
+
+const steps = await getCollection('steps');
+const workshopSteps = getWorkshopSteps(steps, workshop);
+const firstStep = workshopSteps[0];
+
+if (!firstStep) {
+  return Astro.redirect('/');
+}
+
+return Astro.redirect(getStepHref(workshop, firstStep), 308);
+---

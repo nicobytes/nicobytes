@@ -9,6 +9,7 @@ import Prose from "../../components/Prose.astro";
 import { formatDate } from "../../lib/formatDate";
 import { getOgImageUrl } from "../../lib/getOgImageUrl";
 import { blogPostingSchema } from "../../lib/seo/jsonLd";
+import "katex/dist/katex.min.css";
 
 type BlogEntry = CollectionEntry<"blog">;
 

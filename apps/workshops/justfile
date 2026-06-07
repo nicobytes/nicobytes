@@ -1,0 +1,13 @@
+i:
+    pnpm i
+    pnpm run dev
+
+serve:
+    pnpm run dev
+
+fmt:
+    pnpm run format
+
+deploy:
+    pnpm run build
+    pnpm run deploy

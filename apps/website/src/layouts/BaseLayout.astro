@@ -95,10 +95,6 @@ const ogImage = new URL(image ?? "/og_image.jpg", Astro.site).href;
       title={siteTitle}
     />
     <link rel="icon" href="/favicon.png" />
-    <link
-      href="https://cdn.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
-      rel="stylesheet"
-    />
     {jsonLd && <JsonLd schema={jsonLd} />}
     <!-- Google tag (gtag.js) -->
     <script
