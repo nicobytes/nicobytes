@@ -1,8 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
+
+const srcDir = fileURLToPath(new URL(".", import.meta.url));
+const rootDir = fileURLToPath(new URL("..", import.meta.url));
 
 const ogImageSchema = z
   .string()
@@ -11,7 +15,7 @@ const ogImageSchema = z
   .superRefine((val, ctx) => {
     if (!val) return;
 
-    const file = path.join(process.cwd(), "public", val.slice(1));
+    const file = path.join(rootDir, "public", val.slice(1));
     if (!fs.existsSync(file)) {
       ctx.addIssue({
         code: "custom",
@@ -21,7 +25,10 @@ const ogImageSchema = z
   });
 
 const blog = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: path.join(srcDir, "content/blog"),
+  }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -39,7 +46,10 @@ const blog = defineCollection({
 });
 
 const portfolio = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/portfolio" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: path.join(srcDir, "content/portfolio"),
+  }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
