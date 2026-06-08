@@ -8,7 +8,7 @@ import Container from "../../components/Container.astro";
 import ImageLightbox from "../../components/ImageLightbox.astro";
 import Prose from "../../components/Prose.astro";
 import { formatDate } from "../../lib/formatDate";
-import { getOgImageUrl } from "../../lib/getOgImageUrl";
+import { resolveOgMeta } from "../../lib/ogImage";
 import { blogPostingSchema } from "../../lib/seo/jsonLd";
 import "katex/dist/katex.min.css";
 
@@ -104,8 +104,7 @@ const { post, baseSlug, alternate } = Astro.props as {
   alternate?: AlternateLink;
 };
 const { Content } = await render(post);
-const { url: ogImage, width: ogImageWidth, height: ogImageHeight } =
-  await getOgImageUrl(post.data.heroImage, Astro.site);
+const og = resolveOgMeta(post.data.ogImage, Astro.site);
 const site = Astro.site ?? "https://nicobytes.com";
 const postPath = getPostPath(post, baseSlug);
 const postUrl = new URL(postPath, site).href;
@@ -134,7 +133,7 @@ const jsonLd = blogPostingSchema({
   description: post.data.description,
   url: postUrl,
   datePublished: post.data.date,
-  image: ogImage,
+  image: og.url,
   author: post.data.author,
   inLanguage: pageLang,
 });
@@ -143,9 +142,10 @@ const jsonLd = blogPostingSchema({
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
-  image={ogImage}
-  imageWidth={ogImageWidth}
-  imageHeight={ogImageHeight}
+  image={og.url}
+  imageWidth={og.width}
+  imageHeight={og.height}
+  imageType={og.type}
   type="article"
   publishedTime={post.data.date}
   author={post.data.author}
@@ -159,10 +159,10 @@ const jsonLd = blogPostingSchema({
         <BackButton label={backButtonLabel} />
         <article>
           {
-            post.data.heroImage && (
+            post.data.coverImage && (
               <figure class="mb-6 overflow-hidden rounded-2xl shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:ring-white/10">
                 <Image
-                  src={post.data.heroImage}
+                  src={post.data.coverImage}
                   alt={post.data.title}
                   widths={[672, 1024, 1344]}
                   sizes="(min-width: 42rem) 42rem, 100vw"

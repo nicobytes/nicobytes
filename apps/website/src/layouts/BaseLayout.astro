@@ -12,6 +12,7 @@ interface Props {
   image?: string;
   imageWidth?: number;
   imageHeight?: number;
+  imageType?: string;
   type?: "website" | "article";
   noindex?: boolean;
   publishedTime?: string;
@@ -38,6 +39,7 @@ const {
   image,
   imageWidth,
   imageHeight,
+  imageType = "image/jpeg",
   type = "website",
   noindex,
   publishedTime,
@@ -101,6 +103,7 @@ const ogLocaleAlternates = [
     {imageHeight && (
       <meta property="og:image:height" content={String(imageHeight)} />
     )}
+    <meta property="og:image:type" content={imageType} />
     <meta property="og:site_name" content={siteTitle} />
     {
       type === "article" && publishedTime && (

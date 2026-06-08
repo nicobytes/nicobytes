@@ -1,6 +1,24 @@
+import fs from "node:fs";
+import path from "node:path";
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
+
+const ogImageSchema = z
+  .string()
+  .regex(/^\/imgs\/og\/.+\.(jpe?g|png|webp)$/i)
+  .optional()
+  .superRefine((val, ctx) => {
+    if (!val) return;
+
+    const file = path.join(process.cwd(), "public", val.slice(1));
+    if (!fs.existsSync(file)) {
+      ctx.addIssue({
+        code: "custom",
+        message: `Missing OG file: public${val}`,
+      });
+    }
+  });
 
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
@@ -12,7 +30,8 @@ const blog = defineCollection({
       date: z.string(),
       lang: z.enum(["en", "es"]).default("en"),
       translationSlug: z.string().optional(),
-      heroImage: image().optional(),
+      coverImage: image().optional(),
+      ogImage: ogImageSchema,
       categories: z.array(z.string()).optional(),
       draft: z.boolean().default(false),
       repoLink: z.url().optional(),
@@ -25,7 +44,8 @@ const portfolio = defineCollection({
     z.object({
       title: z.string(),
       description: z.string(),
-      image: image(),
+      coverImage: image(),
+      ogImage: ogImageSchema,
       date: z.string(),
       type: z.enum(["private", "public"]).default("private"),
       url: z.url().optional(),

@@ -7,7 +7,7 @@ import Button from "../../components/Button.astro";
 import Container from "../../components/Container.astro";
 import ImageLightbox from "../../components/ImageLightbox.astro";
 import Prose from "../../components/Prose.astro";
-import { getOgImageUrl } from "../../lib/getOgImageUrl";
+import { resolveOgMeta } from "../../lib/ogImage";
 import { creativeWorkSchema } from "../../lib/seo/jsonLd";
 
 export async function getStaticPaths() {
@@ -20,14 +20,13 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
-const { url: ogImage, width: ogImageWidth, height: ogImageHeight } =
-  await getOgImageUrl(project.data.image, Astro.site);
+const og = resolveOgMeta(project.data.ogImage, Astro.site);
 const projectUrl = new URL(`/portfolio/${project.id}/`, Astro.site).href;
 const jsonLd = creativeWorkSchema({
   title: project.data.title,
   description: project.data.description,
   url: projectUrl,
-  image: ogImage,
+  image: og.url,
   datePublished: project.data.date,
 });
 ---
@@ -35,9 +34,10 @@ const jsonLd = creativeWorkSchema({
 <BaseLayout
   title={project.data.title}
   description={project.data.description}
-  image={ogImage}
-  imageWidth={ogImageWidth}
-  imageHeight={ogImageHeight}
+  image={og.url}
+  imageWidth={og.width}
+  imageHeight={og.height}
+  imageType={og.type}
   jsonLd={jsonLd}
 >
   <Container class="mt-12 lg:mt-24">
@@ -46,10 +46,10 @@ const jsonLd = creativeWorkSchema({
         <BackButton href="/portfolio/" label="Back to portfolio" />
         <article>
           {
-            project.data.image && (
+            project.data.coverImage && (
               <figure class="mb-6 overflow-hidden rounded-2xl shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 dark:ring-white/10">
                 <Image
-                  src={project.data.image}
+                  src={project.data.coverImage}
                   alt={project.data.title}
                   widths={[672, 1024, 1344]}
                   sizes="(min-width: 42rem) 42rem, 100vw"

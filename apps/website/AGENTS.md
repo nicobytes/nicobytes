@@ -60,7 +60,7 @@ src/
 │   └── BaseLayout.astro  # SEO, OG, Twitter, hreflang, JSON-LD, GA
 ├── lib/
 │   ├── seo/jsonLd.ts     # Schemas: BlogPosting, Person, CreativeWork…
-│   ├── getOgImageUrl.ts  # OG images optimizadas (1200px JPG)
+│   ├── ogImage.ts        # resolveOgMeta() — URLs OG estables desde frontmatter
 │   ├── formatDate.ts
 │   └── navItems.ts
 ├── pages/
@@ -73,7 +73,7 @@ src/
 │   └── feed.xml.ts       # RSS
 ├── styles/global.css     # @theme, tokens, animaciones, skip-link
 └── content.config.ts     # Schemas Zod para blog y portfolio
-public/                   # favicon, cv.pdf, og_image.jpg
+public/                   # favicon, cv.pdf, og_image.jpg, imgs/og/blog|portfolio/
 ```
 
 ## Contenido (Content Collections)
@@ -91,7 +91,28 @@ Carpeta por artículo en `src/content/blog/{slug}/`:
 
 Frontmatter requerido: `title`, `description`, `date` (ISO `YYYY-MM-DD`).
 
-Opcionales: `heroImage` (import relativo), `categories`, `repoLink`, `draft`, `lang`, `translationSlug`.
+Opcionales: `coverImage` (import relativo, hero en página), `ogImage` (path `/imgs/og/...`, meta OG), `categories`, `repoLink`, `draft`, `lang`, `translationSlug`.
+
+| Campo | Tipo | Uso |
+|-------|------|-----|
+| `coverImage` | `./cover.png` | Hero; Astro optimiza a webp |
+| `ogImage` | `/imgs/og/blog/{slug}.jpg` | Meta OG/Twitter; JPEG estático en `public/` |
+
+Ejemplo EN:
+
+```yaml
+coverImage: "./cover.png"
+ogImage: "/imgs/og/blog/hybrid-search.jpg"
+```
+
+Ejemplo ES (sufijo `-es`, mismo slug de carpeta):
+
+```yaml
+coverImage: "./cover.png"
+ogImage: "/imgs/og/blog/hybrid-search-es.jpg"
+```
+
+`ogImage` es **obligatorio** si hay `coverImage`.
 
 Convenciones:
 
@@ -105,7 +126,12 @@ Convenciones:
 
 Carpeta por proyecto en `src/content/portfolio/{slug}/index.mdx`.
 
-Frontmatter: `title`, `description`, `image` (requerido), `date`, `type` (`private`|`public`), `url?`, `draft?`.
+Frontmatter: `title`, `description`, `coverImage` (requerido), `ogImage` (requerido), `date`, `type` (`private`|`public`), `url?`, `draft?`.
+
+```yaml
+coverImage: "./chat_ada.jpg"
+ogImage: "/imgs/og/portfolio/platzi-ai-chat.jpg"
+```
 
 Ruta: `/portfolio/{slug}/`.
 
@@ -149,7 +175,7 @@ Al crear o editar páginas, pasa siempre:
 
 - `title` — conciso, keyword-relevante
 - `description` — 150–160 caracteres, único por página
-- `image` — OG image (hero del post o default `/og_image.jpg`)
+- `image` — URL absoluta desde `ogImage` del frontmatter (no el cover optimizado); default `/og_image.jpg`
 - `type` — `"article"` en posts, `"website"` en el resto
 - `lang` — `en` o `es-CO` según idioma
 - `alternates` — hreflang EN/ES + `x-default` en posts bilingües
@@ -169,7 +195,11 @@ Al crear o editar páginas, pasa siempre:
 - [ ] `title` y `description` únicos y descriptivos
 - [ ] Un solo `<h1>` (viene del layout, no del MDX)
 - [ ] Jerarquía `h2` → `h3` sin saltos
-- [ ] `heroImage` con alt text (= title o descriptivo)
+- [ ] `coverImage` en carpeta del post (hero, webp vía Astro)
+- [ ] `ogImage` apuntando a JPEG 1200×630 en `public/imgs/og/...`
+- [ ] Archivo OG existe en disco (el build valida con Zod)
+- [ ] Traducción ES: `ogImage` con sufijo `-es` (`{slug}-es.jpg`)
+- [ ] Alt del hero = `title` o descriptivo
 - [ ] Links externos: ya tienen `target="_blank"` + `rel="noopener noreferrer"` via rehype
 - [ ] Traducción ES con `hreflang` correcto si existe par EN
 - [ ] `draft: true` mientras no esté listo para publicar
@@ -185,10 +215,17 @@ Objetivo: **100 Lighthouse** en performance. Cada cambio debe preservar o mejora
 
 ### Imágenes
 
-- **Hero / LCP**: `astro:assets` `<Image>` con `loading="eager"`, `fetchpriority="high"`, `format="webp"`, `widths` + `sizes`.
+- **Hero / LCP**: `coverImage` → `astro:assets` `<Image>` con `loading="eager"`, `fetchpriority="high"`, `format="webp"`, `widths` + `sizes`.
 - **Contenido**: `ArticleImage.astro` (lazy, webp, quality 80) o el mismo patrón.
-- **OG**: `getOgImageUrl()` genera JPG 1200px — no subir PNGs enormes sin optimizar.
-- Colocar assets en la carpeta del post, no en `public/` salvo estáticos globales.
+- Colocar covers en la carpeta del post, no en `public/` salvo estáticos globales.
+
+### Imágenes OG (explícitas)
+
+- **Cover (página)**: `coverImage` → `astro:assets` (webp, responsive, LCP).
+- **OG (redes)**: `ogImage` → JPEG estático en `public/imgs/og/`, 1200×630, commiteado.
+- Rutas: `/imgs/og/blog/{slug}.jpg`, `/imgs/og/blog/{slug}-es.jpg`, `/imgs/og/portfolio/{id}.jpg`.
+- No usar el cover optimizado (`/_astro/...`) como `og:image` — se necesita URL estable.
+- Detalle técnico: ver `docs/spec-og-images.md`.
 
 ### JavaScript y CSS
 
