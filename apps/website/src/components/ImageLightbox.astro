@@ -1,0 +1,121 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+  id="image-lightbox"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="image-lightbox-title"
+  inert
+  class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-150"
+>
+  <div
+    id="image-lightbox-backdrop"
+    class="absolute inset-0 bg-black/60 dark:bg-black/80"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="pointer-events-none relative z-10 flex h-full w-full items-center justify-center p-4">
+    <p id="image-lightbox-title" class="sr-only">Enlarged image</p>
+    <button
+      type="button"
+      id="image-lightbox-close"
+      aria-label="Close image"
+      class="pointer-events-auto absolute top-4 right-4 z-20 flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-full bg-white/90 p-2 shadow-lg ring-1 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:ring-white/10"
+    >
+      <Icon
+        name="line-md:close"
+        aria-hidden="true"
+        class="h-6 w-6 text-zinc-500 dark:text-zinc-400"
+      />
+    </button>
+    <img
+      id="image-lightbox-img"
+      alt=""
+      class="pointer-events-auto max-h-[90vh] max-w-[90vw] cursor-zoom-out rounded-lg object-contain shadow-2xl"
+    />
+  </div>
+</div>
+
+<script>
+  const lightbox = document.getElementById("image-lightbox")!;
+  const backdrop = document.getElementById("image-lightbox-backdrop")!;
+  const closeBtn = document.getElementById("image-lightbox-close")!;
+  const img = document.getElementById("image-lightbox-img") as HTMLImageElement;
+
+  let previouslyFocused: HTMLElement | null = null;
+  let isOpen = false;
+
+  function openLightbox(src: string, alt: string) {
+    if (isOpen) return;
+
+    previouslyFocused = document.activeElement as HTMLElement | null;
+    img.src = src;
+    img.alt = alt;
+
+    lightbox.classList.remove("hidden");
+    lightbox.removeAttribute("inert");
+    document.body.style.overflow = "hidden";
+    isOpen = true;
+
+    requestAnimationFrame(() => {
+      lightbox.classList.remove("opacity-0");
+      closeBtn.focus();
+    });
+  }
+
+  function closeLightbox() {
+    if (!isOpen) return;
+
+    lightbox.classList.add("opacity-0");
+    lightbox.setAttribute("inert", "");
+    document.body.style.overflow = "";
+    isOpen = false;
+
+    setTimeout(() => {
+      lightbox.classList.add("hidden");
+      img.removeAttribute("src");
+      img.alt = "";
+      previouslyFocused?.focus();
+    }, 150);
+  }
+
+  document.querySelector("[data-mdx-content]")?.addEventListener("click", (event) => {
+    const trigger = (event.target as HTMLElement).closest<HTMLElement>(
+      "[data-lightbox-trigger]",
+    );
+    if (!trigger) return;
+
+    const src = trigger.dataset.lightboxSrc;
+    const alt = trigger.dataset.lightboxAlt ?? "";
+    if (!src) return;
+
+    event.preventDefault();
+    openLightbox(src, alt);
+  });
+
+  closeBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    closeLightbox();
+  });
+
+  backdrop.addEventListener("click", closeLightbox);
+
+  img.addEventListener("click", closeLightbox);
+
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!isOpen) return;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeLightbox();
+    }
+  });
+</script>

@@ -5,6 +5,7 @@ import BackButton from "../../components/BackButton.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Button from "../../components/Button.astro";
 import Container from "../../components/Container.astro";
+import ImageLightbox from "../../components/ImageLightbox.astro";
 import Prose from "../../components/Prose.astro";
 import { getOgImageUrl } from "../../lib/getOgImageUrl";
 import { creativeWorkSchema } from "../../lib/seo/jsonLd";
@@ -99,6 +100,7 @@ const jsonLd = creativeWorkSchema({
             )
           }
         </article>
+        <ImageLightbox />
       </div>
     </div>
   </Container>

@@ -12,8 +12,8 @@ import hybridImg from "./hybrid.png";
 import exploratoriaImg from "./exploratoria.png";
 import puntualImg from "./puntual.png";
 import cloudflareImg from "./cloudflare.png";
-import chatExploImg from "./chat_explo.png";
-import chatPuntualImg from "./chat_puntual.png";
+import chatExploImg from "./chat_explo_en.png";
+import chatPuntualImg from "./chat_puntual_en.png";
 
 > **TL;DR:** While building a conversational agent for a travel agency, I discovered that hybrid search, merging semantic and lexical search results, noticeably improved my RAG system.
 
@@ -29,9 +29,9 @@ The problem was not retrieving information. The problem was retrieving **the rig
 
 It is not the same when a person asks:
 
-- "plans for warm weather destinations" - Ambiguous question
-- "something adventurous near Bogota" - Exploratory question
-- "what about the Guatavita itinerary?" - Follow-up question
+- "getaways somewhere warm" - Ambiguous question
+- "something adventurous near Denver" - Exploratory question
+- "what about the Yosemite itinerary?" - Follow-up question
 
 All three are valid questions, but they require different things: some need interpretation, others need textual precision. At first, I thought that meant choosing between strategies. After testing it in practice, the conclusion was different: I needed **a single search that understood intent and respected the exact text at the same time**. That is exactly what hybrid search does.
 
@@ -54,9 +54,9 @@ That is the core idea: **a result that convinces both layers rises more strongly
 
 Semantic search does not answer "do these words appear?" but rather "what content is similar in intent to this query?". That is key because people almost never speak the way the site is written: they use abbreviations, slang, vague phrases, or they misremember the name of a travel plan.
 
-That is why the semantic layer wins when the main job is to **understand**: intent-based queries ("plans for warm weather destinations"), exploratory queries ("something adventurous near Bogota"), or follow-up questions where the query already comes contextualized by the conversation history ("what about the itinerary?" => "itinerary for the Guatavita plan"). In all those cases, it connects intent with the right content even when the words do not literally match.
+That is why the semantic layer wins when the main job is to **understand**: intent-based queries ("getaways somewhere warm"), exploratory queries ("something adventurous near Denver"), or follow-up questions where the query already comes contextualized by the conversation history ("what about the itinerary?" => "itinerary for the Yosemite plan"). In all those cases, it connects intent with the right content even when the words do not literally match.
 
-The problem appears when the conversation stops being ambiguous. If the user already knows which plan they are interested in and asks for something specific ("tell me in detail the itinerary for Guatavita"), a purely semantic search can bring back reasonable results but not the most precise ones, because words like "itinerary" or "price" appear in many plans. Understanding intent still matters, but it is no longer enough: the answer also has to be anchored to the right text.
+The problem appears when the conversation stops being ambiguous. If the user already knows which plan they are interested in and asks for something specific ("tell me in detail the itinerary for Yosemite"), a purely semantic search can bring back reasonable results but not the most precise ones, because words like "itinerary" or "price" appear in many plans. Understanding intent still matters, but it is no longer enough: the answer also has to be anchored to the right text.
 
 ## What the lexical layer contributes: full text search
 
@@ -96,9 +96,9 @@ In an exploratory query like "recommended destination plans", full text comes ba
 
 <ArticleImage src={exploratoriaImg} alt="Comparison of semantic, hybrid, and full text search for the exploratory query 'recommended destination plans': full text returns no results" />
 
-In a precise query like "Cumbre Nevado del Tolima", the picture changes: all three paths return results, but hybrid is the only one that combines the best of both. It merges the plan that full text finds through exact textual matching with the one semantic search finds through meaning similarity, and reorders them with RRF so that the ones that rank well in both lists rise to the top.
+In a precise query like "Grand Canyon South Rim", the picture changes: all three paths return results, but hybrid is the only one that combines the best of both. It merges the plan that full text finds through exact textual matching with the one semantic search finds through meaning similarity, and reorders them with RRF so that the ones that rank well in both lists rise to the top.
 
-<ArticleImage src={puntualImg} alt="Comparison of semantic, hybrid, and full text search for the precise query 'Cumbre Nevado del Tolima': hybrid merges results from both layers" />
+<ArticleImage src={puntualImg} alt="Comparison of semantic, hybrid, and full text search for the precise query 'Grand Canyon South Rim': hybrid merges results from both layers" />
 
 In my tests, hybrid search produced better results than semantic search alone in every scenario. I did not find a case where it was worth using only one layer.
 
@@ -112,7 +112,7 @@ $$
 \text{RRF}(d) = \sum_{i=1}^{n} \frac{1}{k + \text{rank}_i(d)}
 $$
 
-Where `d` is the document, `rank_i(d)` is the position it occupies in ranking `i` (semantic or lexical), and `k` is a smoothing constant, a typical value is `k = 60`. The intuition is straightforward: being in first position contributes `1 / (k + 1)`, second contributes `1 / (k + 2)`, and so on; the lower it appears, the less it adds.
+Where $d$ is the document, $\text{rank}_i(d)$ is the position it occupies in ranking $i$ (semantic or lexical), and $k$ is a smoothing constant (a typical value is $k = 60$). The intuition is straightforward: being in first position contributes $\frac{1}{k+1}$, second contributes $\frac{1}{k+2}$, and so on; the lower it appears, the less it adds.
 
 What is powerful is what happens when a document appears in **both** lists: its two contributions accumulate and push it upward. A result that convinces both the semantic and the lexical layer ends up beating another one that only stood out in one. And because everything is measured in positions, there is never any need to force an artificial equivalence between scores that mean different things.
 
@@ -149,13 +149,13 @@ root_agent = Agent(
 
 Here `search_context` is the tool that runs the hybrid search query against the knowledge base and returns the already ranked context. The agent decides when to call it, passes the query, contextualized with the history when needed, and answers from that context. There is no "which strategy should I use?" logic: that decision already lives inside the search, and the agent just consumes the result.
 
-In the Amaru agent it is already integrated. With an exploratory query like "plans for warm weather destinations", the agent calls `search_context`, retrieves relevant plans, and answers with concrete options without the user having given an exact name:
+In the Amaru agent it is already integrated. With an exploratory query like "getaways somewhere warm", the agent calls `search_context`, retrieves relevant plans, and answers with concrete options without the user having given an exact name:
 
-<ArticleImage src={chatExploImg} alt="Amaru agent chat: the user asks for plans in warm weather destinations and the agent calls search_context to recommend Skydiving in Flandes, La Guajira, and Rio Guejar" />
+<ArticleImage src={chatExploImg} alt="Amaru agent chat: the user asks for warm-weather getaways and the agent calls search_context to recommend Hawaii, San Diego, and Key West" />
 
-With a more precise query like "plans for cumbre nevado tolima", the flow is the same: one tool only, but the returned context already anchors the answer to the correct plan and the agent responds with specific routes and itineraries:
+With a more precise query like "grand canyon south rim tours", the flow is the same: one tool only, but the returned context already anchors the answer to the correct plan and the agent responds with specific routes and itineraries:
 
-<ArticleImage src={chatPuntualImg} alt="Amaru agent chat: the user asks about the summit of Nevado del Tolima and search_context returns traditional, Montana Pura, and Travesia routes" />
+<ArticleImage src={chatPuntualImg} alt="Amaru agent chat: the user asks about Grand Canyon South Rim tours and search_context returns South Rim, North Rim, and Rim-to-Rim routes" />
 
 ## Conclusion
 
