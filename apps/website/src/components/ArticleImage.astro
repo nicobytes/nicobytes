@@ -22,8 +22,7 @@ const lightbox = await getImage({
   data-lightbox-trigger
   data-lightbox-src={lightbox.src}
   data-lightbox-alt={alt}
-  aria-label={`View larger: ${alt}`}
-  class="group block w-full cursor-zoom-in rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
+  class="group block w-full rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 max-md:cursor-default md:cursor-zoom-in disabled:cursor-default disabled:opacity-100"
 >
   <Image
     src={src}
@@ -34,6 +33,6 @@ const lightbox = await getImage({
     format="webp"
     loading="lazy"
     decoding="async"
-    class="h-auto w-full cursor-zoom-in rounded-lg transition group-hover:opacity-95"
+    class="h-auto w-full rounded-lg transition md:group-hover:opacity-95"
   />
 </button>

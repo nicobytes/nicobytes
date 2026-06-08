@@ -39,6 +39,11 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
+  // Tailwind `md` breakpoint — keep in sync with ArticleImage responsive classes
+  const LIGHTBOX_MEDIA = window.matchMedia("(min-width: 768px)");
+  const focusableSelector =
+    'button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
   const lightbox = document.getElementById("image-lightbox")!;
   const backdrop = document.getElementById("image-lightbox-backdrop")!;
   const closeBtn = document.getElementById("image-lightbox-close")!;
@@ -47,8 +52,39 @@ import { Icon } from "astro-icon/components";
   let previouslyFocused: HTMLElement | null = null;
   let isOpen = false;
 
+  function isLightboxEnabled() {
+    return LIGHTBOX_MEDIA.matches;
+  }
+
+  function getFocusableElements() {
+    return Array.from(
+      lightbox.querySelectorAll<HTMLElement>(focusableSelector),
+    ).filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
+  }
+
+  function syncLightboxTriggers() {
+    const enabled = isLightboxEnabled();
+
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-lightbox-trigger]")
+      .forEach((trigger) => {
+        trigger.disabled = !enabled;
+
+        if (enabled) {
+          const alt = trigger.dataset.lightboxAlt ?? "";
+          trigger.setAttribute("aria-label", `View larger: ${alt}`);
+        } else {
+          trigger.removeAttribute("aria-label");
+        }
+      });
+
+    if (!enabled && isOpen) {
+      closeLightbox();
+    }
+  }
+
   function openLightbox(src: string, alt: string) {
-    if (isOpen) return;
+    if (!isLightboxEnabled() || isOpen) return;
 
     previouslyFocused = document.activeElement as HTMLElement | null;
     img.src = src;
@@ -56,6 +92,7 @@ import { Icon } from "astro-icon/components";
 
     lightbox.classList.remove("hidden");
     lightbox.removeAttribute("inert");
+    backdrop.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     isOpen = true;
 
@@ -70,6 +107,7 @@ import { Icon } from "astro-icon/components";
 
     lightbox.classList.add("opacity-0");
     lightbox.setAttribute("inert", "");
+    backdrop.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
     isOpen = false;
 
@@ -82,10 +120,17 @@ import { Icon } from "astro-icon/components";
   }
 
   document.querySelector("[data-mdx-content]")?.addEventListener("click", (event) => {
+    if (!isLightboxEnabled()) return;
+
     const trigger = (event.target as HTMLElement).closest<HTMLElement>(
       "[data-lightbox-trigger]",
     );
-    if (!trigger) return;
+    if (
+      !trigger ||
+      (trigger instanceof HTMLButtonElement && trigger.disabled)
+    ) {
+      return;
+    }
 
     const src = trigger.dataset.lightboxSrc;
     const alt = trigger.dataset.lightboxAlt ?? "";
@@ -95,20 +140,16 @@ import { Icon } from "astro-icon/components";
     openLightbox(src, alt);
   });
 
+  syncLightboxTriggers();
+  LIGHTBOX_MEDIA.addEventListener("change", syncLightboxTriggers);
+
   closeBtn.addEventListener("click", (event) => {
     event.stopPropagation();
     closeLightbox();
   });
 
   backdrop.addEventListener("click", closeLightbox);
-
   img.addEventListener("click", closeLightbox);
-
-  lightbox.addEventListener("click", (event) => {
-    if (event.target === lightbox) {
-      closeLightbox();
-    }
-  });
 
   document.addEventListener("keydown", (event) => {
     if (!isOpen) return;
@@ -116,6 +157,24 @@ import { Icon } from "astro-icon/components";
     if (event.key === "Escape") {
       event.preventDefault();
       closeLightbox();
+      return;
+    }
+
+    if (event.key !== "Tab") return;
+
+    const focusable = getFocusableElements();
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+
+    if (event.shiftKey && active === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
     }
   });
 </script>
