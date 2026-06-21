@@ -74,7 +74,7 @@ En la carrera de infraestructura de IA, la cadena de suministro es una restricci
 
 Google es distinto: fabrica sus propios **TPUs**. Eso le da una ventaja estructural — menos dependencia de proveedores externos de hardware y más control sobre el stack completo, del chip a la capa de serving.
 
-Este año Google destacó TPUs optimizados para entrenamiento con una nueva arquitectura, además de un diseño híbrido de rack que conecta GPUs y TPUs en un solo sistema. Para trabajo de modelos a gran escala, ser dueño del silicio no es un detalle de marketing. Es una palanca estratégica a largo plazo.
+Este año Google destacó TPUs optimizados para entrenamiento con una [nueva arquitectura](https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive), además de un diseño híbrido de rack que conecta GPUs y TPUs en un solo sistema. Para trabajo de modelos a gran escala, ser dueño del silicio no es un detalle de marketing. Es una palanca estratégica a largo plazo.
 
 <div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
   <ArticleImage src={tpusImg} alt="TPUs" />
@@ -83,7 +83,7 @@ Este año Google destacó TPUs optimizados para entrenamiento con una nueva arqu
 
 ## Mi charla favorita: cinco decisiones de embeddings
 
-La charla que más me marcó fue **"5 embedding decisions every cloud developer needs to know."** Llegó en el momento justo porque estoy construyendo sistemas RAG para agentes, y los embeddings son uno de esos temas donde decisiones pequeñas se acumulan en brechas grandes de calidad.
+La charla que más me marcó fue ["5 embedding decisions every cloud developer needs to know."](https://www.youtube.com/watch?v=YqQ0laSZCxM) Llegó en el momento justo porque estoy construyendo sistemas RAG para agentes, y los embeddings son uno de esos temas donde decisiones pequeñas se acumulan en brechas grandes de calidad.
 
 El speaker dividió el problema en fases y las decisiones que importan en cada una:
 
@@ -94,7 +94,7 @@ El speaker dividió el problema en fases y las decisiones que importan en cada u
 
 Cada decisión estaba ligada a un modo de fallo concreto — no buenas prácticas abstractas, sino los errores que aparecen cuando un pipeline RAG se ve bien en un demo y se cae con consultas reales.
 
-Esa charla influyó directamente en cómo pienso la recuperación. Incluso escribí un artículo sobre [hybrid search](/blog/es/por-que-hybrid-search/) usando Supabase para mejorar las respuestas RAG combinando búsqueda semántica y léxica. El speaker era un developer engineer de MongoDB, y la respuesta de MongoDB a muchos de estos problemas es **MongoDB Atlas Vector Search** — pero las decisiones en sí son agnósticas de plataforma. Chunking, embeddings, reranking y depuración local importan sin importar dónde hospedes el índice.
+Esa charla influyó directamente en cómo pienso sobre *retrieval*. Incluso escribí un artículo sobre [hybrid search](/blog/es/por-que-hybrid-search/) usando Supabase para mejorar las respuestas RAG combinando búsqueda semántica y léxica. El speaker era un developer engineer de MongoDB, y la respuesta de MongoDB a muchos de estos problemas es [[MongoDB AI Search](https://www.mongodb.com/company/blog/product-release-announcements/ai-search-for-agents-announcing-automated-embedding-atlas) — pero las decisiones en sí son agnósticas de plataforma. Chunking, embeddings, reranking y depuración local importan sin importar dónde hospedes el índice.
 
 <div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
   <ArticleImage src={talkImg} alt="Charla" />
@@ -117,9 +117,10 @@ También descubrí [Conference Parties](https://conferenceparties.com/next26/) �
 Un momento destacado fue conocer a **Addy Osmani**. He leído varios de sus libros a lo largo de los años — incluyendo trabajo sobre patrones y rendimiento en JavaScript — y hoy lidera iniciativas de IA en Google Cloud. Hablar con alguien cuya escritura moldeó cómo pienso la ingeniería frontend, ahora trabajando en la capa de IA del mismo ecosistema, fue un momento de cierre de ciclo.
 
 <div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-  <ArticleImage src={githubImg} alt="GitHub" />
-  <ArticleImage src={poolImg} alt="Pool" />
+  <ArticleImage src={addyImg} alt="Addy Osmani" />
+  <ArticleImage src={addyTalkImg} alt="Addy Osmani Talk" />
 </div>
+
 
 
 La conferencia terminó con un concierto encabezado por **Benson Boone** — un cierre acorde para una semana que se sintió mitad inmersión técnica, mitad espectáculo de industria.
