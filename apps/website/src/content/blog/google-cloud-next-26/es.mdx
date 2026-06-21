@@ -1,0 +1,136 @@
+---
+title: "Mi experiencia en Google Cloud Next '26"
+description: "Qué aprendí en Google Cloud Next '26 como Google Developer Expert: Gemini Enterprise Agent Platform, Model Armor, TPUs, decisiones de embeddings para RAG y el valor real del networking en conferencias."
+author: "Nicolas Molina (@nicobytes)"
+date: "2026-06-19"
+lang: "es"
+translationSlug: "experiencia-google-cloud-next-26"
+categories: ["AI", "Cloud"]
+draft: false
+coverImage: "./cover.jpg"
+ogImage: "/imgs/og/blog/google-cloud-next-26.jpg"
+---
+
+import ArticleImage from "../../../components/ArticleImage.astro";
+import agentRuntimeImg from "./agent_runtime.jpg";
+import shiftDownImg from "./shift_down.jpg";
+import modelArmorImg from "./model_armor_work.jpg";
+import modelArmorWorkSlideImg from "./model_armor_slide.jpg";
+import phasesImg from "./phases.jpg";
+import tpusImg from "./tpu.jpg";
+import rackImg from "./rack.jpg";
+import talkImg from "./talk.jpg";
+import rerankingImg from "./reranking.jpg";
+import addyImg from "./addy.jpg";
+import addyTalkImg from "./addy_talk.jpg";
+import concertImg from "./concert.jpg";
+import githubImg from "./github.jpg";
+import poolImg from "./pool.jpg";
+
+
+> **TL;DR:** Google Cloud Next '26 giró en torno a agentes de IA — desde una plataforma empresarial rebrandeada y un nuevo agent runtime hasta Model Armor, hardware TPU y decisiones prácticas de RAG. Lo mejor no fueron solo los keynotes, sino las conversaciones que pasaron entre ellas.
+
+Este año tuve la oportunidad de asistir a Google Cloud Next '26 gracias al programa [Google Developer Experts](https://developers.google.com/community/experts). El evento fue intenso: anuncios, charlas, stands, demos y mucho networking — todo enfocado en construir y desplegar sistemas de IA sobre Google Cloud.
+
+## Gemini Enterprise Agent Platform
+
+El anuncio más grande fue el rebrand. Google renombró **Vertex AI** a **Gemini Enterprise Agent Platform** (GEAP — sí, el acrónimo es largo). El mensaje era claro: Google quiere cubrir todo el ciclo de vida de los agentes de IA empresariales, no solo el acceso a modelos.
+
+El componente central es el nuevo **Agent Runtime**, un servicio administrado para desplegar agentes de forma segura. La propuesta es que los desarrolladores se concentren en crear valor con IA, mientras la plataforma se encarga de calidad, observabilidad, memoria y la capa operativa que normalmente se convierte en un proyecto paralelo cuando un agente sale del prototipo.
+
+Ese cambio importa. En la mayoría de equipos con los que hablo, la lógica del agente es fundamental pero lo que se rompe en producción es todo lo demás: rastrear fallos, mantener contexto entre sesiones y saber cuándo el modelo está equivocado con confianza. GEAP es la apuesta de Google de que esas preocupaciones pertenecen a la plataforma, no a cada codebase.
+
+<div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+  <ArticleImage src={agentRuntimeImg} alt="Agent Runtime" />
+  <ArticleImage src={shiftDownImg} alt="Shift down" />
+</div>
+
+## Workshop de Model Armor
+
+Participé en un taller práctico sobre [Model Armor](https://docs.cloud.google.com/model-armor/overview?), un servicio de Google Cloud diseñado para proteger agentes y sistemas de IA de vectores de ataque comunes:
+
+- Prompt injection
+- Filtraciones de datos sensibles
+- Generación de contenido dañino o inseguro
+
+El taller mostró cómo agregar capas de protección alrededor de un agente sin convertir cada request en un proyecto de seguridad a medida. Para quien despliega agentes con usuarios reales, ese tipo de protección ya no es opcional — forma parte del stack mínimo viable de producción.
+
+<div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+  <ArticleImage src={modelArmorImg} alt="Model Armor" />
+  <ArticleImage src={modelArmorWorkSlideImg} alt="Diapositiva del taller de Model Armor" />
+</div>
+
+## La carrera por liderar la nube de IA
+
+Todos los grandes proveedores de nube compiten por empaquetar servicios de IA en el ciclo de hype actual, y Google no es la excepción. En Next '26, casi cada charla, stand y taller apuntaba en la misma dirección: **agentes** y cómo desplegar sistemas de IA en Google Cloud.
+
+Lo que más me llamó la atención no fue un solo anuncio, sino la consistencia del relato. Google ya no vende APIs aisladas. Vende un camino de punta a punta — de modelo a agente, despliegue y observabilidad — e intenta que ese camino se sienta como la opción por defecto para equipos empresariales.
+
+<ArticleImage src={phasesImg} alt="Fases" />
+
+## TPUs: la ventaja de hardware de Google
+
+En la carrera de infraestructura de IA, la cadena de suministro es una restricción real. OpenAI, Microsoft, Anthropic y muchos otros dependen fuertemente de GPUs de Nvidia para entrenar y servir modelos.
+
+Google es distinto: fabrica sus propios **TPUs**. Eso le da una ventaja estructural — menos dependencia de proveedores externos de hardware y más control sobre el stack completo, del chip a la capa de serving.
+
+Este año Google destacó TPUs optimizados para entrenamiento con una [nueva arquitectura](https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive), además de un diseño híbrido de rack que conecta GPUs y TPUs en un solo sistema. Para trabajo de modelos a gran escala, ser dueño del silicio no es un detalle de marketing. Es una palanca estratégica a largo plazo.
+
+<div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+  <ArticleImage src={tpusImg} alt="TPUs" />
+  <ArticleImage src={rackImg} alt="Rack" />
+</div>
+
+## Mi charla favorita: cinco decisiones de embeddings
+
+La charla que más me marcó fue ["5 embedding decisions every cloud developer needs to know."](https://www.youtube.com/watch?v=YqQ0laSZCxM) Llegó en el momento justo porque estoy construyendo sistemas RAG para agentes, y los embeddings son uno de esos temas donde decisiones pequeñas se acumulan en brechas grandes de calidad.
+
+El speaker dividió el problema en fases y las decisiones que importan en cada una:
+
+- Elegir el **tamaño de chunk** correcto
+- Elegir el **modelo de embedding** adecuado
+- Agregar una capa sólida de **re-ranking**
+- Saber **depurar en local** antes de llevar todo a producción
+
+Cada decisión estaba ligada a un modo de fallo concreto — no buenas prácticas abstractas, sino los errores que aparecen cuando un pipeline RAG se ve bien en un demo y se cae con consultas reales.
+
+Esa charla influyó directamente en cómo pienso sobre *retrieval*. Incluso escribí un artículo sobre [hybrid search](/blog/es/por-que-hybrid-search/) usando Supabase para mejorar las respuestas RAG combinando búsqueda semántica y léxica. El speaker era un developer engineer de MongoDB, y la respuesta de MongoDB a muchos de estos problemas es [[MongoDB AI Search](https://www.mongodb.com/company/blog/product-release-announcements/ai-search-for-agents-announcing-automated-embedding-atlas) — pero las decisiones en sí son agnósticas de plataforma. Chunking, embeddings, reranking y depuración local importan sin importar dónde hospedes el índice.
+
+<div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+  <ArticleImage src={talkImg} alt="Charla" />
+  <ArticleImage src={rerankingImg} alt="Re-ranking" />
+</div>
+
+## Networking: la parte que no cabe en un slide
+
+La parte más valiosa de una conferencia como esta rara vez es un solo anuncio. Son las conversaciones en los pasillos — gente compartiendo qué está construyendo, qué se rompió en producción y qué haría distinto.
+
+Google creó mucho espacio para eso, pero otras empresas también. GitHub, por ejemplo, organizó un evento paralelo con comida, actividades y swag que terminó siendo una sesión genuina de networking y no solo un lounge con marca.
+
+<div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+  <ArticleImage src={githubImg} alt="GitHub" />
+  <ArticleImage src={poolImg} alt="Piscina" />
+</div>
+
+También descubrí [Conference Parties](https://conferenceparties.com/next26/) — un sitio útil para encontrar meetups y eventos comunitarios alrededor de conferencias grandes. Si viajas a un evento de este tamaño, revisar los meetups satélite suele ser donde ocurren las conversaciones más enfocadas.
+
+Un momento destacado fue conocer a **Addy Osmani**. He leído varios de sus libros a lo largo de los años — incluyendo trabajo sobre patrones y rendimiento en JavaScript — y hoy lidera iniciativas de IA en Google Cloud. Hablar con alguien cuya escritura moldeó cómo pienso la ingeniería frontend, ahora trabajando en la capa de IA del mismo ecosistema, fue un momento de cierre de ciclo.
+
+<div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+  <ArticleImage src={addyImg} alt="Addy Osmani" />
+  <ArticleImage src={addyTalkImg} alt="Addy Osmani Talk" />
+</div>
+
+
+
+La conferencia terminó con un concierto encabezado por **Benson Boone** — un cierre acorde para una semana que se sintió mitad inmersión técnica, mitad espectáculo de industria.
+
+<ArticleImage src={concertImg} alt="Concierto" />
+
+## Conclusión
+
+Google Cloud Next '26 dejó una cosa clara: la industria ya pasó la pregunta de "¿qué modelo?" como el problema principal. Los retos difíciles ahora viven en los agentes — despliegue, seguridad, calidad de recuperación, observabilidad e infraestructura para correrlo todo a escala.
+
+GEAP y el Agent Runtime cubren el lado de plataforma. Model Armor cubre el lado de seguridad. Los TPUs cubren el lado de hardware. Charlas como la de embeddings cubren la ingeniería que la mayoría de equipos todavía subestima.
+
+Si hoy estás construyendo agentes o sistemas RAG, el takeaway práctico es tratar esas capas como decisiones conectadas, no como compras separadas. Los equipos que despliegan agentes confiables no serán los del demo más llamativo. Serán los que acertaron chunking, guardrails y observabilidad antes de que el primer usuario presionara enviar.
