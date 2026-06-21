@@ -32,11 +32,11 @@ This year I had the chance to attend Google Cloud Next '26 thanks to the [Google
 
 ## Gemini Enterprise Agent Platform
 
-The biggest platform story was the rebrand. Google renamed **Vertex AI** to **Gemini Enterprise Agent Platform** (GEAP — yes, the acronym is long). The message was clear: Google wants to own the full lifecycle of enterprise AI agents, not just model access.
+The biggest announcement was the rebranding of **Vertex AI** to **Gemini Enterprise Agent Platform** (GEAP — yes, the acronym is long). The message was clear: Google wants to own the full lifecycle of enterprise AI agents, not just model access.
 
 The centerpiece is the new **Agent Runtime**, a managed service to deploy agents securely. The pitch is that developers should focus on creating value through AI, while the platform handles quality, observability, memory, and the operational layer that usually becomes a side project once an agent leaves the prototype stage.
 
-That shift matters. In most teams I talk to, the agent logic is the easy part. What breaks in production is everything around it: tracing failures, keeping context across sessions, and knowing when the model is confidently wrong. GEAP is Google's bet that those concerns belong in the platform, not in every codebase.
+That shift matters. In most teams I talk to, the agent logic is fundamental but what breaks in production is everything around it: tracing failures, keeping context across sessions, and knowing when the model is confidently wrong. GEAP is Google's bet that those concerns belong in the platform, not in every codebase.
 
 <div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
   <ArticleImage src={agentRuntimeImg} alt="Agent Runtime" />
@@ -45,7 +45,7 @@ That shift matters. In most teams I talk to, the agent logic is the easy part. W
 
 ## Model Armor workshop
 
-I joined a hands-on workshop on [Model Armor](https://docs.cloud.google.com/model-armor/overview?), a Google Cloud service designed to protect agents and AI systems from common attack surfaces:
+I joined a hands-on workshop on [Model Armor](https://docs.cloud.google.com/model-armor/overview), a Google Cloud service designed to protect agents and AI systems from common attack surfaces:
 
 - Prompt injection
 - Sensitive data leaks
@@ -73,7 +73,7 @@ In the AI infrastructure race, supply chain is a real constraint. OpenAI, Micros
 
 Google is different: it builds its own **TPUs**. That gives it a structural advantage — less dependency on external hardware vendors and more control over the full stack from chip to serving layer.
 
-This year Google highlighted TPUs optimized for training with a new architecture, plus a hybrid rack design that connects GPUs and TPUs in a single system. For large-scale model work, owning the silicon is not a marketing detail. It is a long-term strategic lever.
+This year Google highlighted TPUs optimized for training with a [new architecture](https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive), plus a hybrid rack design that connects GPUs and TPUs in a single system. For large-scale model work, owning the silicon is not a marketing detail. It is a long-term strategic lever.
 
 <div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
   <ArticleImage src={tpusImg} alt="TPUs" />
@@ -83,7 +83,7 @@ This year Google highlighted TPUs optimized for training with a new architecture
 
 ## My favorite talk: five embedding decisions
 
-The talk that stuck with me most was **"5 embedding decisions every cloud developer needs to know."** It landed at the right moment because I am actively building RAG systems for agents, and embeddings are one of those areas where small decisions compound into big quality gaps.
+The talk that stuck with me most was ["5 embedding decisions every cloud developer needs to know."](https://www.youtube.com/watch?v=YqQ0laSZCxM) It landed at the right moment because I am actively building RAG systems for agents, and embeddings are one of those areas where small decisions compound into big quality gaps.
 
 The speaker broke the problem into phases and the decisions that matter in each one:
 
@@ -94,7 +94,7 @@ The speaker broke the problem into phases and the decisions that matter in each 
 
 Each decision was tied to a concrete failure mode — not abstract best practices, but the mistakes that show up when a RAG pipeline looks fine in a demo and falls apart under real queries.
 
-That talk directly influenced how I think about retrieval. I even wrote a follow-up article on [hybrid search](/blog/hybrid-search/) using Supabase to improve RAG responses by combining semantic and lexical search. The speaker was a MongoDB developer engineer, and MongoDB's answer to many of these pitfalls is **MongoDB Atlas Vector Search** — but the decisions themselves are platform-agnostic. Chunking, embeddings, reranking, and local debugging matter no matter where you host the index.
+That talk directly influenced how I think about retrieval. I even wrote an article on [hybrid search](/blog/hybrid-search/) using Supabase to improve RAG responses by combining semantic and lexical search. The speaker was a MongoDB developer engineer, and MongoDB's answer to many of these pitfalls is [MongoDB AI Search](https://www.mongodb.com/company/blog/product-release-announcements/ai-search-for-agents-announcing-automated-embedding-atlas) — but the decisions themselves are platform-agnostic. Chunking, embeddings, reranking, and local debugging matter no matter where you host the index.
 
 <div class="my-8 grid grid-cols-1 gap-4 md:grid-cols-2">
   <ArticleImage src={talkImg} alt="Talk" />
