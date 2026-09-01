@@ -2,14 +2,14 @@
 title: 'Instala y configura gcloud CLI'
 titleStep: 'gcloud CLI'
 description: 'Instala el Google Cloud CLI, inicia sesión y deja listas las credenciales para desplegar tu agente en GCP.'
-order: 11
-prevStep: '10-google-project'
-nextStep: '12-config'
+order: 2
+prevStep: '01-google-project'
+nextStep: '03-config'
 ---
 
 En el paso anterior creaste tu **proyecto de GCP** y habilitaste las APIs de Agent Runtime. Ahora instalarás el **Google Cloud CLI** (`gcloud`): autenticarte, elegir el proyecto y dejar credenciales listas para herramientas como `agents-cli deploy`.
 
-En el paso 4 viste un error que pedía `gcloud auth application-default login`. Lo omitimos a propósito; ahora sí lo configurarás.
+En el taller anterior, al crear el proyecto con `agents-cli create`, viste un error que pedía `gcloud auth application-default login`. Lo omitimos a propósito; ahora sí lo configurarás.
 
 ## 1. Comprueba si ya tienes gcloud
 
@@ -71,7 +71,7 @@ gcloud init
 El asistente te guiará para:
 
 1. **Iniciar sesión** con tu cuenta de Google (la misma que usaste al crear el proyecto).
-2. **Elegir el proyecto** que creaste en el paso 10 (por su Project ID).
+2. **Elegir el proyecto** que creaste en el paso 1 (por su Project ID).
 
 ## 4. Verifica tus cuentas
 
@@ -114,6 +114,6 @@ Para que ADK, `agents-cli` y las librerías de Google usen credenciales de aplic
 gcloud auth application-default login
 ```
 
-Inicia sesión con la misma cuenta de Google que usaste al crear el proyecto. Este comando es el que el playground pedía en el paso 4; lo configurarás de forma explícita en el paso 12 junto con Vertex AI.
+Inicia sesión con la misma cuenta de Google que usaste al crear el proyecto. Este comando es el que el playground pedía al crear el proyecto; lo configurarás de forma explícita en el paso 3 junto con Vertex AI.
 
 Con `gcloud` instalado, autenticado y ADC listas, continúa con la **configuración de Vertex AI** en `.env` en el siguiente paso.

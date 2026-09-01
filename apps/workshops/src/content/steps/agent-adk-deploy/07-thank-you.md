@@ -1,20 +1,20 @@
 ---
 title: '¡Gracias por completar el taller!'
 titleStep: 'Gracias'
-description: 'Resumen del recorrido completo: de cero a un agente desplegado en Agent Runtime e integrado en producción.'
-order: 16
-prevStep: '15-consume-prod'
+description: 'Resumen del recorrido de despliegue: de GCP a Agent Runtime e integración en producción con REST y microservicios.'
+order: 7
+prevStep: '06-consume-prod'
 ---
 
-> ¡Felicitaciones! Has completado **Tu primer Agent con Google ADK**. Pasaste de una carpeta vacía a un agente desplegado en la nube, con tools reales e integración lista para microservicios.
+> ¡Felicitaciones! Has completado **Despliegue tu Agent**. Llevaste el agente que construiste en el taller anterior desde tu máquina local hasta **Agent Runtime** en la nube, con consumo REST e integración lista para microservicios.
 
-## Lo que construiste
+## Lo que lograste
 
-Al terminar este taller tienes un agente funcional con:
+En este taller desplegaste e integraste tu agente con:
 
-- Un **system prompt** estructurado en `prompt.md`, separado del código
-- **Function tools** en Python: clima simulado (`get_weather`) y consulta a una API HTTP (`get_products`)
-- Pruebas en **playground local** con API key de AI Studio y, más adelante, con **Vertex AI**
+- Un **proyecto de Google Cloud** con facturación y APIs de Agent Runtime habilitadas
+- **gcloud CLI** autenticado y credenciales ADC listas
+- **Vertex AI** configurado en `.env` para probar el agente en local antes del deploy
 - Un **despliegue en Agent Runtime** con `agents-cli deploy`
 - **Consumo del agente** vía REST API: primero con token de usuario, después con **Service Account / ADC** desde Python
 
@@ -22,15 +22,6 @@ Al terminar este taller tienes un agente funcional con:
 
 | Paso | Qué hiciste |
 |------|-------------|
-| **Bienvenida** | Conociste el objetivo del codelab y los requisitos |
-| **Arquitectura** | Viste el mapa de la plataforma: ADK, Gemini, Agent Runtime |
-| **Entorno** | Instalaste Python, `uv` y `agents-cli` |
-| **Crear proyecto** | Generaste el scaffold con `agents-cli create` y abriste el playground |
-| **API key** | Configuraste AI Studio para ejecutar el agente en local |
-| **Google ADK** | Exploraste `app/agent.py` y el rol de `Agent`, `Gemini` e `instruction` |
-| **System prompt** | Moviste las instrucciones a `prompt.md` con rol, reglas y workflow |
-| **Herramientas** | Añadiste `get_weather` como function tool |
-| **API externa** | Conectaste `get_products` a la Platzi Fake Store API con `requests` |
 | **Proyecto GCP** | Creaste el proyecto, activaste facturación y las APIs de Agent Runtime |
 | **gcloud CLI** | Instalaste y autenticaste el CLI de Google Cloud |
 | **Vertex AI** | Alineaste `agents-cli`, `gcloud` y `.env` para Vertex AI en local |

@@ -2,16 +2,16 @@
 title: 'Despliega tu agente en Google Cloud'
 titleStep: 'Despliegue'
 description: 'Publica el agente en GCP con agents-cli deploy y anota el Reasoning Engine ID y la región del deploy.'
-order: 13
-prevStep: '12-config'
-nextStep: '14-consume'
+order: 4
+prevStep: '03-config'
+nextStep: '05-consume'
 ---
 
 En el paso anterior dejaste **Vertex AI configurado** en `.env`, limpiaste `app/agent.py` y comprobaste el agente en el **playground**. Ahora lo publicas en tu proyecto de GCP con `agents-cli deploy`.
 
 ## 1. Despliega el agente
 
-Desde la raíz del proyecto, indica el **mismo Project ID** que anotaste en el paso 10 y que tienes en `.env` (`GOOGLE_CLOUD_PROJECT`):
+Desde la raíz del proyecto, indica el **mismo Project ID** que anotaste en el paso 1 y que tienes en `.env` (`GOOGLE_CLOUD_PROJECT`):
 
 ```bash
 agents-cli deploy --project TU_PROJECT_ID
@@ -72,4 +72,4 @@ Abre [Deployments on Agent Runtime](https://console.cloud.google.com/agent-platf
 
 Si ves tu fila en **Deployments on Agent Runtime**, el servicio ya está publicado. En el siguiente paso consumirás ese agente vía **REST API** con el Reasoning Engine ID y la región que anotaste.
 
-Si el deploy falla por permisos o APIs, vuelve al paso 10 (proyecto y APIs habilitadas) y al paso 12 (autenticación y `.env` con el mismo Project ID).
+Si el deploy falla por permisos o APIs, vuelve al paso 1 (proyecto y APIs habilitadas) y al paso 3 (autenticación y `.env` con el mismo Project ID).

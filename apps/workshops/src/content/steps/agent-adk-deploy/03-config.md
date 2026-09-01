@@ -2,12 +2,12 @@
 title: 'Configura Vertex AI en tu proyecto'
 titleStep: 'Vertex AI'
 description: 'Autentica con agents-cli, alinea gcloud y prepara .env para usar Vertex AI en local antes del despliegue.'
-order: 12
-prevStep: '11-gcloud-cli'
-nextStep: '13-deploy'
+order: 3
+prevStep: '02-gcloud-cli'
+nextStep: '04-deploy'
 ---
 
-En el paso anterior dejaste **`gcloud` instalado**, con sesión iniciada y el **Project ID** correcto. Ahora pasas de desarrollo local con **API key de AI Studio** (paso 5) a un entorno listo para **Vertex AI**: autenticación, variables de entorno y una prueba en el playground antes de desplegar en el siguiente paso.
+En el paso anterior dejaste **`gcloud` instalado**, con sesión iniciada y el **Project ID** correcto. Ahora pasas de desarrollo local con **API key de AI Studio** (taller anterior) a un entorno listo para **Vertex AI**: autenticación, variables de entorno y una prueba en el playground antes de desplegar en el siguiente paso.
 
 ## 1. Verifica la autenticación
 
@@ -26,7 +26,7 @@ Authentication
   Authenticated as tu-correo@gmail.com for project tu-project-id (Application Default Credentials)
 ```
 
-Sustituye `tu-correo@gmail.com` y `tu-project-id` por tu cuenta y el **Project ID** que anotaste en el paso 10.
+Sustituye `tu-correo@gmail.com` y `tu-project-id` por tu cuenta y el **Project ID** que anotaste en el paso 1.
 
 > **Nota:** La API key de AI Studio sigue sirviendo para iterar en local si la mantienes en `.env`. Cuando uses Vertex (`GOOGLE_GENAI_USE_VERTEXAI=True`), el agente usará las credenciales de `gcloud` y la configuración del proyecto.
 
@@ -68,7 +68,7 @@ GOOGLE_CLOUD_LOCATION=global
 GOOGLE_GENAI_USE_VERTEXAI=True
 ```
 
-- **`GOOGLE_CLOUD_PROJECT`**: el mismo Project ID del paso 10.
+- **`GOOGLE_CLOUD_PROJECT`**: el mismo Project ID del paso 1.
 - **`GOOGLE_CLOUD_LOCATION`**: indica **dónde se invocan los modelos Gemini** en Vertex AI, no dónde se despliega tu app Python.
 - **`GOOGLE_GENAI_USE_VERTEXAI=True`**: indica al SDK que use Vertex AI con las credenciales de GCP.
 
@@ -93,7 +93,7 @@ Puedes dejar `GOOGLE_API_KEY` vacía o con un marcador si ya no la usas en este 
 
 ## 4. Limpia `app/agent.py`
 
-En el paso 5 comentaste un bloque que forzaba Vertex AI desde código. Con la configuración en `.env`, ese bloque sobra: **elimínalo por completo** (no lo descomentes).
+En el taller anterior comentaste un bloque que forzaba Vertex AI desde código. Con la configuración en `.env`, ese bloque sobra: **elimínalo por completo** (no lo descomentes).
 
 El fragmento a quitar es este:
 

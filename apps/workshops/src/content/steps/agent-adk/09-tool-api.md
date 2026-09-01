@@ -4,7 +4,7 @@ titleStep: 'API externa'
 description: 'Instala requests, define una function tool que consulta una API HTTP y regístrala junto a get_weather en el agente.'
 order: 9
 prevStep: '08-tools'
-nextStep: '10-google-project'
+nextStep: '10-thank-you'
 ---
 
 En el paso anterior `get_weather` devolvía datos simulados. Ahora vas a crear una tool que **llama a una API real** por HTTP y devuelve solo lo que el agente necesita.
@@ -103,4 +103,4 @@ Prueba ambos caminos:
 - *«¿Qué clima hace en Barcelona?»* → debería invocar `get_weather`.
 - *«¿Qué productos hay en la tienda?»* o *«Muéstrame precios de la tienda»* → debería invocar `get_products` y resumir títulos y precios como pirata.
 
-Con el agente funcionando en local con tools reales, el siguiente bloque del taller es **desplegarlo en Google Cloud**. El primer paso es crear tu **proyecto en Google Cloud** y habilitar las APIs necesarias.
+Con el agente funcionando en local con tools reales, has completado la parte principal de este taller. En el **siguiente paso** verás un resumen de lo que construiste y cómo continuar con **[Despliegue tu Agent](/agent-adk-deploy/01-google-project)** para publicarlo en Google Cloud.

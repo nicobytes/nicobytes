@@ -24,8 +24,7 @@ Antes de instalar herramientas, mira el mapa de la plataforma. En el taller lo r
 
 - ADK + system prompt estructurado + function tools
 - Playground local con API key de AI Studio
-- Despliegue orientado a **Agent Runtime**
 
-El resto del diagrama queda como contexto para cuando escales a producción.
+El despliegue en **Agent Runtime** lo verás en el taller **[Despliegue tu Agent](/agent-adk-deploy/01-google-project)**. El resto del diagrama queda como contexto para cuando escales a producción.
 
 En el siguiente paso instalas **Python**, **uv** y **agents-cli**.

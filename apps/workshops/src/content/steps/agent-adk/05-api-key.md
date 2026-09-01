@@ -22,16 +22,21 @@ Entra en [Google AI Studio → API keys](https://aistudio.google.com/apikey) y g
 En la raíz de tu proyecto (junto a `pyproject.toml`), crea o edita el archivo `.env` con estas variables:
 
 ```env
-GOOGLE_API_KEY=your-api-key-here
-GOOGLE_CLOUD_PROJECT=your-project-id-here
-GOOGLE_CLOUD_LOCATION=your-region-here
-GOOGLE_GENAI_USE_VERTEXAI=0
+# Local development configuration
+# For deployment, these are set via Terraform / the deploy command.
+
+# Vertex AI Configuration (default)
+#GOOGLE_GENAI_USE_VERTEXAI=true
+#GOOGLE_CLOUD_PROJECT=gen-lang-client-0411397838
+#GOOGLE_CLOUD_LOCATION=global
+
+# Alternatively, for Gemini API via Google AI Studio,
+# comment out the three lines above and uncomment:
+GEMINI_API_KEY=
 ```
 
 - **`GOOGLE_API_KEY`**: la clave que acabas de generar en AI Studio.
 - **`GOOGLE_GENAI_USE_VERTEXAI=0`**: indica al proyecto que use la API de AI Studio en lugar de Vertex AI.
-
-> **Nota:** `GOOGLE_CLOUD_PROJECT` y `GOOGLE_CLOUD_LOCATION` son opcionales mientras uses AI Studio; los necesitarás al configurar Vertex AI en el paso 12.
 
 Comprueba que `.env` esté listado en `.gitignore` para que no se suba a GitHub por accidente.
 
@@ -53,24 +58,7 @@ En GitHub es fácil encontrar keys filtradas; por ejemplo, [búsquedas por `GOOG
 
 Si crees que una key se filtró, **revócala de inmediato** en AI Studio y genera una nueva.
 
-## 4. Ajusta `app/agent.py`
-
-El proyecto generado con `agents-cli` incluye código que fuerza Vertex AI. Comenta ese bloque para que el agente lea la configuración desde `.env`:
-
-```python
-# app/agent.py
-"""
-import os
-import google.auth
-
-_, project_id = google.auth.default()
-os.environ["GOOGLE_CLOUD_PROJECT"] = project_id
-os.environ["GOOGLE_CLOUD_LOCATION"] = "global"
-os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
-"""
-```
-
-## 5. Ejecuta el playground
+## 4. Ejecuta el playground
 
 Con la API key en `.env` y el bloque de Vertex AI comentado, vuelve a lanzar el playground:
 
@@ -80,7 +68,7 @@ agents-cli playground
 
 Si todo está bien configurado, el comando abrirá el **ADK Dev UI** en el navegador (por defecto en `http://127.0.0.1:8000`) sin el error de `RefreshError` de Google Auth.
 
-## 6. Envía tu primer mensaje
+## 5. Envía tu primer mensaje
 
 En la interfaz del playground verás el panel de depuración del ADK: historial de la conversación, trazas de herramientas y la respuesta del modelo. Escribe un saludo en el cuadro de chat y confirma que el agente responde.
 

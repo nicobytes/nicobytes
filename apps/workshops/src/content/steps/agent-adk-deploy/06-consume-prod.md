@@ -2,18 +2,18 @@
 title: 'Consume tu agente desde microservicios'
 titleStep: 'Microservicios'
 description: 'Integra el agente desplegado con Service Account o ADC usando un cliente HTTP en Python.'
-order: 15
-prevStep: '14-consume'
-nextStep: '16-thank-you'
+order: 6
+prevStep: '05-consume'
+nextStep: '07-thank-you'
 ---
 
 En el paso anterior probaste el agente con un **access token de usuario** (`gcloud auth print-access-token`). Eso sirve para depurar, pero caduca en ~1 hora y no encaja en un microservicio que corre 24/7.
 
-Aquí usas la **misma REST API** del paso 14, pero con autenticación de **Service Account** o **Application Default Credentials (ADC)**. La librería `google-auth` renueva el token por ti; no hace falta ejecutar `gcloud` en cada petición.
+Aquí usas la **misma REST API** del paso 5, pero con autenticación de **Service Account** o **Application Default Credentials (ADC)**. La librería `google-auth` renueva el token por ti; no hace falta ejecutar `gcloud` en cada petición.
 
 > **Nota:** Tu microservicio **no** ejecuta el agente localmente. Solo llama al Reasoning Engine remoto por HTTP.
 
-> **Importante:** Usa `AGENT_ENGINE_REGION` con la región del deploy (la misma `DEPLOY_REGION` del paso 14, p. ej. `us-east1`). No uses `GOOGLE_CLOUD_LOCATION=global` aquí: esa variable es solo para invocar Gemini en local (paso 12).
+> **Importante:** Usa `AGENT_ENGINE_REGION` con la región del deploy (la misma `DEPLOY_REGION` del paso 5, p. ej. `us-east1`). No uses `GOOGLE_CLOUD_LOCATION=global` aquí: esa variable es solo para invocar Gemini en local (paso 3).
 
 ## 1. Prepara la identidad en GCP
 
@@ -49,7 +49,7 @@ import google.auth.transport.requests
 import requests
 
 PROJECT_ID = os.environ["GOOGLE_CLOUD_PROJECT"]
-# Región del Reasoning Engine (deploy), no GOOGLE_CLOUD_LOCATION=global del paso 12
+# Región del Reasoning Engine (deploy), no GOOGLE_CLOUD_LOCATION=global del paso 3
 REGION = os.environ["AGENT_ENGINE_REGION"]
 ENGINE_ID = os.environ["AGENT_ENGINE_ID"]
 USER_ID = "u_123"

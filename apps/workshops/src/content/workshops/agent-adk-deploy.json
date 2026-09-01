@@ -1,0 +1,7 @@
+{
+  "title": "Despliegue tu Agent",
+  "description": "Lleva tu agente ADK a producción: configura Google Cloud, despliega en Agent Runtime y consúmelo vía REST API desde curl y microservicios Python.",
+  "order": 3,
+  "level": "intermediate",
+  "tags": ["python", "agents", "adk", "gcp", "deploy"]
+}

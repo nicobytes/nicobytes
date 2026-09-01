@@ -2,20 +2,20 @@
 title: 'Prueba tu agente desplegado'
 titleStep: 'Prueba REST'
 description: 'Prueba el agente desplegado con un access token temporal y la REST API de Vertex AI Agent Engine.'
-order: 14
-prevStep: '13-deploy'
-nextStep: '15-consume-prod'
+order: 5
+prevStep: '04-deploy'
+nextStep: '06-consume-prod'
 ---
 
 En el paso anterior desplegaste el agente y anotaste el **Reasoning Engine ID** y la **región del deploy**. Ahora lo consumes desde fuera del playground: la primera opción es la **REST API** con un **access token temporal** generado con `gcloud`.
 
 > **Nota:** El token caduca en poco tiempo (suele durar ~1 hora). Si recibes `401 Unauthorized`, vuelve a ejecutar `gcloud auth print-access-token`.
 
-> **Importante:** La región del Reasoning Engine (`DEPLOY_REGION`) es la que mostró `agents-cli deploy` (por ejemplo `us-east1`). No confundirla con `GOOGLE_CLOUD_LOCATION=global` del paso 12, que solo aplica a invocar Gemini en local.
+> **Importante:** La región del Reasoning Engine (`DEPLOY_REGION`) es la que mostró `agents-cli deploy` (por ejemplo `us-east1`). No confundirla con `GOOGLE_CLOUD_LOCATION=global` del paso 3, que solo aplica a invocar Gemini en local.
 
 ## 1. Obtén un access token
 
-Con la misma sesión de `gcloud` del paso 11 y el proyecto del paso 10:
+Con la misma sesión de `gcloud` del paso 2 y el proyecto del paso 1:
 
 ```bash
 gcloud auth print-access-token
@@ -82,6 +82,6 @@ Deberías ver fragmentos de la respuesta del agente en la terminal. Prueba pregu
 | `401 Unauthorized` | Token expirado → `gcloud auth print-access-token` de nuevo. |
 | `404 Not Found` | `PROJECT_ID`, `DEPLOY_REGION` o `ENGINE_ID` incorrectos. |
 | Sesión no encontrada | Creaste la sesión con otro `session_id` o no ejecutaste el paso 2. |
-| Permisos denegados | La cuenta de `gcloud` necesita roles de Vertex AI en el proyecto (paso 10). |
+| Permisos denegados | La cuenta de `gcloud` necesita roles de Vertex AI en el proyecto (paso 1). |
 
 Con esto ya tienes un flujo mínimo para probar el agente desde cualquier cliente HTTP. El token de usuario caduca pronto y no sirve para microservicios en producción. En el **siguiente paso** verás cómo integrarlo con **Service Account**, ADC y un cliente en **Python** sin depender de `gcloud`.

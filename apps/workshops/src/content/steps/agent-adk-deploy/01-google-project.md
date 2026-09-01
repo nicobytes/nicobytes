@@ -2,12 +2,13 @@
 title: 'Crea tu proyecto en Google Cloud'
 titleStep: 'Proyecto GCP'
 description: 'Crea un proyecto en Google Cloud, activa la facturación y habilita las APIs de Agent Runtime.'
-order: 10
-prevStep: '09-tool-api'
-nextStep: '11-gcloud-cli'
+order: 1
+nextStep: '02-gcloud-cli'
 ---
 
-Hasta ahora el agente corre en local con una **API key de AI Studio** (paso 5). Para **desplegar** en Google Cloud necesitas un **proyecto de GCP**: el contenedor de recursos, facturación y permisos donde vivirá el agente en la nube.
+> **Prerrequisito:** Este taller continúa el agente que construiste en [Tu primer Agent con Google ADK](/agent-adk/01-welcome). Debes tener el proyecto local con `get_weather`, `get_products` y el playground funcionando con API key de AI Studio.
+
+Hasta ahora el agente corre en local con una **API key de AI Studio** (taller anterior). Para **desplegar** en Google Cloud necesitas un **proyecto de GCP**: el contenedor de recursos, facturación y permisos donde vivirá el agente en la nube.
 
 En este paso crearás (o elegirás) ese proyecto y habilitarás las APIs de **Agent Runtime**. En el siguiente paso instalarás **gcloud CLI** para autenticarte y conectar tu máquina con GCP.
 
@@ -25,7 +26,7 @@ Necesitas un **proyecto de GCP** donde desplegar el agente.
 
 Anota el **Project ID** (no el nombre): lo usarás en `gcloud init`, en variables de entorno y al ejecutar `agents-cli deploy`.
 
-> **Nota:** El despliegue consume recursos de GCP. Es **normal** que Google Cloud te pida configurar una **cuenta de facturación** asociada al proyecto — al crearlo o al habilitar las APIs. Completa ese paso para activar la facturación antes de continuar. Si ya configuraste `GOOGLE_CLOUD_PROJECT` en tu `.env` (paso 5), puedes reutilizar ese mismo proyecto siempre que tenga los permisos necesarios.
+> **Nota:** El despliegue consume recursos de GCP. Es **normal** que Google Cloud te pida configurar una **cuenta de facturación** asociada al proyecto — al crearlo o al habilitar las APIs. Completa ese paso para activar la facturación antes de continuar. Si ya configuraste `GOOGLE_CLOUD_PROJECT` en tu `.env` (taller anterior), puedes reutilizar ese mismo proyecto siempre que tenga los permisos necesarios.
 
 ## 2. Habilita las APIs de Agent Runtime
 
