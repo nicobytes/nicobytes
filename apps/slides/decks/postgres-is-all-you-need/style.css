@@ -175,3 +175,58 @@ body,
 .t-logo.angular img {
   width: 50rem;
 }
+
+/* ---------- Profile: avatar, role, bio on the same axis ---------- */
+.t-profile .stage {
+  justify-content: center;
+  gap: 2.4rem;
+}
+.t-profile .avatar {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 18%;
+}
+.t-profile h1 {
+  margin: 0;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-stretch: 92%;
+  font-size: 5.4rem;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.t-profile .caret {
+  display: inline-block;
+  width: 0.28rem;
+  height: 0.82em;
+  margin-left: 0.35rem;
+  background: var(--supabase);
+  vertical-align: -0.06em;
+  animation: profile-caret 1s step-end infinite;
+}
+@keyframes profile-caret {
+  50% { opacity: 0; }
+}
+.t-profile p {
+  margin: 0;
+  max-width: 62rem;
+  font-size: 2.15rem;
+  font-weight: 500;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+  color: var(--muted);
+  text-wrap: balance;
+}
+.t-profile .hl {
+  color: var(--supabase);
+  font-weight: 700;
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-profile .caret {
+    animation: none;
+  }
+}

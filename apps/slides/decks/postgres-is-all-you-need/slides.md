@@ -18,6 +18,15 @@ class: t-title cover
 
 ---
 layout: stage
+class: t-profile
+---
+
+<img class="avatar" src="/profile.jpg" alt="Nicolas Molina" />
+<h1>Senior Software Engineer<span class="caret" aria-hidden="true"></span></h1>
+<p>Soy Nicolas Molina (@nicobytes), Senior Software Engineer y profesor en Platzi, con más de 13 años de experiencia en desarrollo y gestión de tecnología. Reconocido por Google como <span class="hl">Angular Developer Expert</span> y por Microsoft como <span class="hl">Most Valuable Professional</span>.</p>
+
+---
+layout: stage
 class: t-para
 ---
 
@@ -75,7 +84,7 @@ ctx: angular
 ---
 
 ```ts
-@Injectable({ providedIn: 'root' })
+@Service()
 export class SupabaseService {
   readonly client = createClient<Database>(
     url, key
@@ -108,6 +117,48 @@ const { data } = await this.supabase
   .from('todos')
   .select('*')
   .order('created_at', { ascending: false });
+```
+
+---
+layout: stage
+class: t-code
+ctx: angular
+---
+
+```ts
+const { data } = await this.supabase
+  .from('todos')
+  .insert({ title: 'Postgres' })
+  .select()
+  .single();
+```
+
+---
+layout: stage
+class: t-code
+ctx: angular
+---
+
+```ts
+const { data } = await this.supabase
+  .from('todos')
+  .update({ done: true })
+  .eq('id', id)
+  .select()
+  .single();
+```
+
+---
+layout: stage
+class: t-code
+ctx: angular
+---
+
+```ts
+await this.supabase
+  .from('todos')
+  .delete()
+  .eq('id', id);
 ```
 
 ---
