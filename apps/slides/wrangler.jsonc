@@ -1,8 +1,10 @@
 {
 	"name": "slides-nicobytes",
+	"main": "./worker.js",
 	"compatibility_date": "2026-10-17",
 	"assets": {
-		"directory": "./dist"
+		"directory": "./dist",
+		"binding": "ASSETS"
 	},
 	"observability": {
 		"enabled": true,

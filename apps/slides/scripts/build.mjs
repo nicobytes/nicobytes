@@ -107,6 +107,7 @@ for (const deck of decks) {
     '--out',
     path.join(dist, deck.slug),
   ])
+  await rm(path.join(dist, deck.slug, '_redirects'), { force: true })
 }
 
 await cp(path.join(root, 'home', 'home.css'), path.join(dist, 'home.css'))
@@ -117,11 +118,5 @@ const list = decks.length
   : '<li class="empty">Todavía no hay slides publicados.</li>'
 
 await writeFile(path.join(dist, 'index.html'), template.replace('<!-- decks -->', list))
-
-const redirects = decks
-  .map((deck) => `/${deck.slug}/* /${deck.slug}/index.html 200`)
-  .join('\n')
-
-await writeFile(path.join(dist, '_redirects'), redirects ? `${redirects}\n` : '')
 
 console.log(`Built ${decks.length} deck${decks.length === 1 ? '' : 's'} into dist/`)
