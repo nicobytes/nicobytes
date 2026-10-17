@@ -22,6 +22,10 @@
 		{
 			"pattern": "workshops.nicobytes.com",
 			"custom_domain": true
+		},
+		{
+			"pattern": "workshops.nicobytes.dev",
+			"custom_domain": true
 		}
 	]
 }
