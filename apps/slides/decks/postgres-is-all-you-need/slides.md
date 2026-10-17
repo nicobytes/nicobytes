@@ -2,7 +2,7 @@
 theme: default
 title: Postgres is All You Need
 info: |
-  12 funciones de Supabase, demostradas con Angular.
+  14 funciones de Supabase, demostradas con Angular.
 canvasWidth: 1280
 fonts:
   sans: 'Bricolage Grotesque'
@@ -30,7 +30,7 @@ layout: stage
 class: t-para
 ---
 
-<p>12 funciones de Supabase, demostradas con Angular.</p>
+<p>14 funciones de Supabase, demostradas con Angular.</p>
 
 ---
 layout: stage
@@ -51,7 +51,7 @@ layout: stage
 class: t-para
 ---
 
-<p><span class="premise">12 cosas sobre Supabase que probablemente no conoces.</span> <span class="promise">La #12 te va a sorprender.</span></p>
+<p><span class="premise">14 cosas sobre Supabase que probablemente no conoces.</span> <span class="promise">La #14 te va a sorprender.</span></p>
 
 ---
 layout: stage
@@ -296,7 +296,112 @@ layout: stage
 class: t-title
 ---
 
-<h1><span class="n">05</span>Auth</h1>
+<h1><span class="n">05</span>SQL Functions</h1>
+
+---
+layout: stage
+class: t-para
+---
+
+<p><span class="premise">La consulta compleja vive en Postgres.</span> Desde Angular es una sola llamada.</p>
+
+---
+layout: stage
+class: t-code
+ctx: sql
+---
+
+```sql
+create function customer_message_counts(
+  org_id uuid, ids uuid[]
+)
+returns table (id uuid, n bigint, last_at timestamptz)
+language sql stable as $$
+  ----
+$$;
+```
+
+---
+layout: stage
+class: t-code
+ctx: sql
+---
+
+```sql
+select conversation_id, count(*)::bigint, max(created_at)
+from messages
+where organization_id = org_id
+  and conversation_id = any (ids)
+  and role = 'customer'
+group by conversation_id;
+```
+
+---
+layout: stage
+class: t-code
+ctx: angular
+---
+
+```ts
+const { data } = await this.supabase
+  .rpc('customer_message_counts', {
+    org_id: orgId,
+    ids,
+  });
+```
+
+---
+layout: stage
+class: t-title
+---
+
+<h1><span class="n">06</span>Triggers</h1>
+
+---
+layout: stage
+class: t-para
+---
+
+<p><span class="premise">Llega un mensaje y Postgres avisa.</span> Tu app no tiene que estar escuchando.</p>
+
+---
+layout: stage
+class: t-code
+ctx: sql
+---
+
+```sql
+create function notify_message()
+returns trigger language plpgsql as $$
+begin
+  perform net.http_post(
+    '.../functions/v1/notify',
+    jsonb_build_object('id', new.id)
+  );
+  return new;
+end $$;
+```
+
+---
+layout: stage
+class: t-code
+ctx: sql
+---
+
+```sql
+create trigger on_customer_message
+  after insert on messages
+  for each row
+  when (new.role = 'customer')
+  execute function notify_message();
+```
+
+---
+layout: stage
+class: t-title
+---
+
+<h1><span class="n">07</span>Auth</h1>
 
 ---
 layout: stage
@@ -325,7 +430,7 @@ layout: stage
 class: t-title
 ---
 
-<h1><span class="n">06</span>File Storage</h1>
+<h1><span class="n">08</span>File Storage</h1>
 
 ---
 layout: stage
@@ -355,7 +460,7 @@ layout: stage
 class: t-title
 ---
 
-<h1><span class="n">07</span>Edge Functions</h1>
+<h1><span class="n">09</span>Edge Functions</h1>
 
 ---
 layout: stage
@@ -400,7 +505,7 @@ layout: stage
 class: t-title
 ---
 
-<h1><span class="n">08</span>Scheduling</h1>
+<h1><span class="n">10</span>Scheduling</h1>
 
 ---
 layout: stage
@@ -429,7 +534,7 @@ layout: stage
 class: t-title
 ---
 
-<h1><span class="n">09</span>Realtime</h1>
+<h1><span class="n">11</span>Realtime</h1>
 
 ---
 layout: stage
@@ -458,7 +563,7 @@ layout: stage
 class: t-title
 ---
 
-<h1><span class="n">10</span>AI &amp; Vectors</h1>
+<h1><span class="n">12</span>AI &amp; Vectors</h1>
 
 ---
 layout: stage
@@ -486,7 +591,7 @@ layout: stage
 class: t-title
 ---
 
-<h1><span class="n">11</span>Queues</h1>
+<h1><span class="n">13</span>Queues</h1>
 
 ---
 layout: stage
@@ -514,7 +619,7 @@ layout: stage
 class: t-title
 ---
 
-<h1><span class="n red">12</span>Self-Hosting</h1>
+<h1><span class="n red">14</span>Self-Hosting</h1>
 
 ---
 layout: stage
