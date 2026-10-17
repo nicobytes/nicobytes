@@ -86,7 +86,7 @@ const homeJsonLd = [
     url: siteUrl,
     description: homeDescription,
     sameAs: socialLinks.map((link) => link.href),
-    jobTitle: "Senior Software Engineer",
+    jobTitle: "Senior Software Engineer and Platzi Professor",
   }),
 ];
 
@@ -95,20 +95,30 @@ const homeJsonLd = [
 <BaseLayout description={homeDescription} jsonLd={homeJsonLd}>
   <Container class="mt-9">
     <h1
-      class="animate-fade-up inline-flex max-w-full items-baseline gap-1 text-[clamp(1.375rem,3.8vw,3rem)] font-bold tracking-tight whitespace-nowrap text-zinc-800 dark:text-zinc-100"
+      class="animate-fade-up flex max-w-full flex-col items-start text-[clamp(1.375rem,3.8vw,3rem)] leading-tight font-bold tracking-tight text-zinc-800 dark:text-zinc-100"
     >
-      <span>Senior Software Engineer</span>
-      <span
-        class="inline-block h-[1.1em] w-[3px] shrink-0 translate-y-[0.1em] bg-teal-500 dark:bg-teal-400"
-        style="animation: cursor-blink 1s step-end infinite;"
-        aria-hidden="true"></span>
+      <span class="whitespace-nowrap">Senior Software Engineer</span>
+      <span class="inline-flex items-baseline gap-1 whitespace-nowrap">
+        <span class="sr-only">and </span>
+        <span>Platzi Professor</span>
+        <span
+          class="inline-block h-[1.1em] w-[3px] shrink-0 translate-y-[0.1em] bg-teal-500 dark:bg-teal-400"
+          style="animation: cursor-blink 1s step-end infinite;"
+          aria-hidden="true"></span>
+      </span>
     </h1>
     <div class="mt-6 max-w-2xl">
       <p
         class="animate-fade-up text-base text-zinc-600 delay-1 dark:text-zinc-400"
       >
-        I'm Nicolas Molina (@nicobytes) Sr Software Engineer with more than
-        {yearsOfExperience} years of experience in development and technology management.
+        I'm Nicolas Molina (@nicobytes) Sr Software Engineer and professor at <a
+          href="https://platzi.com/profes/nicobytes/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-accent-cyan text-teal-500 transition dark:text-teal-400"
+          >Platzi</a
+        > with more than {yearsOfExperience} years of experience in development
+        and technology management.
         Recognized by Google as an <a
           href="https://g.dev/nicobytes"
           target="_blank"

@@ -61,6 +61,12 @@
       "skillPath": "skills/spec-driven-development/SKILL.md",
       "computedHash": "c29c9fe28235431984e1f8d5f5a578fc03184d6da17131574f16b240f7c93c3f"
     },
+    "slidev": {
+      "source": "slidevjs/slidev",
+      "sourceType": "github",
+      "skillPath": "skills/slidev/SKILL.md",
+      "computedHash": "745f8fbe6bd26c17699efff608548560e6d4b5ca65dbcff70d394f9d6f6374aa"
+    },
     "web-quality-audit": {
       "source": "addyosmani/web-quality-skills",
       "sourceType": "github",

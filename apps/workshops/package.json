@@ -11,7 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "generate-types": "wrangler types",
-    "deploy": "npx wrangler deploy"
+    "deploy": "pnpm wrangler deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.6.0",

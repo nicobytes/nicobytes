@@ -17,5 +17,11 @@
 	],
 	"observability": {
 		"enabled": true
-	}
+	},
+	"routes": [
+		{
+			"pattern": "workshops.nicobytes.com",
+			"custom_domain": true
+		}
+	]
 }

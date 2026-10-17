@@ -1,0 +1,39 @@
+name: Slides Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/slides/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+          cache-dependency-path: apps/slides/pnpm-lock.yaml
+      - name: Install Dependencies
+        working-directory: ./apps/slides
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        working-directory: ./apps/slides
+        run: pnpm build
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: pnpm
+          workingDirectory: ./apps/slides
+          command: deploy

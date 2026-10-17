@@ -1,0 +1,15 @@
+i:
+    pnpm i
+
+deck slug:
+    pnpm deck {{slug}}
+
+build:
+    pnpm run build
+
+preview:
+    pnpm run preview
+
+deploy:
+    pnpm run build
+    pnpm run deploy
